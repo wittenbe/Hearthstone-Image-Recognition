@@ -1,0 +1,153 @@
+
+	//obsolete, yay!
+//	cv::Mat tempImg;
+//	name_end += "Victory", "Defeat";
+//	tempImg = cv::imread(GAME_VICTORY, CV_LOAD_IMAGE_GRAYSCALE);
+//	descriptor_end.push_back(getDescriptor(tempImg));
+//	tempImg = cv::imread(GAME_DEFEAT, CV_LOAD_IMAGE_GRAYSCALE);
+//	descriptor_end.push_back(getDescriptor(tempImg));
+//
+//	name_coin += "first", "second";
+//	tempImg = cv::imread(GAME_COIN_FIRST, CV_LOAD_IMAGE_GRAYSCALE);
+//	descriptor_coin.push_back(getDescriptor(tempImg));
+//	tempImg = cv::imread(GAME_COIN_SECOND, CV_LOAD_IMAGE_GRAYSCALE);
+//	descriptor_coin.push_back(getDescriptor(tempImg));
+//
+//	cv::Mat descriptorTemp;
+//	name_class += "Druid", "Hunter", "Mage", "Paladin", "Priest", "Rogue", "Shaman", "Warlock", "Warrior";
+//	for (unsigned int i = 0; i < name_class.size(); i++) {
+//		tempImg = cv::imread((boost::format(GAME_CLASS_FORMAT) % name_class[i]).str(), CV_LOAD_IMAGE_GRAYSCALE);
+//		descriptorTemp = getDescriptor(tempImg);
+//		descriptor_class.push_back(descriptorTemp);
+//	}
+
+//void StreamProcessor::processClass(cv::Mat& image) {
+//	//opponent portrait position:
+//    cv::Mat roiImg = image(
+//    		cv::Range(0, image.rows * 0.5),
+//    		cv::Range(image.cols * 0.6, image.cols * 0.9));
+//    bool lookforplayer = false;
+////	cv::imshow("Output Window", roiImg);
+////	cv::waitKey();
+//
+//    cv::Mat greyscaleImg; //SIFT features can only be calculated on greyscale images
+//    cv::cvtColor(roiImg, greyscaleImg, CV_BGR2GRAY);
+//    cv::Mat descriptorImage = getDescriptor(greyscaleImg);
+//    std::string vs;
+//    for (unsigned int i = 0; i < name_class.size(); i++) {
+//    	if (isMatch(descriptorImage, descriptor_class[i])) {
+//    		vs = name_class[i];
+//    		lookforplayer = true; //if opponent is found, look for player
+//    		printf("found enemy %d\n", i);
+//    		break;
+//    	}
+//    }
+//
+//    if (lookforplayer) {
+//    	//player portrait position:
+//    	roiImg = image(
+//    			cv::Range(image.rows * 0.5, image.rows),
+//    			cv::Range(image.cols * 0.1, image.cols * 0.4));
+//        cv::Mat greyscaleImg;
+//        cv::cvtColor(roiImg, greyscaleImg, CV_BGR2GRAY);
+//        cv::Mat descriptorImage = getDescriptor(greyscaleImg);
+//        for (unsigned int i = 0; i < name_class.size(); i++) {
+//        	if (isMatch(descriptorImage, descriptor_class[i])) {
+//        		stateMutex.lock(); //only one thread should update state
+//        		if (gameState == STATE_BEFORE_CLASS) {
+//        			gameState = STATE_BEFORE_COIN;
+//            		vs_text = (boost::format(GAME_MSG_START) % name_class[i] % vs).str(); //output after coin detection
+//            		printf("found player %d\n", i);
+////            		bot->message(vs_text);
+//        		}
+//        		stateMutex.unlock();
+//        		break;
+//        	}
+//        }
+//    }
+//}
+
+//void StreamProcessor::processCoin(cv::Mat& image) {
+//    cv::Mat roiImg = image(
+//    		cv::Range(image.rows * 0.5, image.rows * 0.7),
+//    		cv::Range(image.cols * 0.6, image.cols * 0.8));
+////    cv::imshow("Output Window", roiImg);
+////    cv::waitKey();
+//
+//    cv::Mat greyscaleImg;
+//    cv::cvtColor(roiImg, greyscaleImg, CV_BGR2GRAY);
+//    cv::Mat descriptorImage = getDescriptor(greyscaleImg);
+//    for (unsigned int i = 0; i < name_coin.size(); i++) {
+//    	if (isMatch(descriptorImage, descriptor_coin[i])) {
+//    		stateMutex.lock();
+//    		if (gameState == STATE_BEFORE_COIN) {
+//        		gameState = STATE_BEFORE_END;
+//        		std::string msg = vs_text + (boost::format(GAME_MSG_AFTERCOIN) % (i + 1)).str();
+//        		bot->message(msg);
+//    		}
+//    		stateMutex.unlock();
+//    		break;
+//    	}
+//    }
+//}
+
+//void StreamProcessor::processVictoryDefeat(cv::Mat& image) {
+//    cv::Mat roiImg = image(
+//    		cv::Range(image.rows * 0.5, image.rows * 0.7),
+//    		cv::Range(image.cols * 0.35, image.cols * 0.65));
+////	cv::imshow("Output Window", roiImg);
+////	cv::waitKey();
+//
+//    cv::Mat greyscaleImg;
+//    cv::cvtColor(roiImg, greyscaleImg, CV_BGR2GRAY);
+//    cv::Mat descriptorImage = getDescriptor(greyscaleImg);
+//    for (unsigned int i = 0; i < name_end.size(); i++) {
+//    	if (isMatch(descriptorImage, descriptor_end[i])) {
+//    		stateMutex.lock();
+//    		if (gameState == STATE_BEFORE_END) {
+//        		gameState = STATE_BEFORE_CLASS;
+//        		std::string wl = (i == 0)? "w" : "l";
+////        		std::string msg = (boost::format(GAME_MSG_END) % wl).str();
+//        		std::string msg = /*vs_text +*/ "!score -" + wl;
+//        		bot->message(msg);
+//    		}
+//    		stateMutex.unlock();
+//    		break;
+//    	}
+//    }
+//}
+
+//get descriptor of features
+cv::Mat StreamProcessor::getDescriptor(cv::Mat& image) {
+	std::vector<cv::KeyPoint> keypoints;
+	cv::Mat descriptor;
+	detector->detect(image, keypoints);
+	extractor->compute(image, keypoints, descriptor);
+	return descriptor;
+}
+
+//basically compares the reference image's features (the object) with the stream image (the scene), more specifically the ROI
+bool StreamProcessor::isMatch(cv::Mat& descriptorObj, cv::Mat& descriptorScene) {
+	bool match = false;
+	std::vector<std::vector<cv::DMatch> > matches;
+	std::vector<cv::DMatch> good_matches;
+	matcher->knnMatch(descriptorObj, descriptorScene, matches, 2);
+
+	//the 0.4 constant is a measure on how similar the features are, with lower being more strict (but also unlikely to find matches)
+	//there's a tradeoff of strictness and the initial amount of features calculated
+	for (int i = 0; i < std::min(descriptorScene.rows - 1,(int) matches.size()); i++) {
+		if ((matches[i].size() <= 2 && matches[i].size() > 0) && (matches[i][0].distance < 0.4 * (matches[i][1].distance))) {
+			good_matches.push_back(matches[i][0]);
+		}
+	}
+
+	//to identify where the object is in the scene, i.e. what the homography is, we'd need 4 known points to solve for 4 unknowns (2 rotation, 2 translation)
+	//that means taht if we HAVE 4 or more points, we can most likely calculate a homography to find the reference image in the stream image
+	if (good_matches.size() >= 4) {
+		//the actual homography isn't calculated to save time; and its analysis is probably not that simple anyway
+		//this also means that it's actually unknown WHERE the object is in the scene, only THAT it probably appears somewhere
+		match = true;
+	}
+
+	return match;
+}

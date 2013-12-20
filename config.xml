@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<twitch_bot>
+		<server>irc.twitch.tv</server>
+		<server_port>6667</server_port>
+		<!-- if channel is empty, "#<streamer>" will be chosen as the channel --> 
+		<channel></channel>
+
+		<bot_nick>ForteBot</bot_nick>
+		<bot_pass></bot_pass> <!-- use an oauth token -->
+		
+		<!-- twitch's limitation is 20 actions per 30 seconds, else you get an 8h ban -->
+		<max_msg>20</max_msg>
+		<timeframe>30</timeframe>
+	</twitch_bot>
+	<stream>
+		<streamer>trumpsc</streamer>
+		<live>true</live>
+		<vod>http://api.justin.tv/api/broadcast/by_archive/483356129.xml</vod>
+	</stream>
+	<image_recognition>
+		<threads>1</threads>
+		<!-- just p-hashes for now; if false the data is alread assumed to be in data.xml -->
+		<precompute_data>false</precompute_data>
+		
+		<phash_threshold>13</phash_threshold>
+	</image_recognition>
+	<paths>
+		<!-- paths relative to the CMakeLists.txt -->
+		<recognition_data_path>../data.xml</recognition_data_path>
+		<livestreamer_path>../livestreamer-v1.7.0/livestreamer</livestreamer_path>
+		<curl_path>.\..\curl</curl_path>
+		<!-- only needed if precompute_data == true -->
+		<card_image_path>../images/card</card_image_path>
+		<hero_image_path>../images/hero</hero_image_path>
+	</paths>
+</config>
