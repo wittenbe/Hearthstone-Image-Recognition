@@ -32,6 +32,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
 	param_silent = true;
 	param_overthrow_hidbot = false;
+	param_debug_level = 0;
 	enableRecognizer(RECOGNIZER_DRAFT_CLASS_PICK);
 	enableRecognizer(RECOGNIZER_DRAFT_CARD_PICK);
 	currentDeck.clear();
@@ -62,11 +63,12 @@ void StreamManager::run() {
 		const bool validImage = stream->read(image);
 		if (!validImage) break;
 
-		if (param_debug) {
+		if (param_debug_level >= 2) {
 			cv::imshow("Debug", image);
 			cv::waitKey(10);
 		}
 
+		boost::timer t;
 		std::vector<Recognizer::RecognitionResult> results = recognizer->recognize(image, allowedRecognizers);
 
 		commandMutex.lock();
@@ -77,6 +79,7 @@ void StreamManager::run() {
 				enableRecognizer(RECOGNIZER_DRAFT_CARD_PICK);
 				disableRecognizer(RECOGNIZER_DRAFT_CLASS_PICK);
 				currentDeck.clear();
+				std::cout << "new draft" << std::endl;
 
 				if (!param_silent) {
 					bot->message("!subon");
@@ -98,6 +101,7 @@ void StreamManager::run() {
 				if (isNew) {
 					disableRecognizer(RECOGNIZER_DRAFT_CARD_PICK);
 					enableRecognizer(RECOGNIZER_DRAFT_CARD_CHOSEN);
+					enableRecognizer(RECOGNIZER_DRAFT_CLASS_PICK);
 					currentDeck.picks.push_back(result.results);
 					std::cout << "pick " << currentDeck.cards.size() << ": " + result.results[0] + ", " + result.results[1] + ", " << result.results[2] << std::endl;
 				}
@@ -132,6 +136,10 @@ void StreamManager::run() {
 		}
 
 		commandMutex.unlock();
+
+		if (param_debug_level >= 1) {
+			std::cout << t.elapsed() << std::endl;
+		}
 	}
 
 	std::cout << "an error while reading a frame occured" << std::endl;
@@ -165,7 +173,7 @@ std::string StreamManager::createDeckString(Deck deck) {
 	return deckString;
 }
 
-std::string StreamManager::processCommand(std::string user, std::vector<std::string> cmdParams, bool isSuperUser) {
+std::string StreamManager::processCommand(std::string user, std::vector<std::string> cmdParams, bool isAllowed, bool isSuperUser) {
 	std::string response;
 	if (cmdParams.size() == 0) return response;
 
@@ -175,20 +183,31 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 	if ("!deck" == cmdParams[0]) {
 		response = (boost::format(CMD_DECK_FORMAT) % currentDeck.url).str();
 	}
+	else if ("!deckprogress" == cmdParams[0]) {
+		if (currentDeck.picks.size() < 30) {
+			response = "Arena draft progress: " + boost::lexical_cast<std::string>(currentDeck.cards.size()) + "/30";
+			if (currentDeck.cards.size() != 0) {
+				response += ", latest pick: " + currentDeck.cards.back();
+			}
+		} else {
+			response = "Deck complete";
+		}
+	}
 	else if ("!setdeck" == cmdParams[0]
-	         && isSuperUser && cmdParams.size() >= 2) {
+	         && isAllowed && cmdParams.size() >= 2) {
 		currentDeck.url = cmdParams[1];
 	}
 	else if ("!silence" == cmdParams[0]
-	         && isSuperUser) {
+	         && isAllowed) {
 		param_silent = toggleEnable;
 	}
 	else if("!fb_debug" == cmdParams[0]
 	         && isSuperUser) {
 		param_debug = toggleEnable;
 	}
-	else if ("!overthrowhidbot") {
-
+	else if ("!fb_debuglevel" == cmdParams[0]
+	         && isSuperUser && cmdParams.size() == 2) {
+		param_debug_level = boost::lexical_cast<unsigned int>(cmdParams[1]);
 	}
 
 	commandMutex.unlock();

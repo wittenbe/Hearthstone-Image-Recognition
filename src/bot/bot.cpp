@@ -36,7 +36,7 @@ bot::bot()
 		}
 	});
 
-	m_allowed_users.push_back("zeforte");
+	m_owners.push_back("zeforte");
 
 	connect();
 }
@@ -182,6 +182,10 @@ void bot::unallow_user(std::string user) {
 
 bool bot::isallowed(std::string user) {
 	return is_contained(m_allowed_users, user);
+}
+
+bool bot::isowner(std::string user) {
+	return is_contained(m_owners, user);
 }
 
 } // ns clever_bot

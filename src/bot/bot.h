@@ -33,6 +33,7 @@ public:
 	void allow_user(std::string user);
 	void unallow_user(std::string user);
 	bool isallowed(std::string user);
+	bool isowner(std::string user);
 
 	template <class T>
 	bool is_contained(std::vector<T> vec, T elem) {
@@ -55,6 +56,7 @@ protected:
 
 	//allowed user handling
 	std::vector<std::string> m_allowed_users;
+	std::vector<std::string> m_owners;
 
 	//command handling
 	std::deque<double> m_sent_command_timestamps;

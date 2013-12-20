@@ -29,7 +29,7 @@ public:
 	void startAsyn();
 	void wait();
 	void run();
-	std::string processCommand(std::string user, std::vector<std::string> cmdParams, bool isSuperUser);
+	std::string processCommand(std::string user, std::vector<std::string> cmdParams, bool isAllowed, bool isSuperUser);
 
 	std::string getDeckURL();
 	void setDeckURL(std::string deckURL);
@@ -43,6 +43,7 @@ private:
 	bool param_silent;
 	bool param_debug;
 	bool param_overthrow_hidbot;
+	unsigned int param_debug_level;
 
 	int numThreads;
 	boost::thread_group processingThreads;

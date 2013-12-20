@@ -26,12 +26,12 @@ public:
 	}
 
 	static std::string callCurl(const std::string& params) {
-		std::string curl(/*"\"" + std::string(HSIR_BASE_DIR) + "/" +*/ Config::getConfig().get<std::string>("config.paths.curl_path") + " -s ");
+		std::string curl(Config::getConfig().get<std::string>("config.paths.curl_path") + " -s ");
 		return exec(curl + params);
 	}
 
 	static std::string callLivestreamer(std::string streamer, std::string quality = "mobile_Medium") {
-		static std::string livestreamer("\"" + std::string(HSIR_BASE_DIR) + "/" + Config::getConfig().get<std::string>("config.paths.livestreamer_path") + "\" -j ");
+		static std::string livestreamer(Config::getConfig().get<std::string>("config.paths.livestreamer_path") + " -j ");
 		return exec(livestreamer + "twitch.tv/" + streamer + " " + quality);
 	}
 

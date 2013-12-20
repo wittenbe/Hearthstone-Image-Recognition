@@ -50,7 +50,9 @@ int main(int argc, char* argv[]) {
 			std::vector<std::string> cmdArgs;
 			boost::split(cmdArgs, cmdArgsString, boost::is_any_of(" "), boost::token_compress_on);
 
-			std::string response = sm.processCommand(user, cmdArgs, bot->isallowed(user));
+			const bool owner = bot->isowner(user);
+			const bool allowed = owner || bot->isallowed(user);
+			std::string response = sm.processCommand(user, cmdArgs, allowed, owner);
 			if (!response.empty()) {
 				bot->message(response);
 			}
