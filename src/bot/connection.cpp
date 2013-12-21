@@ -86,7 +86,7 @@ void connection::read(const boost::system::error_code& error)
 	    std::string line;
 	    std::istream is(&m_buffer);
 	    std::getline(is, line);
-	    line = line.substr(0, line.length() - 1); //delete late character, i.e. \n
+	    line = line.substr(0, line.length() - 1); //delete last character, i.e. \n
 		m_read_handler(line);
 
 		boost::asio::async_read_until(m_socket, m_buffer, '\n',

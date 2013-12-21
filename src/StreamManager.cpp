@@ -30,7 +30,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->bot = bot;
 	recognizer = RecognizerPtr(new Recognizer());
 	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
-	param_silent = true;
+	param_silent = false;
 	param_overthrow_hidbot = false;
 	param_debug_level = 0;
 	enableRecognizer(RECOGNIZER_DRAFT_CLASS_PICK);
@@ -126,6 +126,7 @@ void StreamManager::run() {
 						std::vector<std::string> choices = list_of("9")("8")("7")("6")("4-5")("0-3");
 						std::string strawpoll = SystemInterface::createStrawpoll(MSG_WINS_POLL, choices);
 						bot->message(MSG_WINS_POLL_VOTE + strawpoll);
+						bot->message("Mods, remember to set what Trump predicted with !predict (?)");
 						bot->repeat_message((boost::format(MSG_WINS_POLL_VOTE_REPEAT) % strawpoll).str(),
 								7, 5, 0);
 					}
@@ -179,6 +180,9 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 
 	commandMutex.lock();
 	bool toggleEnable = cmdParams.size() == 1 || cmdParams[1] == "1";
+	std::vector<std::string> params;
+	for (size_t i = 1; i < cmdParams.size(); i++) {params.push_back(cmdParams[i]);}
+	std::string allParams = boost::algorithm::join(params, " ");
 
 	if ("!deck" == cmdParams[0]) {
 		response = (boost::format(CMD_DECK_FORMAT) % currentDeck.url).str();
@@ -193,20 +197,16 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 			response = "Deck complete";
 		}
 	}
-	else if ("!setdeck" == cmdParams[0]
-	         && isAllowed && cmdParams.size() >= 2) {
-		currentDeck.url = cmdParams[1];
+	else if ("!setdeck" == cmdParams[0] && isAllowed && cmdParams.size() >= 2) {
+		currentDeck.url = allParams;
 	}
-	else if ("!silence" == cmdParams[0]
-	         && isAllowed) {
+	else if ("!silence" == cmdParams[0] && isAllowed) {
 		param_silent = toggleEnable;
 	}
-	else if("!fb_debug" == cmdParams[0]
-	         && isSuperUser) {
+	else if("!fb_debug" == cmdParams[0] && isSuperUser) {
 		param_debug = toggleEnable;
 	}
-	else if ("!fb_debuglevel" == cmdParams[0]
-	         && isSuperUser && cmdParams.size() == 2) {
+	else if ("!fb_debuglevel" == cmdParams[0] && isSuperUser && cmdParams.size() == 2) {
 		param_debug_level = boost::lexical_cast<unsigned int>(cmdParams[1]);
 	}
 
