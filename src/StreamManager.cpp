@@ -126,7 +126,7 @@ void StreamManager::run() {
 						std::vector<std::string> choices = list_of("9")("8")("7")("6")("4-5")("0-3");
 						std::string strawpoll = SystemInterface::createStrawpoll(MSG_WINS_POLL, choices);
 						bot->message(MSG_WINS_POLL_VOTE + strawpoll);
-						bot->message("Mods, remember to set what Trump predicted with !predict (?)");
+//						bot->message("Mods, remember to set what Trump predicted with !predict (?)");
 						bot->repeat_message((boost::format(MSG_WINS_POLL_VOTE_REPEAT) % strawpoll).str(),
 								7, 5, 0);
 					}
