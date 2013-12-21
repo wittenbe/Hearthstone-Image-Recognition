@@ -105,6 +105,7 @@ int main(int argc, char* argv[]) {
 				sm.setStream(hs::StreamPtr(new hs::Stream(addrs)));
 			}
 
+			std::cout << "connecting" << std::endl;
 			if (connected) {
 				std::cout << "connected to stream!" << std::endl;
 			    sm.startAsyn();
