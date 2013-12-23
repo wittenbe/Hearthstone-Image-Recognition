@@ -14,7 +14,7 @@ using namespace boost::assign;
 
 namespace hs {
 
-#define CMD_DECK_FORMAT "Trump's current deck: %s"
+#define CMD_DECK_FORMAT "Trump's current decklist: %s"
 #define MSG_CLASS_POLL "Which class should Trump pick next?"
 #define MSG_CLASS_POLL_VOTE "Vote for Trump's next class: "
 #define MSG_CLASS_POLL_VOTE_REPEAT "relink: "
@@ -32,7 +32,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
 	param_silent = true;
 	param_overthrow_hidbot = false;
-	param_debug_level = 1;
+	param_debug_level = 0;
 	enableRecognizer(RECOGNIZER_DRAFT_CLASS_PICK);
 	enableRecognizer(RECOGNIZER_DRAFT_CARD_PICK);
 	currentDeck.clear();

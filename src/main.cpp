@@ -96,6 +96,7 @@ int main(int argc, char* argv[]) {
 			bool connected = true;
 			const std::string execOutput = SystemInterface::callLivestreamer(streamer);
 			if (execOutput.find("\"error\"") <= execOutput.length()) {
+				std::cout << execOutput << std::endl;
 				connected = false;
 			} else {
 				const std::string subStr = execOutput.substr(execOutput.find("http"), execOutput.npos);
@@ -104,6 +105,11 @@ int main(int argc, char* argv[]) {
 				addrs.push_back(streamUrl);
 				sm.setStream(hs::StreamPtr(new hs::Stream(addrs)));
 			}
+
+			addrs.clear();
+			addrs.push_back("http://video12.ams01.hls.justin.tv/hls37/itshafu_7960684128_46834637/medium/index.m3u8?token=id=6897264402632612645,bid=7960684128,exp=1387909342,node=video12-1.ams01.hls.justin.tv,nname=video12.ams01,fmt=medium&sig=4e6a3d0dbc44305ccd4fe12a6b22e15beb5d6a10&");
+			connected = true;
+			sm.setStream(hs::StreamPtr(new hs::Stream(addrs)));
 
 			std::cout << "connecting" << std::endl;
 			if (connected) {
