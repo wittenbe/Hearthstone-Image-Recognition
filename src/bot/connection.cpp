@@ -43,12 +43,30 @@ void connection::connect()
 void connection::run()
 {
 	boost::thread write_handler_thread(m_write_handler);
-
-	boost::asio::async_read_until(m_socket, m_buffer, '\n',
-			boost::bind(&connection::read, this, _1)
-	);
-//	m_io_service.run();
 	m_read_thread = boost::thread(boost::bind(&boost::asio::io_service::run, &m_io_service));
+
+	while (alive()) {
+		boost::asio::read_until(m_socket, m_buffer, "\r\n");
+
+	    std::string line;
+	    std::istream is(&m_buffer);
+	    std::getline(is, line);
+	    std::cout << line << std::endl;
+	    line = line.substr(0, line.length() - 1); //delete last character, i.e. \n
+		m_read_handler(line);
+
+//		boost::asio::async_read_until(m_socket, m_buffer, '\n',
+//				boost::bind(&connection::read, this, _1)
+//		);
+	}
+
+//	boost::asio::async_read_until(m_socket, m_buffer, '\n',
+//			boost::bind(&connection::read, this, _1)
+//	);
+//
+//	std::cout << "asynch" << std::endl;
+//	m_io_service.run();
+
 
 	write_handler_thread.join();
 }
