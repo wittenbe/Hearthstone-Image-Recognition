@@ -32,7 +32,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
 	param_silent = true;
 	param_overthrow_hidbot = false;
-	param_debug_level = 2;
+	param_debug_level = 0;
 	enableRecognizer(RECOGNIZER_DRAFT_CLASS_PICK);
 	enableRecognizer(RECOGNIZER_DRAFT_CARD_PICK);
 	currentDeck.clear();
