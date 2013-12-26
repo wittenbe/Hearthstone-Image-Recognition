@@ -27,7 +27,6 @@ public:
 	void connect();
 	void connect(const std::string& addr, const std::string& port);
 	void write(const std::string& content);
-	void read(const boost::system::error_code& error);
 	
 	void set_read_handler(const read_handler_type& handler);
 	void set_write_handler(const write_handler_type& handler);

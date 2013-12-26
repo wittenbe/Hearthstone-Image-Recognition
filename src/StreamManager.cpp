@@ -32,7 +32,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
 	param_silent = true;
 	param_overthrow_hidbot = false;
-	param_debug_level = 0;
+	param_debug_level = 2;
 	enableRecognizer(RECOGNIZER_DRAFT_CLASS_PICK);
 	enableRecognizer(RECOGNIZER_DRAFT_CARD_PICK);
 	currentDeck.clear();
@@ -63,7 +63,7 @@ void StreamManager::run() {
 		const bool validImage = stream->read(image);
 		if (!validImage) break;
 
-		if (param_debug_level >= 2) {
+		if (param_debug_level & 2) {
 			cv::imshow("Debug", image);
 			cv::waitKey(10);
 		}
@@ -138,7 +138,7 @@ void StreamManager::run() {
 
 		commandMutex.unlock();
 
-		if (param_debug_level >= 1) {
+		if (param_debug_level & 1) {
 			std::cout << t.elapsed() << std::endl;
 		}
 	}
@@ -197,7 +197,8 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 			response = "Deck complete";
 		}
 	}
-	else if ("!setdeck" == cmdParams[0] && isAllowed && cmdParams.size() >= 2) {
+	else if (cmdParams.size() >= 2 &&  isAllowed &&
+			"!setdeck" == cmdParams[0]) {
 		currentDeck.url = allParams;
 	}
 	else if ("!silence" == cmdParams[0] && isAllowed) {
@@ -208,6 +209,12 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 	}
 	else if ("!fb_debuglevel" == cmdParams[0] && isSuperUser && cmdParams.size() == 2) {
 		param_debug_level = boost::lexical_cast<unsigned int>(cmdParams[1]);
+	}
+	else if (cmdParams.size() >= 2 &&  isAllowed &&
+			"!info" == cmdParams[0] && "fortebot" == cmdParams[1]) {
+		response = "ForteBot uses OpenCV and perceptual hashing to very quickly compare all card images against the stream image. "
+				"The Bot is written in C++ by ZeForte. "
+				"Check out the source on GitHub: http://bit.ly/1eGgN5g";
 	}
 
 	commandMutex.unlock();

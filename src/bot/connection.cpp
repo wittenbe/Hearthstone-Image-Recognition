@@ -51,22 +51,9 @@ void connection::run()
 	    std::string line;
 	    std::istream is(&m_buffer);
 	    std::getline(is, line);
-	    std::cout << line << std::endl;
 	    line = line.substr(0, line.length() - 1); //delete last character, i.e. \n
 		m_read_handler(line);
-
-//		boost::asio::async_read_until(m_socket, m_buffer, '\n',
-//				boost::bind(&connection::read, this, _1)
-//		);
 	}
-
-//	boost::asio::async_read_until(m_socket, m_buffer, '\n',
-//			boost::bind(&connection::read, this, _1)
-//	);
-//
-//	std::cout << "asynch" << std::endl;
-//	m_io_service.run();
-
 
 	write_handler_thread.join();
 }
@@ -94,26 +81,6 @@ void connection::write(const std::string& content)
 {
 	LOG("Write", content);
 	boost::asio::write(m_socket, boost::asio::buffer(content + "\r\n"));
-}
-
-void connection::read(const boost::system::error_code& error)
-{
-	if (error) {
-		LOG("Error", "Some error occured");
-		close();
-	}
-	else {
-	    std::string line;
-	    std::istream is(&m_buffer);
-	    std::getline(is, line);
-	    std::cout << line << std::endl;
-	    line = line.substr(0, line.length() - 1); //delete last character, i.e. \n
-		m_read_handler(line);
-
-		boost::asio::async_read_until(m_socket, m_buffer, '\n',
-				boost::bind(&connection::read, this, _1)
-		);
-	}
 }
 
 void connection::set_read_handler(const read_handler_type& handler)

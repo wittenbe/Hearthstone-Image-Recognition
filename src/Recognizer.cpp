@@ -21,9 +21,9 @@ using namespace boost::assign;
 namespace hs {
 
 const std::vector<cv::Rect_<float> > Recognizer::ARENA_CLASS_START = list_of
-		(cv::Rect_<float>(0.2366f, 0.3063f, 0.0656f, 0.1751f))
-		(cv::Rect_<float>(0.3806f, 0.3063f, 0.0656f, 0.1751f))
-		(cv::Rect_<float>(0.5235f, 0.3063f, 0.0656f, 0.1751f));
+		(cv::Rect_<float>(0.2366f, 0.2938f, 0.0656f, 0.1751f))
+		(cv::Rect_<float>(0.3806f, 0.2938f, 0.0656f, 0.1751f))
+		(cv::Rect_<float>(0.5235f, 0.2938f, 0.0656f, 0.1751f));
 
 const std::vector<cv::Rect_<float> > Recognizer::ARENA_CARD_PICK = list_of
 		(cv::Rect_<float>(0.2448f, 0.2459f, 0.0504f, 0.1230f))
