@@ -6,6 +6,7 @@
 #include <boost/asio.hpp>
 #include <boost/function.hpp>
 #include <boost/array.hpp>
+#include <boost/thread.hpp>
 
 namespace clever_bot {
 
@@ -42,6 +43,7 @@ private:
 	boost::asio::io_service m_io_service;
 	boost::asio::ip::tcp::socket m_socket;
 	
+	boost::thread m_read_thread;
 	read_handler_type m_read_handler;
 	write_handler_type m_write_handler;
 	
