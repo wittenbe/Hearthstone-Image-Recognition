@@ -210,7 +210,7 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 	for (size_t i = 1; i < cmdParams.size(); i++) {params.push_back(cmdParams[i]);}
 	std::string allParams = boost::algorithm::join(params, " ");
 
-	if ("!deck" == cmdParams[0]) {
+	if ("!deck" == cmdParams[0] || "!decklist" == cmdParams[0]) {
 		response = (boost::format(CMD_DECK_FORMAT) % currentDeck.url).str();
 	}
 	else if ("!deckprogress" == cmdParams[0]) {
@@ -242,7 +242,8 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 		if (toggle) {
 			param_backupscoring = toggleEnable;
 		}
-		response = "Backup scoring is: " + (param_backupscoring)? "on" : "off";
+		response = "Backup scoring is: ";
+		response += (param_backupscoring)? "on" : "off";
 	}
 	else if ("!silence" == cmdParams[0] && isAllowed) {
 		param_silent = toggleEnable;
