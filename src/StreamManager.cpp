@@ -136,14 +136,15 @@ void StreamManager::run() {
 				}
 			}
 			else if (RECOGNIZER_GAME_CLASS_SHOW  == result.sourceRecognizer) {
-//				std::cout << "new game" << std::endl;
+				std::cout << "new game" << std::endl;
 				enable(RECOGNIZER_GAME_COIN);
 				disable(RECOGNIZER_GAME_CLASS_SHOW);
 				currentGame.player = result.results[0];
-				currentGame.opponent = result.results[0];
+				currentGame.opponent = result.results[1];
 
 			}
 			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer) {
+				std::cout << "coin" << std::endl;
 				enable(RECOGNIZER_GAME_END);
 				disable(RECOGNIZER_GAME_COIN);
 				currentGame.fs = result.results[0];
@@ -152,6 +153,7 @@ void StreamManager::run() {
 				}
 			}
 			else if (RECOGNIZER_GAME_END == result.sourceRecognizer) {
+				std::cout << "end" << std::endl;
 				enable(RECOGNIZER_GAME_CLASS_SHOW);
 				disable(RECOGNIZER_GAME_END);
 				currentGame.end = result.results[0];
