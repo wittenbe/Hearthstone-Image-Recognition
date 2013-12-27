@@ -4,7 +4,7 @@
 		<server>irc.twitch.tv</server>
 		<server_port>6667</server_port>
 		<!-- if channel is empty, "#<streamer>" will be chosen as the channel --> 
-		<channel></channel>
+		<channel>#trumpsc</channel>
 
 		<bot_nick>ForteBot</bot_nick>
 		<bot_pass></bot_pass> <!-- use an oauth token -->
@@ -15,8 +15,8 @@
 	</twitch_bot>
 	<stream>
 		<streamer>trumpsc</streamer>
-		<live>true</live>
-		<vod>http://api.justin.tv/api/broadcast/by_archive/483356129.xml</vod>
+		<live>false</live>
+		<vod>http://api.justin.tv/api/broadcast/by_archive/490132588.xml</vod>
 	</stream>
 	<image_recognition>
 		<threads>1</threads>
@@ -24,14 +24,21 @@
 		<precompute_data>false</precompute_data>
 		
 		<phash_threshold>13</phash_threshold>
+		
+		<sift_feature_count>100</sift_feature_count>
 	</image_recognition>
 	<paths>
-		<!-- paths relative to the CMakeLists.txt -->
+		<!-- data is relative to folder with CMakeLists, the rest is relative to executable -->
+		<!-- eventually, all will be relative to where you execute the program -->
 		<recognition_data_path>../data.xml</recognition_data_path>
-		<livestreamer_path>../livestreamer-v1.7.0/livestreamer</livestreamer_path>
+		<livestreamer_path>.\..\livestreamer-v1.7.0\livestreamer.exe</livestreamer_path>
 		<curl_path>.\..\curl</curl_path>
+		
+		<!-- needed for sift feature precalculation -->
+		<misc_image_path>../images/misc</misc_image_path>
 		<!-- only needed if precompute_data == true -->
 		<card_image_path>../images/card</card_image_path>
 		<hero_image_path>../images/hero</hero_image_path>
+		
 	</paths>
 </config>
