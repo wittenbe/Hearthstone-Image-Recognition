@@ -15,15 +15,20 @@ using namespace boost::assign;
 namespace hs {
 
 #define CMD_DECK_FORMAT "Trump's current decklist: %s"
+
+#define DECK_PICK_FORMAT "Pick %02i: (%s, %s, %s)"
+#define DECK_PICKED_FORMAT " --> Trump picked %s"
+
 #define MSG_CLASS_POLL "Which class should Trump pick next?"
 #define MSG_CLASS_POLL_VOTE "Vote for Trump's next class: "
-#define MSG_CLASS_POLL_VOTE_REPEAT "relink: "
+#define MSG_CLASS_POLL_VOTE_REPEAT "relink: %s"
+
 #define MSG_WINS_POLL "How many wins do you think Trump will be able to achieve with this deck?"
 #define MSG_WINS_POLL_VOTE "How many wins do you think Trump will get? "
 #define MSG_WINS_POLL_VOTE_REPEAT "relink: %s"
 
-#define DECK_PICK_FORMAT "Pick %02i: (%s, %s, %s)"
-#define DECK_PICKED_FORMAT " --> Trump picked %s"
+#define MSG_GAME_START "#!score -as %s -vs %s -%d"
+
 
 StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->stream = stream;
@@ -31,10 +36,10 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	recognizer = RecognizerPtr(new Recognizer());
 	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
 	param_silent = true;
-	param_overthrow_hidbot = false;
+	param_backupscoring = false;
 	param_debug_level = 0;
-	enableRecognizer(RECOGNIZER_DRAFT_CLASS_PICK);
-	enableRecognizer(RECOGNIZER_DRAFT_CARD_PICK);
+	enable(RECOGNIZER_ALLOW_ALL);
+	disable(RECOGNIZER_DRAFT_CARD_CHOSEN);
 	currentDeck.clear();
 
 	numThreads = Config::getConfig().get<int>("config.image_recognition.threads");
@@ -56,6 +61,7 @@ void StreamManager::wait() {
 
 void StreamManager::run() {
 	cv::Mat image;
+//	stream->setFramePos(11900);
 
 	bool running = true;
 	while (running) {
@@ -64,8 +70,10 @@ void StreamManager::run() {
 		if (!validImage) break;
 
 		if (param_debug_level & 2) {
+			std::cout << stream->getFramePos() << std::endl;
 			cv::imshow("Debug", image);
 			cv::waitKey(10);
+//			cv::waitKey();
 		}
 
 		boost::timer t;
@@ -74,10 +82,8 @@ void StreamManager::run() {
 		commandMutex.lock();
 
 		for (auto& result : results) {
-			switch (result.sourceRecognizer) {
-			case RECOGNIZER_DRAFT_CLASS_PICK: {
-				enableRecognizer(RECOGNIZER_DRAFT_CARD_PICK);
-				disableRecognizer(RECOGNIZER_DRAFT_CLASS_PICK);
+			if (RECOGNIZER_DRAFT_CLASS_PICK == result.sourceRecognizer) {
+				enableAllBut(RECOGNIZER_DRAFT_CLASS_PICK | RECOGNIZER_DRAFT_CARD_CHOSEN);
 				currentDeck.clear();
 				std::cout << "new draft" << std::endl;
 
@@ -85,12 +91,12 @@ void StreamManager::run() {
 					bot->message("!subon");
 					std::string strawpoll = SystemInterface::createStrawpoll(MSG_CLASS_POLL, result.results);
 					bot->message(MSG_CLASS_POLL_VOTE + strawpoll, 1);
-					bot->repeat_message(MSG_CLASS_POLL_VOTE_REPEAT + strawpoll, 5, 5, 2);
+					bot->repeat_message((boost::format(MSG_CLASS_POLL_VOTE_REPEAT) % strawpoll).str(),
+							5, 5, 2);
 					bot->message("!suboff", 60);
 				}
-			}break;
-
-			case RECOGNIZER_DRAFT_CARD_PICK: {
+			}
+			else if (RECOGNIZER_DRAFT_CARD_PICK == result.sourceRecognizer) {
 				bool isNew = currentDeck.cards.size() == 0;
 				const size_t last = currentDeck.picks.size() - 1;
 				for (size_t i = 0; i < result.results.size() && !isNew; i++) {
@@ -99,40 +105,45 @@ void StreamManager::run() {
 				}
 
 				if (isNew) {
-					disableRecognizer(RECOGNIZER_DRAFT_CARD_PICK);
-					enableRecognizer(RECOGNIZER_DRAFT_CARD_CHOSEN);
-					enableRecognizer(RECOGNIZER_DRAFT_CLASS_PICK);
+					enableAllBut(RECOGNIZER_DRAFT_CARD_PICK);
 					currentDeck.picks.push_back(result.results);
-					std::cout << "pick " << currentDeck.cards.size() << ": " + result.results[0] + ", " + result.results[1] + ", " << result.results[2] << std::endl;
+					std::cout << "pick " << currentDeck.cards.size() + 1 << ": " + result.results[0] + ", " + result.results[1] + ", " << result.results[2] << std::endl;
 				}
-			}break;
-
-			case RECOGNIZER_DRAFT_CARD_CHOSEN: {
-				enableRecognizer(RECOGNIZER_DRAFT_CARD_PICK);
-				disableRecognizer(RECOGNIZER_DRAFT_CARD_CHOSEN);
+			}
+			else if (RECOGNIZER_DRAFT_CARD_CHOSEN  == result.sourceRecognizer) {
+				enable(RECOGNIZER_DRAFT_CARD_PICK);
+				disable(RECOGNIZER_DRAFT_CARD_CHOSEN);
 
 				size_t index = boost::lexical_cast<int>(result.results[0]);
 				std::cout << "picked " << currentDeck.picks.back()[index] << std::endl;
 				currentDeck.cards.push_back(currentDeck.picks.back()[index]);
 
 				if (currentDeck.cards.size() == 30) {
-					disableRecognizer(RECOGNIZER_DRAFT_CARD_PICK);
-					enableRecognizer(RECOGNIZER_DRAFT_CLASS_PICK);
+					enableAllBut(RECOGNIZER_DRAFT_CARD_PICK | RECOGNIZER_DRAFT_CARD_CHOSEN);
 					std::string deckString = createDeckString(currentDeck);
 					currentDeck.url = SystemInterface::createHastebin(deckString);
 
 					bot->message((boost::format(CMD_DECK_FORMAT) % currentDeck.url).str());
 					if (!param_silent) {
-						std::vector<std::string> choices = list_of("9")("8")("7")("6")("4-5")("0-3");
-						std::string strawpoll = SystemInterface::createStrawpoll(MSG_WINS_POLL, choices);
-						bot->message(MSG_WINS_POLL_VOTE + strawpoll);
-//						bot->message("Mods, remember to set what Trump predicted with !predict (?)");
-						bot->repeat_message((boost::format(MSG_WINS_POLL_VOTE_REPEAT) % strawpoll).str(),
-								7, 5, 0);
+//						std::vector<std::string> choices = list_of("9")("8")("7")("6")("4-5")("0-3");
+//						std::string strawpoll = SystemInterface::createStrawpoll(MSG_WINS_POLL, choices);
+//						bot->message(MSG_WINS_POLL_VOTE + strawpoll);
+////						bot->message("Mods, remember to set what Trump predicted with !predict (?)");
+//						bot->repeat_message((boost::format(MSG_WINS_POLL_VOTE_REPEAT) % strawpoll).str(),
+//								7, 5, 0);
 					}
 				}
+			}
+			else if (RECOGNIZER_GAME_CLASS_SHOW  == result.sourceRecognizer) {
+//				std::cout << "new game" << std::endl;
+//				enableAllBut(RECOGNIZER_DRAFT_CARD_CHOSEN);
 
-			}break;
+			}
+			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer) {
+//				std::cout << "coin " << result.results[0] << std::endl;
+			}
+			else if (RECOGNIZER_GAME_END == result.sourceRecognizer) {
+//				std::cout << "end " << result.results[0] << std::endl;
 			}
 		}
 
@@ -179,7 +190,8 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 	if (cmdParams.size() == 0) return response;
 
 	commandMutex.lock();
-	bool toggleEnable = cmdParams.size() == 1 || cmdParams[1] == "1";
+	bool toggle = cmdParams.size() >= 1;
+	bool toggleEnable = toggle && (cmdParams[1] == "1" || cmdParams[1] == "on" || cmdParams[1] == "true");
 	std::vector<std::string> params;
 	for (size_t i = 1; i < cmdParams.size(); i++) {params.push_back(cmdParams[i]);}
 	std::string allParams = boost::algorithm::join(params, " ");
@@ -197,6 +209,17 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 			response = "Deck complete";
 		}
 	}
+	else if ("!deckforcepublish" == cmdParams[0] && isAllowed) {
+		while (currentDeck.picks.size() < 30) {
+			std::vector<std::string> pick;
+			pick.push_back("?"); pick.push_back("?"); pick.push_back("?");
+			currentDeck.picks.push_back(pick);
+		}
+		while (currentDeck.cards.size() < 30) currentDeck.cards.push_back("?");
+		std::string deckString = createDeckString(currentDeck);
+		currentDeck.url = SystemInterface::createHastebin(deckString);
+		response = (boost::format(CMD_DECK_FORMAT) % currentDeck.url).str();
+	}
 	else if (cmdParams.size() >= 2 &&  isAllowed &&
 			"!setdeck" == cmdParams[0]) {
 		currentDeck.url = allParams;
@@ -204,17 +227,14 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 	else if ("!silence" == cmdParams[0] && isAllowed) {
 		param_silent = toggleEnable;
 	}
-	else if("!fb_debug" == cmdParams[0] && isSuperUser) {
-		param_debug = toggleEnable;
-	}
 	else if ("!fb_debuglevel" == cmdParams[0] && isSuperUser && cmdParams.size() == 2) {
 		param_debug_level = boost::lexical_cast<unsigned int>(cmdParams[1]);
 	}
 	else if (cmdParams.size() >= 2 &&  isAllowed &&
 			"!info" == cmdParams[0] && "fortebot" == cmdParams[1]) {
-		response = "ForteBot uses OpenCV and perceptual hashing to very quickly compare all card images against the stream image. "
+		response = "ForteBot uses OpenCV and perceptual hashing to very quickly compare all card images against the stream image to find a match. "
 				"The Bot is written in C++ by ZeForte. "
-				"Check out the source on GitHub: http://bit.ly/1eGgN5g";
+				"Check out the (poorly commented) source on GitHub: http://bit.ly/1eGgN5g";
 	}
 
 	commandMutex.unlock();

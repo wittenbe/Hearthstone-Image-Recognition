@@ -40,9 +40,9 @@ private:
 	clever_bot::botPtr bot;
 	RecognizerPtr recognizer;
 	unsigned int allowedRecognizers;
+
 	bool param_silent;
-	bool param_debug;
-	bool param_overthrow_hidbot;
+	bool param_backupscoring;
 	unsigned int param_debug_level;
 
 	int numThreads;
@@ -53,8 +53,10 @@ private:
 	//make sure the execution of commands doesn't interfere with other vars
     boost::mutex commandMutex;
 
-    void disableRecognizer(unsigned int recognizer) {allowedRecognizers &= (~recognizer);}
-    void enableRecognizer(unsigned int recognizer) {allowedRecognizers |= recognizer;}
+    void disable(unsigned int recognizer) {allowedRecognizers &= (~recognizer);}
+    void enable(unsigned int recognizer) {allowedRecognizers |= recognizer;}
+    void enableAllBut(unsigned int recognizers) {allowedRecognizers = ~recognizers;}
+    void disableAllBut(unsigned int recognizers) {allowedRecognizers = recognizers;}
 };
 
 }

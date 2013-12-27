@@ -20,28 +20,34 @@ using namespace boost::assign;
 
 namespace hs {
 
-const std::vector<cv::Rect_<float> > Recognizer::ARENA_CLASS_START = list_of
+//regions of interest for phash comparisons
+const Recognizer::VectorROI Recognizer::DRAFT_CLASS_PICK = list_of
 		(cv::Rect_<float>(0.2366f, 0.2938f, 0.0656f, 0.1751f))
 		(cv::Rect_<float>(0.3806f, 0.2938f, 0.0656f, 0.1751f))
 		(cv::Rect_<float>(0.5235f, 0.2938f, 0.0656f, 0.1751f));
 
-const std::vector<cv::Rect_<float> > Recognizer::ARENA_CARD_PICK = list_of
+const Recognizer::VectorROI Recognizer::DRAFT_CARD_PICK = list_of
 		(cv::Rect_<float>(0.2448f, 0.2459f, 0.0504f, 0.1230f))
 		(cv::Rect_<float>(0.3876f, 0.2459f, 0.0504f, 0.1230f))
 		(cv::Rect_<float>(0.5293f, 0.2459f, 0.0504f, 0.1230f));
 
-const std::vector<cv::Rect_<float> > Recognizer::ARENA_CARD_BLUE = list_of
+const Recognizer::VectorROI Recognizer::DRAFT_CARD_CHOSEN = list_of
 		(cv::Rect_<float>(0.2448f, 0.4459f, 0.0504f, 0.073f))
 		(cv::Rect_<float>(0.3876f, 0.4459f, 0.0504f, 0.073f))
 		(cv::Rect_<float>(0.5293f, 0.4459f, 0.0504f, 0.073f));
 
-const std::vector<cv::Rect_<float> > Recognizer::GAME_CLASS_SHOW = list_of
-		(cv::Rect_<float>(0.2799f, 0.5917f, 0.1101f, 0.2938f))
-		(cv::Rect_<float>(0.6581f, 0.123f, 0.1101f, 0.2938f));
+const Recognizer::VectorROI Recognizer::GAME_CLASS_SHOW = list_of
+		(cv::Rect_<float>(0.2799f, 0.5938f, 0.1101f, 0.2938f))
+		(cv::Rect_<float>(0.6593f, 0.123f, 0.1101f, 0.2938f));
+
+//regions of interest for SIFT comparison
+const Recognizer::VectorROI Recognizer::GAME_COIN = list_of
+		(cv::Rect_<float>(0.645f, 0.4f, 0.1f, 0.23f));
+
+const Recognizer::VectorROI Recognizer::GAME_END = list_of
+		(cv::Rect_<float>(0.38f, 0.53f, 0.25f, 0.13f));
 
 Recognizer::Recognizer() {
-	waitForBlue = false;
-
 	auto cfg = Config::getConfig();
 	phashThreshold = cfg.get<int>("config.image_recognition.phash_threshold");
 	std::string dataPath = std::string(HSIR_BASE_DIR) + "/" + cfg.get<std::string>("config.paths.recognition_data_path");
@@ -53,6 +59,22 @@ Recognizer::Recognizer() {
 
     populateFromData("hs_data.cards", cards);
     populateFromData("hs_data.heroes", heroes);
+
+    //prepare the SIFT stuff
+	detector = SiftFeatureDetectorPtr(new cv::SiftFeatureDetector(cfg.get<int>("config.image_recognition.sift_feature_count")));
+	extractor = SiftDescriptorExtractorPtr(new cv::SiftDescriptorExtractor());
+	matcher = FlannBasedMatcherPtr(new cv::FlannBasedMatcher());
+
+    cv::Mat tempImg;
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_victory.png", CV_LOAD_IMAGE_GRAYSCALE);
+    descriptorEnd.push_back(std::make_pair(getDescriptor(tempImg), "w"));
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_defeat.png", CV_LOAD_IMAGE_GRAYSCALE);
+    descriptorEnd.push_back(std::make_pair(getDescriptor(tempImg), "l"));
+
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_first.png", CV_LOAD_IMAGE_GRAYSCALE);
+    descriptorCoin.push_back(std::make_pair(getDescriptor(tempImg), "1"));
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_second.png", CV_LOAD_IMAGE_GRAYSCALE);
+    descriptorCoin.push_back(std::make_pair(getDescriptor(tempImg), "2"));
 }
 
 void Recognizer::precomputeData(const std::string& dataPath) {
@@ -90,7 +112,7 @@ void Recognizer::populateFromData(const std::string& dataPath, DataSet& dataSet)
             DataSetEntry o;
             o.name = name;
             o.phash = phash;
-            dataSet.dataPoints.push_back(o);
+            dataSet.entries.push_back(o);
         	dataSet.hashes.push_back(phash);
     	}
     }
@@ -100,35 +122,22 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 	std::vector<RecognitionResult> results;
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CLASS_PICK) {
-		std::vector<std::string> bestMatches = comparePHashes(image, ARENA_CLASS_START, heroes);
-		bool valid = true;
-		for (auto& bestMatch : bestMatches) {
-			valid &= !bestMatch.empty();
-		}
-		if (valid) {
-			RecognitionResult rr;
-			rr.sourceRecognizer = RECOGNIZER_DRAFT_CLASS_PICK;
-			rr.results = bestMatches;
-			results.push_back(rr);
-		}
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CLASS_PICK, DRAFT_CLASS_PICK, heroes);
+		if (rr.valid) results.push_back(rr);
 	}
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CARD_PICK) {
-		std::vector<std::string> bestMatches = comparePHashes(image, ARENA_CARD_PICK, cards);
-		bool valid = true;
-		for (auto& bestMatch : bestMatches) {
-			valid &= !bestMatch.empty();
-		}
-		if (valid) {
-			RecognitionResult rr;
-			rr.sourceRecognizer = RECOGNIZER_DRAFT_CARD_PICK;
-			rr.results = bestMatches;
-			results.push_back(rr);
-		}
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CARD_PICK, DRAFT_CARD_PICK, cards);
+		if (rr.valid) results.push_back(rr);
+	}
+
+	if (allowedRecognizers & RECOGNIZER_GAME_CLASS_SHOW) {
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_CLASS_SHOW, GAME_CLASS_SHOW, heroes);
+		if (rr.valid) results.push_back(rr);
 	}
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CARD_CHOSEN) {
-		int index = getIndexOfBluest(image, ARENA_CARD_BLUE);
+		int index = getIndexOfBluest(image, DRAFT_CARD_CHOSEN);
 		if (index >= 0) {
 			RecognitionResult rr;
 			rr.sourceRecognizer = RECOGNIZER_DRAFT_CARD_CHOSEN;
@@ -137,14 +146,36 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 		}
 	}
 
-//	    cv::imshow("Output Window", image);
-//	    cv::waitKey(15);
-//	    cv::waitKey();
+	if (allowedRecognizers & RECOGNIZER_GAME_COIN) {
+		RecognitionResult rr = compareSIFT(image, RECOGNIZER_GAME_COIN, GAME_COIN, descriptorCoin);
+		if (rr.valid) results.push_back(rr);
+	}
+
+	if (allowedRecognizers & RECOGNIZER_GAME_END) {
+		RecognitionResult rr = compareSIFT(image, RECOGNIZER_GAME_END, GAME_END, descriptorEnd);
+		if (rr.valid) results.push_back(rr);
+	}
 
 	return results;
 }
 
-std::vector<std::string> Recognizer::comparePHashes(const cv::Mat& image, const std::vector<cv::Rect_<float> >& roi, DataSet dataSet) {
+Recognizer::RecognitionResult Recognizer::comparePHashes(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const DataSet& dataSet) {
+	std::vector<std::string> bestMatches = bestPHashMatches(image, roi, dataSet);
+	bool valid = true;
+	for (auto& bestMatch : bestMatches) {
+		valid &= !bestMatch.empty();
+	}
+	RecognitionResult rr;
+	rr.valid = valid;
+	if (valid) {
+		rr.sourceRecognizer = recognizer;
+		rr.results = bestMatches;
+	}
+
+	return rr;
+}
+
+std::vector<std::string> Recognizer::bestPHashMatches(const cv::Mat& image, const VectorROI& roi, const DataSet& dataSet) {
 	std::vector<std::string> results;
 	for (auto& r : roi) {
 		cv::Mat roiImage = image(
@@ -154,7 +185,7 @@ std::vector<std::string> Recognizer::comparePHashes(const cv::Mat& image, const 
 		PerceptualHash::ComparisonResult best = PerceptualHash::best(phash, dataSet.hashes);
 
 		if (best.distance < phashThreshold) {
-			results.push_back(dataSet.dataPoints[best.index].name);
+			results.push_back(dataSet.entries[best.index].name);
 		} else {
 			results.push_back("");
 		}
@@ -163,7 +194,7 @@ std::vector<std::string> Recognizer::comparePHashes(const cv::Mat& image, const 
 	return results;
 }
 
-int Recognizer::getIndexOfBluest(const cv::Mat& image, const std::vector<cv::Rect_<float> >& roi) {
+int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
 	std::vector<float> results;
 	for (auto& r : roi) {
 		cv::Mat roiImage = image(
@@ -193,6 +224,65 @@ int Recognizer::getIndexOfBluest(const cv::Mat& image, const std::vector<cv::Rec
 	return bluest;
 }
 
+Recognizer::RecognitionResult Recognizer::compareSIFT(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const std::vector<std::pair<cv::Mat, std::string> > descriptors) {
+    RecognitionResult rr;
+    rr.valid = false;
 
+	for (auto& r : roi) {
+		cv::Mat roiImage = image(
+	    		cv::Range(r.y * image.rows, (r.y + r.height) * image.rows),
+	    		cv::Range(r.x * image.cols, (r.x + r.width) * image.cols));
+	    cv::Mat greyscaleImage;
+	    cv::cvtColor(roiImage, greyscaleImage, CV_BGR2GRAY);
+	    cv::Mat descriptorImage = getDescriptor(greyscaleImage);
+
+
+	    for (size_t i = 0; i < descriptors.size(); i++) {
+	    	if (isSIFTMatch(descriptorImage, descriptors[i].first)) {
+	    		rr.valid = true;
+	    		rr.sourceRecognizer = recognizer;
+	    		rr.results.push_back(descriptors[i].second);
+	    		break;
+	    	}
+	    }
+	    if (rr.valid) break;
+	}
+
+	return rr;
+}
+
+//get descriptor of SIFT features
+cv::Mat Recognizer::getDescriptor(cv::Mat& image) {
+	std::vector<cv::KeyPoint> keypoints;
+	cv::Mat descriptor;
+	detector->detect(image, keypoints);
+	extractor->compute(image, keypoints, descriptor);
+	return descriptor;
+}
+
+bool Recognizer::isSIFTMatch(const cv::Mat& descriptorObj, const cv::Mat& descriptorScene) {
+	bool match = false;
+	std::vector<std::vector<cv::DMatch> > matches;
+	std::vector<cv::DMatch> good_matches;
+	matcher->knnMatch(descriptorObj, descriptorScene, matches, 2);
+
+	//the 0.4 constant is a measure on how similar the features are, with lower being more strict (but also unlikely to find matches)
+	//there's a tradeoff of strictness and the initial amount of features calculated
+	for (int i = 0; i < std::min(descriptorScene.rows - 1,(int) matches.size()); i++) {
+		if ((matches[i].size() <= 2 && matches[i].size() > 0) && (matches[i][0].distance < 0.4 * (matches[i][1].distance))) {
+			good_matches.push_back(matches[i][0]);
+		}
+	}
+
+	//to identify where the object is in the scene, i.e. what the homography is, we'd need 4 known points to solve for 4 unknowns (2 rotation, 2 translation)
+	//that means taht if we HAVE 4 or more points, we can most likely calculate a homography to find the reference image in the stream image
+	if (good_matches.size() >= 4) {
+		//the actual homography isn't calculated to save time; and its analysis is probably not that simple anyway
+		//this also means that it's actually unknown WHERE the object is in the scene, only THAT it probably appears somewhere
+		match = true;
+	}
+
+	return match;
+}
 
 }

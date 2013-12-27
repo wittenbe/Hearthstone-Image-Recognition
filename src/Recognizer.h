@@ -21,25 +21,32 @@ namespace hs {
 #define RECOGNIZER_DRAFT_CLASS_PICK 1
 #define RECOGNIZER_DRAFT_CARD_PICK 4
 #define RECOGNIZER_DRAFT_CARD_CHOSEN 8
-
-//partial support or planned
-#define RECOGNIZER_DRAFT_CLASS_CHOSEN 2
 #define RECOGNIZER_GAME_CLASS_SHOW 16
 #define RECOGNIZER_GAME_COIN 32
 #define RECOGNIZER_GAME_END 64
 
-//only the supported are included
-#define RECOGNIZER_ALLOW_ALL 13
+//partial support or planned
+#define RECOGNIZER_DRAFT_CLASS_CHOSEN 2
+
+#define RECOGNIZER_ALLOW_ALL -1
 #define RECOGNIZER_ALLOW_NONE 0
+
+typedef boost::shared_ptr<cv::SiftFeatureDetector> SiftFeatureDetectorPtr;
+typedef boost::shared_ptr<cv::SiftDescriptorExtractor> SiftDescriptorExtractorPtr;
+typedef boost::shared_ptr<cv::FlannBasedMatcher> FlannBasedMatcherPtr;
 
 class Recognizer {
 public:
-	static const std::vector<cv::Rect_<float> > ARENA_CLASS_START;
-	static const std::vector<cv::Rect_<float> > ARENA_CARD_PICK;
-	static const std::vector<cv::Rect_<float> > ARENA_CARD_BLUE;
-	static const std::vector<cv::Rect_<float> > GAME_CLASS_SHOW;
+	typedef std::vector<cv::Rect_<float> > VectorROI;
+	static const VectorROI DRAFT_CLASS_PICK;
+	static const VectorROI DRAFT_CARD_PICK;
+	static const VectorROI DRAFT_CARD_CHOSEN;
+	static const VectorROI GAME_CLASS_SHOW;
+	static const VectorROI GAME_COIN;
+	static const VectorROI GAME_END;
 
 	struct RecognitionResult {
+		bool valid;
 		unsigned int sourceRecognizer;
 		std::vector<std::string> results;
 	};
@@ -50,8 +57,8 @@ public:
 	};
 
 	struct DataSet {
-		std::vector<DataSetEntry> dataPoints;
-		std::vector<ulong64> hashes; //quick access
+		std::vector<DataSetEntry> entries;
+		std::vector<ulong64> hashes; //for quick access
 	};
 
 	Recognizer();
@@ -59,15 +66,26 @@ public:
 private:
 	void precomputeData(const std::string& dataPath);
 	void populateFromData(const std::string& dataPath, DataSet& dataSet);
-	std::vector<std::string> comparePHashes(const cv::Mat& image, const std::vector<cv::Rect_<float> >& roi, DataSet dataSet);
-	int getIndexOfBluest(const cv::Mat& image, const std::vector<cv::Rect_<float> >& roi);
+
+	RecognitionResult compareSIFT(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const std::vector<std::pair<cv::Mat, std::string> > descriptors);
+	RecognitionResult comparePHashes(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const DataSet& dataSet);
+	std::vector<std::string> bestPHashMatches(const cv::Mat& image, const VectorROI& roi, const DataSet& dataSet);
+	int getIndexOfBluest(const cv::Mat& image, const VectorROI& roi);
+
+	cv::Mat getDescriptor(cv::Mat& image);
+	bool isSIFTMatch(const cv::Mat& descriptorObj, const cv::Mat& descriptorScene);
 
 	boost::property_tree::ptree data;
 	int phashThreshold;
 	DataSet cards;
 	DataSet heroes;
-	unsigned int gameState; //three states: before class selection, before coin and before end
-	bool waitForBlue; //substate of card picking
+
+	//SIFT stuff
+	SiftFeatureDetectorPtr detector;
+	SiftDescriptorExtractorPtr extractor;
+	FlannBasedMatcherPtr matcher;
+	std::vector<std::pair<cv::Mat, std::string> > descriptorCoin;
+	std::vector<std::pair<cv::Mat, std::string> > descriptorEnd;
 };
 
 typedef boost::shared_ptr<Recognizer> RecognizerPtr;

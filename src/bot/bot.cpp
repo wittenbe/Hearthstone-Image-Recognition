@@ -92,7 +92,7 @@ void bot::write_handler()
     		send_count--;
     	}
 
-    	if (m_sent_command_timestamps.size() == 0 && m_unsent_commands.size() == 0 && m_uptime.elapsed() > 86400.0) {
+    	if (m_sent_command_timestamps.size() == 0 && m_unsent_commands.size() == 0 && m_uptime.elapsed() > 43200.0) {
     		m_uptime = boost::timer(); //avoid overflows for very long running times
     	}
 	}
