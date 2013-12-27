@@ -27,7 +27,8 @@ namespace hs {
 #define MSG_WINS_POLL_VOTE "How many wins do you think Trump will get? "
 #define MSG_WINS_POLL_VOTE_REPEAT "relink: %s"
 
-#define MSG_GAME_START "#!score -as %s -vs %s -%d"
+#define MSG_GAME_START "!score -as %s -vs %s -%s"
+#define MSG_GAME_END "!score -%s"
 
 
 StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
@@ -136,14 +137,27 @@ void StreamManager::run() {
 			}
 			else if (RECOGNIZER_GAME_CLASS_SHOW  == result.sourceRecognizer) {
 //				std::cout << "new game" << std::endl;
-//				enableAllBut(RECOGNIZER_DRAFT_CARD_CHOSEN);
+				enable(RECOGNIZER_GAME_COIN);
+				disable(RECOGNIZER_GAME_CLASS_SHOW);
+				currentGame.player = result.results[0];
+				currentGame.opponent = result.results[0];
 
 			}
 			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer) {
-//				std::cout << "coin " << result.results[0] << std::endl;
+				enable(RECOGNIZER_GAME_END);
+				disable(RECOGNIZER_GAME_COIN);
+				currentGame.fs = result.results[0];
+				if (param_backupscoring) {
+					bot->message((boost::format(MSG_GAME_START) % currentGame.player % currentGame.opponent % currentGame.fs).str());
+				}
 			}
 			else if (RECOGNIZER_GAME_END == result.sourceRecognizer) {
-//				std::cout << "end " << result.results[0] << std::endl;
+				enable(RECOGNIZER_GAME_CLASS_SHOW);
+				disable(RECOGNIZER_GAME_END);
+				currentGame.end = result.results[0];
+				if (param_backupscoring) {
+					bot->message((boost::format(MSG_GAME_END) % currentGame.end).str());
+				}
 			}
 		}
 
@@ -223,6 +237,12 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 	else if (cmdParams.size() >= 2 &&  isAllowed &&
 			"!setdeck" == cmdParams[0]) {
 		currentDeck.url = allParams;
+	}
+	else if ("!backupscoring" == cmdParams[0] && isAllowed) {
+		if (toggle) {
+			param_backupscoring = toggleEnable;
+		}
+		response = "Backup scoring is: " + (param_backupscoring)? "on" : "off";
 	}
 	else if ("!silence" == cmdParams[0] && isAllowed) {
 		param_silent = toggleEnable;

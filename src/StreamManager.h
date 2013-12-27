@@ -24,6 +24,13 @@ public:
 		void clear() {url=DEFAULT_DECKURL; cards.clear(); picks.clear();}
 	};
 
+	struct Game {
+		std::string player;
+		std::string opponent;
+		std::string fs;
+		std::string end;
+	};
+
 	StreamManager(StreamPtr stream, clever_bot::botPtr bot);
 	void setStream(StreamPtr stream);
 	void startAsyn();
@@ -49,6 +56,7 @@ private:
 	boost::thread_group processingThreads;
 
 	Deck currentDeck;
+	Game currentGame;
 
 	//make sure the execution of commands doesn't interfere with other vars
     boost::mutex commandMutex;
