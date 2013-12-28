@@ -45,7 +45,7 @@ const Recognizer::VectorROI Recognizer::GAME_COIN = list_of
 		(cv::Rect_<float>(0.645f, 0.4f, 0.1f, 0.23f));
 
 const Recognizer::VectorROI Recognizer::GAME_END = list_of
-		(cv::Rect_<float>(0.38f, 0.53f, 0.25f, 0.13f));
+		(cv::Rect_<float>(0.38f, 0.55f, 0.25f, 0.12f));
 
 Recognizer::Recognizer() {
 	auto cfg = Config::getConfig();
@@ -65,16 +65,33 @@ Recognizer::Recognizer() {
 	extractor = SiftDescriptorExtractorPtr(new cv::SiftDescriptorExtractor());
 	matcher = FlannBasedMatcherPtr(new cv::FlannBasedMatcher());
 
-    cv::Mat tempImg;
-    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_victory.png", CV_LOAD_IMAGE_GRAYSCALE);
-    descriptorEnd.push_back(std::make_pair(getDescriptor(tempImg), "w"));
-    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_defeat.png", CV_LOAD_IMAGE_GRAYSCALE);
-    descriptorEnd.push_back(std::make_pair(getDescriptor(tempImg), "l"));
+    cv::Mat tempImg, gsImg;
 
-    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_first.png", CV_LOAD_IMAGE_GRAYSCALE);
-    descriptorCoin.push_back(std::make_pair(getDescriptor(tempImg), "1"));
-    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_second.png", CV_LOAD_IMAGE_GRAYSCALE);
-    descriptorCoin.push_back(std::make_pair(getDescriptor(tempImg), "2"));
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_end_victory.png", CV_LOAD_IMAGE_COLOR);
+    DataSetEntry endV("w", PerceptualHash::phash(tempImg));
+    cv::cvtColor(tempImg, gsImg, CV_BGR2GRAY);
+    descriptorEnd.push_back(std::make_pair(getDescriptor(gsImg), "w"));
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_end_defeat.png", CV_LOAD_IMAGE_COLOR);
+    DataSetEntry endD("l", PerceptualHash::phash(tempImg));
+    cv::cvtColor(tempImg, gsImg, CV_BGR2GRAY);
+    descriptorEnd.push_back(std::make_pair(getDescriptor(gsImg), "l"));
+    setEnd.entries.push_back(endV);
+    setEnd.entries.push_back(endD);
+    setEnd.hashes.push_back(endV.phash);
+    setEnd.hashes.push_back(endD.phash);
+
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_first.png", CV_LOAD_IMAGE_COLOR);
+    DataSetEntry coin1("1", PerceptualHash::phash(tempImg));
+    cv::cvtColor(tempImg, gsImg, CV_BGR2GRAY);
+    descriptorCoin.push_back(std::make_pair(getDescriptor(gsImg), "1"));
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_second.png", CV_LOAD_IMAGE_COLOR);
+    DataSetEntry coin2("2", PerceptualHash::phash(tempImg));
+    cv::cvtColor(tempImg, gsImg, CV_BGR2GRAY);
+    descriptorCoin.push_back(std::make_pair(getDescriptor(gsImg), "2"));
+    setCoin.entries.push_back(coin1);
+    setCoin.entries.push_back(coin2);
+    setCoin.hashes.push_back(coin1.phash);
+    setCoin.hashes.push_back(coin2.phash);
 }
 
 void Recognizer::precomputeData(const std::string& dataPath) {
@@ -109,9 +126,7 @@ void Recognizer::populateFromData(const std::string& dataPath, DataSet& dataSet)
     	if (v.first == "entry") {
             const std::string name = v.second.get<std::string>("name");
             const ulong64 phash = v.second.get<ulong64>("phash");
-            DataSetEntry o;
-            o.name = name;
-            o.phash = phash;
+            DataSetEntry o(name, phash);
             dataSet.entries.push_back(o);
         	dataSet.hashes.push_back(phash);
     	}
@@ -146,14 +161,21 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 		}
 	}
 
+	//only perform the expensive sift detection if the image succeeded with the phashes
 	if (allowedRecognizers & RECOGNIZER_GAME_COIN) {
-		RecognitionResult rr = compareSIFT(image, RECOGNIZER_GAME_COIN, GAME_COIN, descriptorCoin);
-		if (rr.valid) results.push_back(rr);
+		RecognitionResult rrPH = comparePHashes(image, RECOGNIZER_GAME_COIN, GAME_COIN, setCoin);
+		if (rrPH.valid) {
+			RecognitionResult rr = compareSIFT(image, RECOGNIZER_GAME_COIN, GAME_COIN, descriptorCoin);
+			if (rr.valid) results.push_back(rr);
+		}
 	}
 
 	if (allowedRecognizers & RECOGNIZER_GAME_END) {
-		RecognitionResult rr = compareSIFT(image, RECOGNIZER_GAME_END, GAME_END, descriptorEnd);
-		if (rr.valid) results.push_back(rr);
+		RecognitionResult rrPH = comparePHashes(image, RECOGNIZER_GAME_END, GAME_END, setEnd);
+		if (rrPH.valid) {
+			RecognitionResult rr = compareSIFT(image, RECOGNIZER_GAME_END, GAME_END, descriptorEnd);
+			if (rr.valid) results.push_back(rr);
+		}
 	}
 
 	return results;

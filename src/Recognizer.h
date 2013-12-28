@@ -52,6 +52,7 @@ public:
 	};
 
 	struct DataSetEntry {
+		DataSetEntry(std::string name, ulong64 phash) : name(name), phash(phash) {}
 		std::string name;
 		ulong64 phash;
 	};
@@ -79,6 +80,8 @@ private:
 	int phashThreshold;
 	DataSet cards;
 	DataSet heroes;
+	DataSet setCoin;
+	DataSet setEnd;
 
 	//SIFT stuff
 	SiftFeatureDetectorPtr detector;

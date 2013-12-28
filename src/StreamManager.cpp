@@ -27,8 +27,8 @@ namespace hs {
 #define MSG_WINS_POLL_VOTE "How many wins do you think Trump will get? "
 #define MSG_WINS_POLL_VOTE_REPEAT "relink: %s"
 
-#define MSG_GAME_START "!score -as %s -vs %s -%s"
-#define MSG_GAME_END "!score -%s"
+#define MSG_GAME_START "#!score -as %s -vs %s -%s"
+#define MSG_GAME_END "#!score -%s"
 
 
 StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
@@ -37,8 +37,8 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	recognizer = RecognizerPtr(new Recognizer());
 	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
 	param_silent = true;
-	param_backupscoring = false;
-	param_debug_level = 0;
+	param_backupscoring = true;
+	param_debug_level = 1;
 	enable(RECOGNIZER_ALLOW_ALL);
 	disable(RECOGNIZER_DRAFT_CARD_CHOSEN);
 	currentDeck.clear();
@@ -62,7 +62,7 @@ void StreamManager::wait() {
 
 void StreamManager::run() {
 	cv::Mat image;
-//	stream->setFramePos(11900);
+	stream->setFramePos(15100);
 
 	bool running = true;
 	while (running) {
@@ -71,10 +71,9 @@ void StreamManager::run() {
 		if (!validImage) break;
 
 		if (param_debug_level & 2) {
-			std::cout << stream->getFramePos() << std::endl;
 			cv::imshow("Debug", image);
-			cv::waitKey(10);
-//			cv::waitKey();
+//			cv::waitKey(10);
+			cv::waitKey();
 		}
 
 		boost::timer t;
@@ -166,7 +165,7 @@ void StreamManager::run() {
 		commandMutex.unlock();
 
 		if (param_debug_level & 1) {
-			std::cout << t.elapsed() << std::endl;
+			std::cout << "Processed frame " << stream->getFramePos() << " in " << t.elapsed() << "s" << std::endl;
 		}
 	}
 
