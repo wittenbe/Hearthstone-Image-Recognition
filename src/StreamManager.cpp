@@ -209,7 +209,7 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 	if (cmdParams.size() == 0) return response;
 
 	commandMutex.lock();
-	bool toggle = cmdParams.size() >= 1;
+	bool toggle = cmdParams.size() >= 2;
 	bool toggleEnable = toggle && (cmdParams[1] == "1" || cmdParams[1] == "on" || cmdParams[1] == "true");
 	std::vector<std::string> params;
 	for (size_t i = 1; i < cmdParams.size(); i++) {params.push_back(cmdParams[i]);}
