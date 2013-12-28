@@ -11,7 +11,7 @@
 
 namespace hs {
 
-#define DEFAULT_DECKURL "unknown (either draft is in progress or I missed it)"
+#define DEFAULT_DECKURL "draft is in progress (if I missed draft, have a mod do !deckforcepublish for a partial draft)"
 
 class StreamManager {
 public:

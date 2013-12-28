@@ -92,11 +92,18 @@ int main(int argc, char* argv[]) {
 	    sm.startAsyn();
 	    sm.wait();
 	} else {
+		int retryTimer = 60;
 		while (true) {
+			std::cout << "connecting" << std::endl;
 			bool connected = true;
 			const std::string execOutput = SystemInterface::callLivestreamer(streamer);
 			if (execOutput.find("\"error\"") <= execOutput.length()) {
 				std::cout << execOutput << std::endl;
+				if (execOutput.find("No streams found on this URL") <= execOutput.length()) {
+					retryTimer = 60;
+				} else {
+					retryTimer = 1; //retry aggressively if some issue occured not related to the streamer being offline
+				}
 				connected = false;
 			} else {
 				const std::string subStr = execOutput.substr(execOutput.find("http"), execOutput.npos);
@@ -106,13 +113,13 @@ int main(int argc, char* argv[]) {
 				sm.setStream(hs::StreamPtr(new hs::Stream(addrs)));
 			}
 
-			std::cout << "connecting" << std::endl;
 			if (connected) {
 				std::cout << "connected to stream!" << std::endl;
 			    sm.startAsyn();
 			    sm.wait();
+			} else {
+				boost::this_thread::sleep_for(boost::chrono::seconds(retryTimer));
 			}
-			boost::this_thread::sleep_for(boost::chrono::seconds(60));
 		}
 	}
 

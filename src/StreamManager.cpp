@@ -27,8 +27,8 @@ namespace hs {
 #define MSG_WINS_POLL_VOTE "How many wins do you think Trump will get? "
 #define MSG_WINS_POLL_VOTE_REPEAT "relink: %s"
 
-#define MSG_GAME_START "#!score -as %s -vs %s -%s"
-#define MSG_GAME_END "#!score -%s"
+#define MSG_GAME_START "!score -as %s -vs %s -%s"
+#define MSG_GAME_END "!score -%s"
 
 
 StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
@@ -36,9 +36,9 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->bot = bot;
 	recognizer = RecognizerPtr(new Recognizer());
 	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
-	param_silent = true;
+	param_silent = false;
 	param_backupscoring = true;
-	param_debug_level = 1;
+	param_debug_level = 0;
 	enable(RECOGNIZER_ALLOW_ALL);
 	disable(RECOGNIZER_DRAFT_CARD_CHOSEN);
 	currentDeck.clear();
@@ -72,8 +72,8 @@ void StreamManager::run() {
 
 		if (param_debug_level & 2) {
 			cv::imshow("Debug", image);
-//			cv::waitKey(10);
-			cv::waitKey();
+			cv::waitKey(10);
+//			cv::waitKey();
 		}
 
 		boost::timer t;
@@ -255,6 +255,7 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 	else if (cmdParams.size() >= 2 &&  isAllowed &&
 			"!info" == cmdParams[0] && "fortebot" == cmdParams[1]) {
 		response = "ForteBot uses OpenCV and perceptual hashing to very quickly compare all card images against the stream image to find a match. "
+				"Additionally, SIFT feature detection is used for automated (backup) scoring. "
 				"The Bot is written in C++ by ZeForte. "
 				"Check out the (poorly commented) source on GitHub: http://bit.ly/1eGgN5g";
 	}

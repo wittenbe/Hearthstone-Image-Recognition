@@ -20,6 +20,8 @@ using namespace boost::assign;
 
 namespace hs {
 
+//to avoid dependency on a specific resolution, these values are ratios of the screen width/height
+
 //regions of interest for phash comparisons
 const Recognizer::VectorROI Recognizer::DRAFT_CLASS_PICK = list_of
 		(cv::Rect_<float>(0.2366f, 0.2938f, 0.0656f, 0.1751f))
@@ -42,10 +44,10 @@ const Recognizer::VectorROI Recognizer::GAME_CLASS_SHOW = list_of
 
 //regions of interest for SIFT comparison
 const Recognizer::VectorROI Recognizer::GAME_COIN = list_of
-		(cv::Rect_<float>(0.645f, 0.4f, 0.1f, 0.23f));
+		(cv::Rect_<float>(0.6441f, 0.4f, 0.0996f, 0.2292f));
 
 const Recognizer::VectorROI Recognizer::GAME_END = list_of
-		(cv::Rect_<float>(0.38f, 0.55f, 0.25f, 0.12f));
+		(cv::Rect_<float>(0.3794f, 0.55f, 0.2495f, 0.1188f));
 
 Recognizer::Recognizer() {
 	auto cfg = Config::getConfig();
