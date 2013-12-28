@@ -18,6 +18,7 @@ public:
 	double getFramePos();
 	void skipFrame();
 	void skipFrames(double n);
+	bool isLivestream();
 
 private:
 	bool openNextStream();

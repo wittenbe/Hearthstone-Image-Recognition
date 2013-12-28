@@ -62,7 +62,7 @@ void StreamManager::wait() {
 
 void StreamManager::run() {
 	cv::Mat image;
-	stream->setFramePos(15100);
+//	stream->setFramePos(15100);
 
 	bool running = true;
 	while (running) {
@@ -165,7 +165,11 @@ void StreamManager::run() {
 		commandMutex.unlock();
 
 		if (param_debug_level & 1) {
-			std::cout << "Processed frame " << stream->getFramePos() << " in " << t.elapsed() << "s" << std::endl;
+			if (stream->isLivestream()) {
+				std::cout << "Processed frame in " << t.elapsed() << "s" << std::endl;
+			} else {
+				std::cout << "Processed frame " << stream->getFramePos() << " in " << t.elapsed() << "s" << std::endl;
+			}
 		}
 	}
 

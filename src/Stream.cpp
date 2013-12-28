@@ -64,4 +64,8 @@ void Stream::skipFrames(double n) {
 	vcap.set(CV_CAP_PROP_POS_FRAMES, vcap.get(CV_CAP_PROP_POS_FRAMES) + n); //doesn't seem to always work on live streams?
 }
 
+bool Stream::isLivestream() {
+	return isLiveStream;
+}
+
 }
