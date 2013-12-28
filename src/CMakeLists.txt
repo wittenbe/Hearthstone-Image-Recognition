@@ -26,11 +26,11 @@ add_executable(${EXECUTABLE_NAME}
     bot/mainbot.cpp
 )
 
-find_package(Boost REQUIRED COMPONENTS system thread regex chrono)
+find_package(Boost 1.54 REQUIRED COMPONENTS system thread regex chrono)
 include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
 
-find_package(OpenCV REQUIRED)
+find_package(OpenCV 2.4.6 REQUIRED)
 target_link_libraries(${EXECUTABLE_NAME} ${OpenCV_LIBS})
 
 IF(WIN32)
