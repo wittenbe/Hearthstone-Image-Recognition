@@ -92,8 +92,8 @@ void StreamManager::run() {
 					std::string strawpoll = SystemInterface::createStrawpoll(MSG_CLASS_POLL, result.results);
 					bot->message(MSG_CLASS_POLL_VOTE + strawpoll, 1);
 					bot->repeat_message((boost::format(MSG_CLASS_POLL_VOTE_REPEAT) % strawpoll).str(),
-							5, 5, 2);
-					bot->message("!suboff", 60);
+							30, 5, 2);
+					bot->message("!suboff", 150);
 				}
 			}
 			else if (RECOGNIZER_DRAFT_CARD_PICK == result.sourceRecognizer) {
@@ -145,6 +145,7 @@ void StreamManager::run() {
 			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer) {
 				std::cout << "coin" << std::endl;
 				enable(RECOGNIZER_GAME_END);
+				enable(RECOGNIZER_GAME_CLASS_SHOW);
 				disable(RECOGNIZER_GAME_COIN);
 				currentGame.fs = result.results[0];
 				if (param_backupscoring) {
