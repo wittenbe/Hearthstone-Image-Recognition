@@ -48,7 +48,7 @@ private:
 	RecognizerPtr recognizer;
 	unsigned int allowedRecognizers;
 
-	bool param_silent;
+	bool param_strawpolling;
 	bool param_backupscoring;
 	unsigned int param_debug_level;
 

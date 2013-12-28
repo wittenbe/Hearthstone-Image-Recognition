@@ -36,7 +36,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->bot = bot;
 	recognizer = RecognizerPtr(new Recognizer());
 	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
-	param_silent = false;
+	param_strawpolling = true;
 	param_backupscoring = true;
 	param_debug_level = 0;
 	enable(RECOGNIZER_ALLOW_ALL);
@@ -87,7 +87,7 @@ void StreamManager::run() {
 				currentDeck.clear();
 				std::cout << "new draft" << std::endl;
 
-				if (!param_silent) {
+				if (param_strawpolling) {
 					bot->message("!subon");
 					std::string strawpoll = SystemInterface::createStrawpoll(MSG_CLASS_POLL, result.results);
 					bot->message(MSG_CLASS_POLL_VOTE + strawpoll, 1);
@@ -124,7 +124,7 @@ void StreamManager::run() {
 					currentDeck.url = SystemInterface::createHastebin(deckString);
 
 					bot->message((boost::format(CMD_DECK_FORMAT) % currentDeck.url).str());
-					if (!param_silent) {
+					if (!param_strawpolling) {
 //						std::vector<std::string> choices = list_of("9")("8")("7")("6")("4-5")("0-3");
 //						std::string strawpoll = SystemInterface::createStrawpoll(MSG_WINS_POLL, choices);
 //						bot->message(MSG_WINS_POLL_VOTE + strawpoll);
@@ -250,8 +250,12 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 		response = "Backup scoring is: ";
 		response += (param_backupscoring)? "on" : "off";
 	}
-	else if ("!silence" == cmdParams[0] && isAllowed) {
-		param_silent = toggleEnable;
+	else if ("!strawpolling" == cmdParams[0] && isAllowed) {
+		if (toggle) {
+			param_strawpolling = toggleEnable;
+		}
+		response = "Automated strawpolling is: ";
+		response += (param_strawpolling)? "on" : "off";
 	}
 	else if ("!fb_debuglevel" == cmdParams[0] && isSuperUser && cmdParams.size() == 2) {
 		param_debug_level = boost::lexical_cast<unsigned int>(cmdParams[1]);
