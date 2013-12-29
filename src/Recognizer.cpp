@@ -220,6 +220,7 @@ std::vector<std::string> Recognizer::bestPHashMatches(const cv::Mat& image, cons
 
 int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
 	std::vector<float> results;
+	std::vector<float> resultsRed;
 	for (auto& r : roi) {
 		cv::Mat roiImage = image(
 	    		cv::Range(r.y * image.rows, (r.y + r.height) * image.rows),
@@ -227,11 +228,14 @@ int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
 
 		  cv::Scalar s = cv::mean(roiImage);
 		  results.push_back(s[0]);
+		  resultsRed.push_back(s[2]);
 	}
 
 	//find max and second highest
 	int maxIndex = -1;
 	float maxVal = 0, secondVal = 0;
+	float minRed = 255;
+	float maxRed = 0;
 	for (size_t i = 0; i < results.size(); i++) {
 		if (results[i] > maxVal) {
 			secondVal = maxVal;
@@ -240,11 +244,17 @@ int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
 		} else if (results[i] > secondVal) {
 			secondVal = results[i];
 		}
+
+		minRed = std::min(minRed, resultsRed[i]);
+		maxRed = std::max(maxRed, resultsRed[i]);
 	}
+	float redRatioDeviation = fabs(maxRed/minRed - 1);
 
 	// a roi is considered "pretty blue" if the blue channel is at least 60% higher
 	//than other roi's blue and if it's past an absolute threshold
 	int bluest = (maxVal > (1.6 * secondVal) && maxVal > 180)? maxIndex : -1;
+	if (redRatioDeviation >= 0.3) bluest = -1; //to prevent some false positives; real matches have a ratio very close to 1
+
 	return bluest;
 }
 

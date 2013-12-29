@@ -38,7 +38,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
 	param_strawpolling = true;
 	param_backupscoring = true;
-	param_debug_level = 0;
+	param_debug_level = 3;
 	enable(RECOGNIZER_ALLOW_ALL);
 	disable(RECOGNIZER_DRAFT_CARD_CHOSEN);
 	currentDeck.clear();
@@ -62,7 +62,8 @@ void StreamManager::wait() {
 
 void StreamManager::run() {
 	cv::Mat image;
-//	stream->setFramePos(15100);
+	stream->setStream(1);
+	stream->setFramePos(16000);
 
 	bool running = true;
 	while (running) {
@@ -72,8 +73,8 @@ void StreamManager::run() {
 
 		if (param_debug_level & 2) {
 			cv::imshow("Debug", image);
-			cv::waitKey(10);
-//			cv::waitKey();
+//			cv::waitKey(10);
+			cv::waitKey();
 		}
 
 		boost::timer t;
