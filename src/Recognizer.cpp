@@ -47,7 +47,7 @@ const Recognizer::VectorROI Recognizer::GAME_COIN = list_of
 		(cv::Rect_<float>(0.6441f, 0.4f, 0.0996f, 0.2292f));
 
 const Recognizer::VectorROI Recognizer::GAME_END = list_of
-		(cv::Rect_<float>(0.3794f, 0.55f, 0.2495f, 0.1188f));
+		(cv::Rect_<float>(0.3771f, 0.5542f, 0.2506f, 0.1188f));
 
 Recognizer::Recognizer() {
 	auto cfg = Config::getConfig();
@@ -219,7 +219,7 @@ std::vector<std::string> Recognizer::bestPHashMatches(const cv::Mat& image, cons
 }
 
 int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
-	std::vector<float> results;
+	std::vector<float> resultsBlue;
 	std::vector<float> resultsRed;
 	for (auto& r : roi) {
 		cv::Mat roiImage = image(
@@ -227,7 +227,7 @@ int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
 	    		cv::Range(r.x * image.cols, (r.x + r.width) * image.cols));
 
 		  cv::Scalar s = cv::mean(roiImage);
-		  results.push_back(s[0]);
+		  resultsBlue.push_back(s[0]);
 		  resultsRed.push_back(s[2]);
 	}
 
@@ -236,13 +236,13 @@ int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
 	float maxVal = 0, secondVal = 0;
 	float minRed = 255;
 	float maxRed = 0;
-	for (size_t i = 0; i < results.size(); i++) {
-		if (results[i] > maxVal) {
+	for (size_t i = 0; i < resultsBlue.size(); i++) {
+		if (resultsBlue[i] > maxVal) {
 			secondVal = maxVal;
 			maxIndex = i;
-			maxVal = results[i];
-		} else if (results[i] > secondVal) {
-			secondVal = results[i];
+			maxVal = resultsBlue[i];
+		} else if (resultsBlue[i] > secondVal) {
+			secondVal = resultsBlue[i];
 		}
 
 		minRed = std::min(minRed, resultsRed[i]);
@@ -253,7 +253,7 @@ int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
 	// a roi is considered "pretty blue" if the blue channel is at least 60% higher
 	//than other roi's blue and if it's past an absolute threshold
 	int bluest = (maxVal > (1.6 * secondVal) && maxVal > 180)? maxIndex : -1;
-	if (redRatioDeviation >= 0.3) bluest = -1; //to prevent some false positives; real matches have a ratio very close to 1
+	if (redRatioDeviation >= 0.3) bluest = -1; //to prevent some false positives; real matches have a ratio very close to 1, i.e. the deviation 0
 
 	return bluest;
 }
