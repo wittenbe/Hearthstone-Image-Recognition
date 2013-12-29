@@ -49,10 +49,12 @@ Compiling on Linux
 Compile boost (at least system, regex, chrono and thread) and opencv first. 
 
 From the project's root:  
-    mkdir build
-	cd build
-	cmake ../src
-	make
+```
+mkdir build
+cd build
+cmake ../src
+make
+```
 	
 Use `ccmake ../src` or cmake-gui to specify any paths cmake didn't find itself.
 
