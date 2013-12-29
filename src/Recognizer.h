@@ -52,6 +52,7 @@ public:
 	};
 
 	struct DataSetEntry {
+		DataSetEntry();
 		DataSetEntry(std::string name, ulong64 phash) : name(name), phash(phash) {}
 		std::string name;
 		ulong64 phash;

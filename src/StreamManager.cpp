@@ -36,9 +36,9 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->bot = bot;
 	recognizer = RecognizerPtr(new Recognizer());
 	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
-	param_strawpolling = false;
-	param_backupscoring = false;
-	param_debug_level = 2;
+	param_strawpolling = true;
+	param_backupscoring = true;
+	param_debug_level = 0;
 	enable(RECOGNIZER_ALLOW_ALL);
 	disable(RECOGNIZER_DRAFT_CARD_CHOSEN);
 	currentDeck.clear();
