@@ -9,7 +9,6 @@ IF(WIN32)
 ENDIF(WIN32)
 
 add_definitions(-U__STRICT_ANSI__)
-add_definitions(-DHSIR_BASE_DIR="${PROJECT_SOURCE_DIR}")
 
 include_directories(bot)
 

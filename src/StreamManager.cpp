@@ -14,17 +14,17 @@ using namespace boost::assign;
 
 namespace hs {
 
-#define CMD_DECK_FORMAT "Trump's current decklist: %s"
+#define CMD_DECK_FORMAT "%s's current decklist: %s"
 
 #define DECK_PICK_FORMAT "Pick %02i: (%s, %s, %s)"
-#define DECK_PICKED_FORMAT " --> Trump picked %s"
+#define DECK_PICKED_FORMAT " --> %s picked %s"
 
-#define MSG_CLASS_POLL "Which class should Trump pick next?"
-#define MSG_CLASS_POLL_VOTE "Vote for Trump's next class: "
+#define MSG_CLASS_POLL "Which class should %s pick next?"
+#define MSG_CLASS_POLL_VOTE "Vote for %s's next class: %s"
 #define MSG_CLASS_POLL_VOTE_REPEAT "relink: %s"
 
-#define MSG_WINS_POLL "How many wins do you think Trump will be able to achieve with this deck?"
-#define MSG_WINS_POLL_VOTE "How many wins do you think Trump will get? "
+#define MSG_WINS_POLL "How many wins do you think %s will be able to achieve with this deck?"
+#define MSG_WINS_POLL_VOTE "How many wins do you think %s will get? "
 #define MSG_WINS_POLL_VOTE_REPEAT "relink: %s"
 
 #define MSG_GAME_START "!score -as %s -vs %s -%s"
@@ -35,15 +35,22 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->stream = stream;
 	this->bot = bot;
 	recognizer = RecognizerPtr(new Recognizer());
-	allowedRecognizers = RECOGNIZER_ALLOW_NONE;
 	param_strawpolling = true;
-	param_backupscoring = true;
+	param_backupscoring = false;
 	param_debug_level = 0;
-	enable(RECOGNIZER_ALLOW_ALL);
-	disable(RECOGNIZER_DRAFT_CARD_CHOSEN);
 	currentDeck.clear();
 
-	numThreads = Config::getConfig().get<int>("config.image_recognition.threads");
+	currentDeck.state = 0;
+	currentGame.state = 0;
+	enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
+	enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
+	enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
+	enable(currentGame.state, RECOGNIZER_GAME_END);
+
+	sName = Config::getConfig().get<std::string>("config.stream.streamer_name");
+	//not really supported (yet?)
+//	numThreads = Config::getConfig().get<int>("config.image_recognition.threads");
+	numThreads = 1;
 }
 
 void StreamManager::setStream(StreamPtr stream) {
@@ -62,8 +69,8 @@ void StreamManager::wait() {
 
 void StreamManager::run() {
 	cv::Mat image;
-//	stream->setStream(1);
-//	stream->setFramePos(29414);
+//	stream->setStream(4);
+//	stream->setFramePos(37228);
 
 	bool running = true;
 	while (running) {
@@ -73,27 +80,28 @@ void StreamManager::run() {
 
 		if (param_debug_level & 2) {
 			cv::imshow("Debug", image);
-			cv::waitKey(10);
-//			cv::waitKey();
+//			cv::waitKey(10);
+			cv::waitKey();
 		}
 
 		boost::timer t;
-		std::vector<Recognizer::RecognitionResult> results = recognizer->recognize(image, allowedRecognizers);
+		std::vector<Recognizer::RecognitionResult> results = recognizer->recognize(image, currentDeck.state | currentGame.state);
 
 		commandMutex.lock();
 
 		for (auto& result : results) {
 			if (RECOGNIZER_DRAFT_CLASS_PICK == result.sourceRecognizer) {
-				enableAllBut(RECOGNIZER_DRAFT_CLASS_PICK | RECOGNIZER_DRAFT_CARD_CHOSEN);
 				currentDeck.clear();
-				std::cout << "new draft" << std::endl;
+				disable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
+				enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
+				std::cout << "new draft: " << result.results[0] << ", " << result.results[1] << ", " << result.results[2] << std::endl;
 
 				if (param_strawpolling) {
 					bot->message("!subon");
-					std::string strawpoll = SystemInterface::createStrawpoll(MSG_CLASS_POLL, result.results);
-					bot->message(MSG_CLASS_POLL_VOTE + strawpoll, 1);
+					std::string strawpoll = SystemInterface::createStrawpoll((boost::format(MSG_CLASS_POLL) % sName).str(), result.results);
+					bot->message((boost::format(MSG_CLASS_POLL_VOTE) % sName % strawpoll).str(), 1);
 					bot->repeat_message((boost::format(MSG_CLASS_POLL_VOTE_REPEAT) % strawpoll).str(),
-							15, 10, 2);
+							7, 25, 7);
 					bot->message("!suboff", 120);
 				}
 			}
@@ -106,57 +114,59 @@ void StreamManager::run() {
 				}
 
 				if (isNew) {
-					enableAllBut(RECOGNIZER_DRAFT_CARD_PICK);
+					enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
+					enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_CHOSEN);
+					disable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
 					currentDeck.picks.push_back(result.results);
 					std::cout << "pick " << currentDeck.cards.size() + 1 << ": " + result.results[0] + ", " + result.results[1] + ", " << result.results[2] << std::endl;
 				}
 			}
 			else if (RECOGNIZER_DRAFT_CARD_CHOSEN  == result.sourceRecognizer) {
-				enable(RECOGNIZER_DRAFT_CARD_PICK);
-				disable(RECOGNIZER_DRAFT_CARD_CHOSEN);
+				enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
+				enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
+				disable(currentDeck.state, RECOGNIZER_DRAFT_CARD_CHOSEN);
 
 				size_t index = boost::lexical_cast<int>(result.results[0]);
 				std::cout << "picked " << currentDeck.picks.back()[index] << std::endl;
 				currentDeck.cards.push_back(currentDeck.picks.back()[index]);
 
 				if (currentDeck.cards.size() == 30) {
-					enableAllBut(RECOGNIZER_DRAFT_CARD_PICK | RECOGNIZER_DRAFT_CARD_CHOSEN);
+					disable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
 					std::string deckString = createDeckString(currentDeck);
 					currentDeck.url = SystemInterface::createHastebin(deckString);
 
-					bot->message((boost::format(CMD_DECK_FORMAT) % currentDeck.url).str());
+					bot->message((boost::format(CMD_DECK_FORMAT) % sName % currentDeck.url).str());
 					if (!param_strawpolling) {
 //						std::vector<std::string> choices = list_of("9")("8")("7")("6")("4-5")("0-3");
 //						std::string strawpoll = SystemInterface::createStrawpoll(MSG_WINS_POLL, choices);
-//						bot->message(MSG_WINS_POLL_VOTE + strawpoll);
-////						bot->message("Mods, remember to set what Trump predicted with !predict (?)");
+//						bot->message((boost::format(MSG_WINS_POLL_VOTE) % sName % strawpoll).str());
 //						bot->repeat_message((boost::format(MSG_WINS_POLL_VOTE_REPEAT) % strawpoll).str(),
 //								7, 5, 0);
 					}
 				}
 			}
 			else if (RECOGNIZER_GAME_CLASS_SHOW  == result.sourceRecognizer) {
-				std::cout << "new game" << std::endl;
-				enable(RECOGNIZER_GAME_COIN);
-				disable(RECOGNIZER_GAME_CLASS_SHOW);
+				std::cout << "new game: " << result.results[0] << " " << result.results[1] << std::endl;
+				enable(currentGame.state, RECOGNIZER_GAME_COIN);
+				disable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
 				currentGame.player = result.results[0];
 				currentGame.opponent = result.results[1];
 
 			}
 			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer) {
-				std::cout << "coin" << std::endl;
-				enable(RECOGNIZER_GAME_END);
-				enable(RECOGNIZER_GAME_CLASS_SHOW);
-				disable(RECOGNIZER_GAME_COIN);
+				std::cout << "coin: " << result.results[0] << std::endl;
+				enable(currentGame.state, RECOGNIZER_GAME_END);
+				enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
+				disable(currentGame.state, RECOGNIZER_GAME_COIN);
 				currentGame.fs = result.results[0];
 				if (param_backupscoring) {
 					bot->message((boost::format(MSG_GAME_START) % currentGame.player % currentGame.opponent % currentGame.fs).str());
 				}
 			}
 			else if (RECOGNIZER_GAME_END == result.sourceRecognizer) {
-				std::cout << "end" << std::endl;
-				enable(RECOGNIZER_GAME_CLASS_SHOW);
-				disable(RECOGNIZER_GAME_END);
+				std::cout << "end: " << result.results[0] << std::endl;
+				enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
+				disable(currentGame.state, RECOGNIZER_GAME_END);
 				currentGame.end = result.results[0];
 				if (param_backupscoring) {
 					bot->message((boost::format(MSG_GAME_END) % currentGame.end).str());
@@ -186,7 +196,7 @@ std::string StreamManager::createDeckString(Deck deck) {
 	for (size_t i = 0; i < deck.picks.size(); i++) {
 		pickString += (boost::format(DECK_PICK_FORMAT) % (i + 1) % deck.picks[i][0] % deck.picks[i][1] % deck.picks[i][2]).str();
 		pickString += "\n";
-		pickString += (boost::format(DECK_PICKED_FORMAT) % deck.cards[i]).str();
+		pickString += (boost::format(DECK_PICKED_FORMAT) % sName % deck.cards[i]).str();
 		pickString += "\n";
 	}
 
@@ -218,10 +228,10 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 	std::string allParams = boost::algorithm::join(params, " ");
 
 	if ("!deck" == cmdParams[0] || "!decklist" == cmdParams[0]) {
-		response = (boost::format(CMD_DECK_FORMAT) % currentDeck.url).str();
+		response = (boost::format(CMD_DECK_FORMAT) % sName % currentDeck.url).str();
 	}
 	else if ("!deckprogress" == cmdParams[0]) {
-		if (currentDeck.picks.size() < 30) {
+		if (currentDeck.cards.size() < 30) {
 			response = "Arena draft progress: " + boost::lexical_cast<std::string>(currentDeck.cards.size()) + "/30";
 			if (currentDeck.cards.size() != 0) {
 				response += ", latest pick: " + currentDeck.cards.back();
@@ -239,7 +249,7 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 		while (currentDeck.cards.size() < 30) currentDeck.cards.push_back("?");
 		std::string deckString = createDeckString(currentDeck);
 		currentDeck.url = SystemInterface::createHastebin(deckString);
-		response = (boost::format(CMD_DECK_FORMAT) % currentDeck.url).str();
+		response = (boost::format(CMD_DECK_FORMAT) % sName % currentDeck.url).str();
 	}
 	else if (cmdParams.size() >= 2 &&  isAllowed &&
 			"!setdeck" == cmdParams[0]) {

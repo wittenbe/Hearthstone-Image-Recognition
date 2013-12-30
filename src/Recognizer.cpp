@@ -52,7 +52,7 @@ const Recognizer::VectorROI Recognizer::GAME_END = list_of
 Recognizer::Recognizer() {
 	auto cfg = Config::getConfig();
 	phashThreshold = cfg.get<int>("config.image_recognition.phash_threshold");
-	std::string dataPath = std::string(HSIR_BASE_DIR) + "/" + cfg.get<std::string>("config.paths.recognition_data_path");
+	std::string dataPath = cfg.get<std::string>("config.paths.recognition_data_path");
 	std::ifstream dataFile(dataPath);
 	boost::property_tree::read_xml(dataFile, data, boost::property_tree::xml_parser::trim_whitespace);
 	if (cfg.get<bool>("config.image_recognition.precompute_data")) {
@@ -97,8 +97,8 @@ Recognizer::Recognizer() {
 }
 
 void Recognizer::precomputeData(const std::string& dataPath) {
-	const std::string cardImagePath = std::string(HSIR_BASE_DIR) + "/" + Config::getConfig().get<std::string>("config.paths.card_image_path") + "/";
-	const std::string heroImagePath = std::string(HSIR_BASE_DIR) + "/" + Config::getConfig().get<std::string>("config.paths.hero_image_path") + "/";
+	const std::string cardImagePath = Config::getConfig().get<std::string>("config.paths.card_image_path") + "/";
+	const std::string heroImagePath = Config::getConfig().get<std::string>("config.paths.hero_image_path") + "/";
 
     for (auto& v : data.get_child("hs_data.cards")) {
     	if (v.first == "entry") {

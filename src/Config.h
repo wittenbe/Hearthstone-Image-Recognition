@@ -6,19 +6,20 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
-#define CONFIG_PATH "/../config.xml" //relative to src
+//relative to executable
+#define CONFIG_PATH "../config.xml"
 
 class Config {
 public:
-    static boost::property_tree::ptree& getConfig()
-    {
+    static boost::property_tree::ptree& getConfig() {
         static boost::property_tree::ptree instance;
         if (instance.empty()) {
-            std::ifstream cfgFile(std::string(HSIR_BASE_DIR CONFIG_PATH).c_str());
+            std::ifstream cfgFile(std::string(CONFIG_PATH).c_str());
             boost::property_tree::read_xml(cfgFile, instance);
         }
         return instance;
     }
+
 private:
     Config() {}
     Config(Config const&);

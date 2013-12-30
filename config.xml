@@ -4,7 +4,7 @@
 		<server>irc.twitch.tv</server>
 		<server_port>6667</server_port>
 		<!-- if channel is empty, "#<streamer>" will be chosen as the channel --> 
-		<channel>#trumpsc</channel>
+		<channel></channel>
 
 		<bot_nick>ForteBot</bot_nick>
 		<bot_pass></bot_pass> <!-- use an oauth token -->
@@ -14,9 +14,11 @@
 		<timeframe>30</timeframe>
 	</twitch_bot>
 	<stream>
-		<streamer>trumpsc</streamer>
 		<live>false</live>
-		<vod>http://api.justin.tv/api/broadcast/by_archive/490132588.xml</vod>
+		<streamer>trumpsc</streamer>
+		<streamer_name>Trump</streamer_name>
+		<stream_quality>mobile_Medium</stream_quality>
+		<vod>http://api.justin.tv/api/broadcast/by_archive/491119986.xml</vod> <!-- in case live == false -->
 	</stream>
 	<image_recognition>
 		<threads>1</threads>
@@ -28,8 +30,7 @@
 		<sift_feature_count>100</sift_feature_count>
 	</image_recognition>
 	<paths>
-		<!-- data is relative to folder with CMakeLists, the rest is relative to executable -->
-		<!-- eventually, all will be relative to where you execute the program -->
+		<!-- relative to where you execute the program -->
 		<recognition_data_path>../data.xml</recognition_data_path>
 		<livestreamer_path>.\..\livestreamer-v1.7.0\livestreamer.exe</livestreamer_path>
 		<curl_path>.\..\curl</curl_path>

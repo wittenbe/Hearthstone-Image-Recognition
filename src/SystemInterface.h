@@ -30,7 +30,8 @@ public:
 		return exec(curl + params);
 	}
 
-	static std::string callLivestreamer(std::string streamer, std::string quality = "mobile_Medium") {
+	static std::string callLivestreamer(std::string streamer) {
+		static std::string quality = Config::getConfig().get<std::string>("config.stream.stream_quality");
 		static std::string livestreamer(Config::getConfig().get<std::string>("config.paths.livestreamer_path") + " -j ");
 		return exec(livestreamer + "twitch.tv/" + streamer + " " + quality);
 	}
