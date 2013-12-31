@@ -35,8 +35,8 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->stream = stream;
 	this->bot = bot;
 	param_strawpolling = true;
-	param_backupscoring = false;
-	param_debug_level = 1;
+	param_backupscoring = true;
+	param_debug_level = 0;
 	currentDeck.clear();
 
 	currentDeck.state = 0;
@@ -48,6 +48,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 		enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
 		enable(currentGame.state, RECOGNIZER_GAME_END);
 	}
+
 
 	sName = Config::getConfig().get<std::string>("config.stream.streamer_name");
 	numThreads = Config::getConfig().get<int>("config.image_recognition.threads");
@@ -98,7 +99,7 @@ void StreamManager::run() {
 		}
 
 		if (results.empty()) continue;
-		commandMutex.lock();
+//		commandMutex.lock();
 		for (auto& result : results) {
 			if (RECOGNIZER_DRAFT_CLASS_PICK == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CLASS_PICK)) {
 				currentDeck.clear();
@@ -183,7 +184,7 @@ void StreamManager::run() {
 				}
 			}
 		}
-		commandMutex.unlock();
+//		commandMutex.unlock();
 	}
 
 	std::cout << "an error while reading a frame occured" << std::endl;
@@ -221,7 +222,7 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 	std::string response;
 	if (cmdParams.size() == 0) return response;
 
-	commandMutex.lock();
+//	commandMutex.lock();
 	bool toggle = cmdParams.size() >= 2;
 	bool toggleEnable = toggle && (cmdParams[1] == "1" || cmdParams[1] == "on" || cmdParams[1] == "true");
 	std::vector<std::string> params;
@@ -242,6 +243,7 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 		}
 	}
 	else if ("!deckforcepublish" == cmdParams[0] && isAllowed) {
+		commandMutex.lock();
 		while (currentDeck.picks.size() < 30) {
 			std::vector<std::string> pick;
 			pick.push_back("?"); pick.push_back("?"); pick.push_back("?");
@@ -251,19 +253,24 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 		std::string deckString = createDeckString(currentDeck);
 		currentDeck.url = SystemInterface::createHastebin(deckString);
 		response = (boost::format(CMD_DECK_FORMAT) % sName % currentDeck.url).str();
+		commandMutex.unlock();
 	}
 	else if (cmdParams.size() >= 2 &&  isAllowed &&
 			"!setdeck" == cmdParams[0]) {
+		commandMutex.lock();
 		currentDeck.url = allParams;
+		commandMutex.unlock();
 	}
 	else if ("!backupscoring" == cmdParams[0] && isAllowed) {
 		if (toggle) {
 			param_backupscoring = toggleEnable;
+			commandMutex.lock();
 			if (toggleEnable) {
 				currentDeck.state = RECOGNIZER_GAME_CLASS_SHOW | RECOGNIZER_GAME_END;
 			} else {
 				currentDeck.state = 0;
 			}
+			commandMutex.unlock();
 		}
 		response = "Backup scoring is: ";
 		response += (param_backupscoring)? "on" : "off";
@@ -286,7 +293,7 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 				"Check out the (poorly commented) source on GitHub: http://bit.ly/1eGgN5g";
 	}
 
-	commandMutex.unlock();
+//	commandMutex.unlock();
 	return response;
 }
 
