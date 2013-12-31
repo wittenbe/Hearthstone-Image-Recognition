@@ -52,6 +52,7 @@ const Recognizer::VectorROI Recognizer::GAME_END = list_of
 Recognizer::Recognizer() {
 	auto cfg = Config::getConfig();
 	phashThreshold = cfg.get<int>("config.image_recognition.phash_threshold");
+	phashThresholdSIFT = cfg.get<int>("config.image_recognition.phash_threshold_sift");
 	std::string dataPath = cfg.get<std::string>("config.paths.recognition_data_path");
 	std::ifstream dataFile(dataPath);
 	boost::property_tree::read_xml(dataFile, data, boost::property_tree::xml_parser::trim_whitespace);
@@ -59,8 +60,8 @@ Recognizer::Recognizer() {
 		precomputeData(dataPath);
 	}
 
-    populateFromData("hs_data.cards", cards);
-    populateFromData("hs_data.heroes", heroes);
+    populateFromData("hs_data.cards", setCards);
+    populateFromData("hs_data.heroes", setClasses);
 
     //prepare the SIFT stuff
 	detector = SiftFeatureDetectorPtr(new cv::SiftFeatureDetector(cfg.get<int>("config.image_recognition.sift_feature_count")));
@@ -94,6 +95,12 @@ Recognizer::Recognizer() {
     setCoin.entries.push_back(coin2);
     setCoin.hashes.push_back(coin1.phash);
     setCoin.hashes.push_back(coin2.phash);
+
+    //set each set's phash threshold
+    setCards.phashThreshold = phashThreshold;
+    setClasses.phashThreshold = phashThreshold;
+    setCoin.phashThreshold = phashThresholdSIFT;
+    setEnd.phashThreshold = phashThresholdSIFT;
 }
 
 void Recognizer::precomputeData(const std::string& dataPath) {
@@ -139,17 +146,17 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 	std::vector<RecognitionResult> results;
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CLASS_PICK) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CLASS_PICK, DRAFT_CLASS_PICK, heroes);
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CLASS_PICK, DRAFT_CLASS_PICK, setClasses);
 		if (rr.valid) results.push_back(rr);
 	}
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CARD_PICK) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CARD_PICK, DRAFT_CARD_PICK, cards);
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CARD_PICK, DRAFT_CARD_PICK, setCards);
 		if (rr.valid) results.push_back(rr);
 	}
 
 	if (allowedRecognizers & RECOGNIZER_GAME_CLASS_SHOW) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_CLASS_SHOW, GAME_CLASS_SHOW, heroes);
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_CLASS_SHOW, GAME_CLASS_SHOW, setClasses);
 		if (rr.valid) results.push_back(rr);
 	}
 
@@ -208,7 +215,7 @@ std::vector<std::string> Recognizer::bestPHashMatches(const cv::Mat& image, cons
 		ulong64 phash = PerceptualHash::phash(roiImage);
 		PerceptualHash::ComparisonResult best = PerceptualHash::best(phash, dataSet.hashes);
 
-		if (best.distance < phashThreshold) {
+		if (best.distance < dataSet.phashThreshold) {
 			results.push_back(dataSet.entries[best.index].name);
 		} else {
 			results.push_back("");

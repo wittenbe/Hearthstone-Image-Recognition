@@ -48,9 +48,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	enable(currentGame.state, RECOGNIZER_GAME_END);
 
 	sName = Config::getConfig().get<std::string>("config.stream.streamer_name");
-	//not really supported (yet?)
-//	numThreads = Config::getConfig().get<int>("config.image_recognition.threads");
-	numThreads = 1;
+	numThreads = Config::getConfig().get<int>("config.image_recognition.threads");
 }
 
 void StreamManager::setStream(StreamPtr stream) {
@@ -90,7 +88,7 @@ void StreamManager::run() {
 		commandMutex.lock();
 
 		for (auto& result : results) {
-			if (RECOGNIZER_DRAFT_CLASS_PICK == result.sourceRecognizer) {
+			if (RECOGNIZER_DRAFT_CLASS_PICK == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CLASS_PICK)) {
 				currentDeck.clear();
 				disable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
 				enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
@@ -101,11 +99,11 @@ void StreamManager::run() {
 					std::string strawpoll = SystemInterface::createStrawpoll((boost::format(MSG_CLASS_POLL) % sName).str(), result.results);
 					bot->message((boost::format(MSG_CLASS_POLL_VOTE) % sName % strawpoll).str(), 1);
 					bot->repeat_message((boost::format(MSG_CLASS_POLL_VOTE_REPEAT) % strawpoll).str(),
-							7, 25, 7);
+							6, 25, 7);
 					bot->message("!suboff", 120);
 				}
 			}
-			else if (RECOGNIZER_DRAFT_CARD_PICK == result.sourceRecognizer) {
+			else if (RECOGNIZER_DRAFT_CARD_PICK == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CARD_PICK)) {
 				bool isNew = currentDeck.cards.size() == 0;
 				const size_t last = currentDeck.picks.size() - 1;
 				for (size_t i = 0; i < result.results.size() && !isNew; i++) {
@@ -121,7 +119,7 @@ void StreamManager::run() {
 					std::cout << "pick " << currentDeck.cards.size() + 1 << ": " + result.results[0] + ", " + result.results[1] + ", " << result.results[2] << std::endl;
 				}
 			}
-			else if (RECOGNIZER_DRAFT_CARD_CHOSEN  == result.sourceRecognizer) {
+			else if (RECOGNIZER_DRAFT_CARD_CHOSEN  == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CARD_CHOSEN)) {
 				enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
 				enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
 				disable(currentDeck.state, RECOGNIZER_DRAFT_CARD_CHOSEN);
@@ -145,7 +143,7 @@ void StreamManager::run() {
 					}
 				}
 			}
-			else if (RECOGNIZER_GAME_CLASS_SHOW  == result.sourceRecognizer) {
+			else if (RECOGNIZER_GAME_CLASS_SHOW  == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_CLASS_SHOW)) {
 				std::cout << "new game: " << result.results[0] << " " << result.results[1] << std::endl;
 				enable(currentGame.state, RECOGNIZER_GAME_COIN);
 				disable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
@@ -153,7 +151,7 @@ void StreamManager::run() {
 				currentGame.opponent = result.results[1];
 
 			}
-			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer) {
+			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_COIN)) {
 				std::cout << "coin: " << result.results[0] << std::endl;
 				enable(currentGame.state, RECOGNIZER_GAME_END);
 				enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
@@ -163,7 +161,7 @@ void StreamManager::run() {
 					bot->message((boost::format(MSG_GAME_START) % currentGame.player % currentGame.opponent % currentGame.fs).str());
 				}
 			}
-			else if (RECOGNIZER_GAME_END == result.sourceRecognizer) {
+			else if (RECOGNIZER_GAME_END == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_END)) {
 				std::cout << "end: " << result.results[0] << std::endl;
 				enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
 				disable(currentGame.state, RECOGNIZER_GAME_END);

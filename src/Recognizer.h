@@ -61,6 +61,7 @@ public:
 	struct DataSet {
 		std::vector<DataSetEntry> entries;
 		std::vector<ulong64> hashes; //for quick access
+		int phashThreshold;
 	};
 
 	Recognizer();
@@ -79,8 +80,9 @@ private:
 
 	boost::property_tree::ptree data;
 	int phashThreshold;
-	DataSet cards;
-	DataSet heroes;
+	int phashThresholdSIFT;
+	DataSet setCards;
+	DataSet setClasses;
 	DataSet setCoin;
 	DataSet setEnd;
 
