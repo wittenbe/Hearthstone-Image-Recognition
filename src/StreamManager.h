@@ -49,7 +49,6 @@ private:
 	std::string createDeckString(Deck deck);
 	StreamPtr stream;
 	clever_bot::botPtr bot;
-	RecognizerPtr recognizer;
 
 	bool param_strawpolling;
 	bool param_backupscoring;

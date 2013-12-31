@@ -34,7 +34,6 @@ namespace hs {
 StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->stream = stream;
 	this->bot = bot;
-	recognizer = RecognizerPtr(new Recognizer());
 	param_strawpolling = true;
 	param_backupscoring = false;
 	param_debug_level = 0;
@@ -69,6 +68,7 @@ void StreamManager::run() {
 	cv::Mat image;
 //	stream->setStream(4);
 //	stream->setFramePos(37228);
+	RecognizerPtr recognizer = RecognizerPtr(new Recognizer());
 
 	bool running = true;
 	while (running) {
