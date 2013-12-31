@@ -36,7 +36,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->bot = bot;
 	param_strawpolling = true;
 	param_backupscoring = false;
-	param_debug_level = 0;
+	param_debug_level = 1;
 	currentDeck.clear();
 
 	currentDeck.state = 0;

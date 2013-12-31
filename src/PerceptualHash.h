@@ -20,8 +20,6 @@ public:
 	static ComparisonResult best(const ulong64& hash, const std::vector<ulong64>& dataSet);
 	static std::vector<ComparisonResult> nbest(int n, const ulong64& hash, const std::vector<ulong64>& dataSet);
 private:
-	static cv::Mat temp1;
-	static cv::Mat temp2;
 	static cv::Mat k;
 };
 

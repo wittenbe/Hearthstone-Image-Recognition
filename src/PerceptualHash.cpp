@@ -3,11 +3,10 @@
 
 namespace hs {
 
-cv::Mat PerceptualHash::temp1 = cv::Mat();
-cv::Mat PerceptualHash::temp2 = cv::Mat();
 cv::Mat PerceptualHash::k = 1.f/9.f * (cv::Mat_<float>(3,3) << 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 ulong64 PerceptualHash::phash(const cv::Mat& image) {
+	cv::Mat temp1, temp2;
 	cv::cvtColor(image, temp1, CV_BGR2GRAY);
 	cv::filter2D(temp1, temp1, CV_32FC1, k);
 
