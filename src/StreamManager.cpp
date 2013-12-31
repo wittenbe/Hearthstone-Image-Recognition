@@ -43,8 +43,11 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	currentGame.state = 0;
 	enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
 	enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
-	enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
-	enable(currentGame.state, RECOGNIZER_GAME_END);
+
+	if (param_backupscoring) {
+		enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
+		enable(currentGame.state, RECOGNIZER_GAME_END);
+	}
 
 	sName = Config::getConfig().get<std::string>("config.stream.streamer_name");
 	numThreads = Config::getConfig().get<int>("config.image_recognition.threads");
@@ -83,10 +86,19 @@ void StreamManager::run() {
 		}
 
 		boost::timer t;
+
 		std::vector<Recognizer::RecognitionResult> results = recognizer->recognize(image, currentDeck.state | currentGame.state);
 
-		commandMutex.lock();
+		if (param_debug_level & 1) {
+			if (stream->isLivestream()) {
+				std::cout << "Processed frame in " << t.elapsed() << "s" << std::endl;
+			} else {
+				std::cout << "Processed frame " << stream->getFramePos() << " in " << t.elapsed() << "s" << std::endl;
+			}
+		}
 
+		if (results.empty()) continue;
+		commandMutex.lock();
 		for (auto& result : results) {
 			if (RECOGNIZER_DRAFT_CLASS_PICK == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CLASS_PICK)) {
 				currentDeck.clear();
@@ -171,16 +183,7 @@ void StreamManager::run() {
 				}
 			}
 		}
-
 		commandMutex.unlock();
-
-		if (param_debug_level & 1) {
-			if (stream->isLivestream()) {
-				std::cout << "Processed frame in " << t.elapsed() << "s" << std::endl;
-			} else {
-				std::cout << "Processed frame " << stream->getFramePos() << " in " << t.elapsed() << "s" << std::endl;
-			}
-		}
 	}
 
 	std::cout << "an error while reading a frame occured" << std::endl;
@@ -256,6 +259,11 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 	else if ("!backupscoring" == cmdParams[0] && isAllowed) {
 		if (toggle) {
 			param_backupscoring = toggleEnable;
+			if (toggleEnable) {
+				currentDeck.state = RECOGNIZER_GAME_CLASS_SHOW | RECOGNIZER_GAME_END;
+			} else {
+				currentDeck.state = 0;
+			}
 		}
 		response = "Backup scoring is: ";
 		response += (param_backupscoring)? "on" : "off";

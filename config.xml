@@ -26,6 +26,8 @@
 		<precompute_data>false</precompute_data>
 		
 		<phash_threshold>13</phash_threshold>
+		<!-- the phash method has to be less acurate if we use sift feature detection afterwards -->
+		<phash_threshold_sift>20</phash_threshold_sift> 
 		
 		<sift_feature_count>100</sift_feature_count>
 	</image_recognition>
