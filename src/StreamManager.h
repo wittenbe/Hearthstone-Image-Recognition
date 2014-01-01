@@ -49,6 +49,7 @@ private:
 	std::string createDeckString(Deck deck);
 	StreamPtr stream;
 	clever_bot::botPtr bot;
+	RecognizerPtr recognizer;
 
 	bool param_strawpolling;
 	bool param_backupscoring;
@@ -62,7 +63,7 @@ private:
 	Game currentGame;
 
 	//make sure the execution of commands doesn't interfere with other vars
-    boost::mutex commandMutex;
+    boost::mutex stateMutex;
 
     void disable(unsigned int& state, unsigned int recognizer) {state &= (~recognizer);}
     void enable(unsigned int& state, unsigned int recognizer) {state |= recognizer;}

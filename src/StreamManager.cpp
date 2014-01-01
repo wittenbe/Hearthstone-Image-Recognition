@@ -24,7 +24,7 @@ namespace hs {
 #define MSG_CLASS_POLL_VOTE_REPEAT "relink: %s"
 
 #define MSG_WINS_POLL "How many wins do you think %s will be able to achieve with this deck?"
-#define MSG_WINS_POLL_VOTE "How many wins do you think %s will get? "
+#define MSG_WINS_POLL_VOTE "How many wins do you think %s will get? %s"
 #define MSG_WINS_POLL_VOTE_REPEAT "relink: %s"
 
 #define MSG_GAME_START "!score -as %s -vs %s -%s"
@@ -38,6 +38,8 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	param_backupscoring = true;
 	param_debug_level = 0;
 	currentDeck.clear();
+
+	recognizer = RecognizerPtr(new Recognizer());
 
 	currentDeck.state = 0;
 	currentGame.state = 0;
@@ -72,7 +74,6 @@ void StreamManager::run() {
 	cv::Mat image;
 //	stream->setStream(4);
 //	stream->setFramePos(37228);
-	RecognizerPtr recognizer = RecognizerPtr(new Recognizer());
 
 	bool running = true;
 	while (running) {
@@ -99,7 +100,7 @@ void StreamManager::run() {
 		}
 
 		if (results.empty()) continue;
-//		commandMutex.lock();
+		stateMutex.lock();
 		for (auto& result : results) {
 			if (RECOGNIZER_DRAFT_CLASS_PICK == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CLASS_PICK)) {
 				currentDeck.clear();
@@ -112,7 +113,7 @@ void StreamManager::run() {
 					std::string strawpoll = SystemInterface::createStrawpoll((boost::format(MSG_CLASS_POLL) % sName).str(), result.results);
 					bot->message((boost::format(MSG_CLASS_POLL_VOTE) % sName % strawpoll).str(), 1);
 					bot->repeat_message((boost::format(MSG_CLASS_POLL_VOTE_REPEAT) % strawpoll).str(),
-							6, 25, 7);
+							5, 25, 7);
 					bot->message("!suboff", 120);
 				}
 			}
@@ -152,7 +153,7 @@ void StreamManager::run() {
 //						std::string strawpoll = SystemInterface::createStrawpoll(MSG_WINS_POLL, choices);
 //						bot->message((boost::format(MSG_WINS_POLL_VOTE) % sName % strawpoll).str());
 //						bot->repeat_message((boost::format(MSG_WINS_POLL_VOTE_REPEAT) % strawpoll).str(),
-//								7, 5, 0);
+//								5, 25, 7);
 					}
 				}
 			}
@@ -184,7 +185,7 @@ void StreamManager::run() {
 				}
 			}
 		}
-//		commandMutex.unlock();
+		stateMutex.unlock();
 	}
 
 	std::cout << "an error while reading a frame occured" << std::endl;
@@ -243,7 +244,7 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 		}
 	}
 	else if ("!deckforcepublish" == cmdParams[0] && isAllowed) {
-		commandMutex.lock();
+		stateMutex.lock();
 		while (currentDeck.picks.size() < 30) {
 			std::vector<std::string> pick;
 			pick.push_back("?"); pick.push_back("?"); pick.push_back("?");
@@ -253,24 +254,24 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 		std::string deckString = createDeckString(currentDeck);
 		currentDeck.url = SystemInterface::createHastebin(deckString);
 		response = (boost::format(CMD_DECK_FORMAT) % sName % currentDeck.url).str();
-		commandMutex.unlock();
+		stateMutex.unlock();
 	}
 	else if (cmdParams.size() >= 2 &&  isAllowed &&
 			"!setdeck" == cmdParams[0]) {
-		commandMutex.lock();
+		stateMutex.lock();
 		currentDeck.url = allParams;
-		commandMutex.unlock();
+		stateMutex.unlock();
 	}
 	else if ("!backupscoring" == cmdParams[0] && isAllowed) {
 		if (toggle) {
 			param_backupscoring = toggleEnable;
-			commandMutex.lock();
+			stateMutex.lock();
 			if (toggleEnable) {
 				currentDeck.state = RECOGNIZER_GAME_CLASS_SHOW | RECOGNIZER_GAME_END;
 			} else {
 				currentDeck.state = 0;
 			}
-			commandMutex.unlock();
+			stateMutex.unlock();
 		}
 		response = "Backup scoring is: ";
 		response += (param_backupscoring)? "on" : "off";
