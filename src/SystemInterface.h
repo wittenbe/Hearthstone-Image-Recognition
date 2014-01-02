@@ -45,15 +45,21 @@ public:
 	}
 
 	static std::string createHastebin(const std::string& text) {
-		std::ofstream myfile;
+		std::ofstream temp;
 		//since transmitting line breaks is difficult(/impossible?)
-		myfile.open("temp.txt");
-		myfile << text;
-		myfile.close();
+		temp.open("temp.txt");
+		temp << text;
+		temp.close();
 
 		std::string params = "--data-binary \"@temp.txt\" hastebin.com/documents";
 		std::string keyValue = callCurl(params);
-		return "http://hastebin.com/" + keyValue.substr(8, keyValue.find_last_of("/\"") - 8) + ".hs";
+
+		std::string response;
+		if (keyValue.length() >= 8 && keyValue.find_last_of("/\"") >= 8 && keyValue.find("false") >= keyValue.length()) {
+			response = "http://hastebin.com/" + keyValue.substr(8, keyValue.find_last_of("/\"") - 8) + ".hs";
+		}
+
+		return response;
 	}
 
 	static std::string createStrawpoll(const std::string& text, const std::vector<std::string>& choices, const bool& multi = true) {
@@ -67,7 +73,13 @@ public:
 
 		std::string curlParams = "-d " + params + " http://strawpoll.me/ajax/new-poll";
 		std::string keyValue = callCurl(curlParams);
-		return "http://strawpoll.me/" + keyValue.substr(6, keyValue.find_last_of("}") - 6);
+
+		std::string response;
+		if (keyValue.length() >= 8 && keyValue.find_last_of("/\"") >= 8 && keyValue.find("false") >= keyValue.length()) {
+			response = "http://strawpoll.me/" + keyValue.substr(6, keyValue.find_last_of("}") - 6);
+		}
+
+		return response;
 	}
 
 };

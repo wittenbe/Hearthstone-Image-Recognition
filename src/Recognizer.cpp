@@ -277,6 +277,7 @@ Recognizer::RecognitionResult Recognizer::compareSIFT(const cv::Mat& image, unsi
 	    cv::cvtColor(roiImage, greyscaleImage, CV_BGR2GRAY);
 	    cv::Mat descriptorImage = getDescriptor(greyscaleImage);
 
+	    if (!descriptorImage.data) continue;
 
 	    for (size_t i = 0; i < descriptors.size(); i++) {
 	    	if (isSIFTMatch(descriptorImage, descriptors[i].first)) {
@@ -297,7 +298,11 @@ cv::Mat Recognizer::getDescriptor(cv::Mat& image) {
 	std::vector<cv::KeyPoint> keypoints;
 	cv::Mat descriptor;
 	detector->detect(image, keypoints);
-	extractor->compute(image, keypoints, descriptor);
+
+	if (keypoints.size() > 0) {
+		extractor->compute(image, keypoints, descriptor);
+	}
+
 	return descriptor;
 }
 

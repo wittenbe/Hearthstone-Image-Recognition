@@ -20,6 +20,9 @@ namespace hs {
 #define DECK_PICKED_FORMAT " --> %s picked %s"
 
 #define MSG_CLASS_POLL "Which class should %s pick next?"
+#define MSG_CLASS_POLL_ERROR_RETRY_COUNT 1
+#define MSG_CLASS_POLL_ERROR "Could not connect to strawpoll, retrying %d more time(s)"
+#define MSG_CLASS_POLL_ERROR_GIVEUP "Could not create a strawpoll"
 #define MSG_CLASS_POLL_VOTE "Vote for %s's next class: %s"
 #define MSG_CLASS_POLL_VOTE_REPEAT "relink: %s"
 
@@ -110,11 +113,24 @@ void StreamManager::run() {
 
 				if (param_strawpolling) {
 					bot->message("!subon");
-					std::string strawpoll = SystemInterface::createStrawpoll((boost::format(MSG_CLASS_POLL) % sName).str(), result.results);
-					bot->message((boost::format(MSG_CLASS_POLL_VOTE) % sName % strawpoll).str(), 1);
-					bot->repeat_message((boost::format(MSG_CLASS_POLL_VOTE_REPEAT) % strawpoll).str(),
-							5, 25, 7);
-					bot->message("!suboff", 120);
+					bool success = false;
+					for (int i = 0; i <= MSG_CLASS_POLL_ERROR_RETRY_COUNT && !success; i++) {
+						std::string strawpoll = SystemInterface::createStrawpoll((boost::format(MSG_CLASS_POLL) % sName).str(), result.results);
+						if (strawpoll.empty()) {
+							bot->message((boost::format(MSG_CLASS_POLL_ERROR) % (MSG_CLASS_POLL_ERROR_RETRY_COUNT - i)).str());
+						} else {
+							bot->message((boost::format(MSG_CLASS_POLL_VOTE) % sName % strawpoll).str());
+							bot->repeat_message((boost::format(MSG_CLASS_POLL_VOTE_REPEAT) % strawpoll).str(),
+									5, 25, 7);
+							bot->message("!suboff", 120);
+							success = true;
+						}
+					}
+
+					if (!success) {
+						bot->message(MSG_CLASS_POLL_ERROR_GIVEUP);
+					}
+
 				}
 			}
 			else if (RECOGNIZER_DRAFT_CARD_PICK == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CARD_PICK)) {
