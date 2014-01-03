@@ -75,7 +75,7 @@ public:
 		std::string keyValue = callCurl(curlParams);
 
 		std::string response;
-		if (keyValue.length() >= 8 && keyValue.find_last_of("/\"") >= 8 && keyValue.find("false") >= keyValue.length()) {
+		if (keyValue.length() >= 6 && keyValue.find_last_of("}") >= 6 && keyValue.find("false") >= keyValue.length()) {
 			response = "http://strawpoll.me/" + keyValue.substr(6, keyValue.find_last_of("}") - 6);
 		}
 
