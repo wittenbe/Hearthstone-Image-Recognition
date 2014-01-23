@@ -1,6 +1,6 @@
 PROJECT(hs_image_recognition)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.4)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)
 CMAKE_POLICY(VERSION 2.6)
 
 SET(CMAKE_CXX_FLAGS "-std=c++11")
@@ -22,16 +22,19 @@ add_executable(${EXECUTABLE_NAME}
     bot/bot.cpp
     bot/connection.cpp
     bot/logger.cpp
-    bot/mainbot.cpp
+ #  bot/mainbot.cpp
 )
 
+set(Boost_NO_SYSTEM_PATHS ON)
+#set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost 1.54 REQUIRED COMPONENTS system thread regex chrono)
 include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
 
-find_package(OpenCV 2.4.6 REQUIRED)
+#set(OpenCV_SHARED OFF)
+find_package(OpenCV 2.4.5 REQUIRED)
 target_link_libraries(${EXECUTABLE_NAME} ${OpenCV_LIBS})
 
 IF(WIN32)
-    TARGET_LINK_LIBRARIES(${EXECUTABLE_NAME} wsock32 ws2_32)
+    target_link_libraries(${EXECUTABLE_NAME} wsock32 ws2_32)
 ENDIF(WIN32)
