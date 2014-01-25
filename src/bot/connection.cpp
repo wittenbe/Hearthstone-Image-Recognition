@@ -1,9 +1,10 @@
+#include "connection.h"
+#include "../Logger.h"
+
 #include <stdexcept>
 #include <functional>
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
-#include "logger.h"
-#include "connection.h"
 
 namespace clever_bot {
 
@@ -24,12 +25,12 @@ void connection::connect()
 		}
 		
 		m_socket.close();
-		LOG("Info", "Trying to connect: " + m_addr + ":" + m_port);
+		HS_INFO << "Trying to connect: " + m_addr + ":" + m_port << std::endl;
 		
 		m_socket.connect(*iter++, error);
 		
 		if (error) {
-			LOG("ERROR", error.message());
+			HS_ERROR << error.message() << std::endl;
 		}
 	}
 	
@@ -37,7 +38,7 @@ void connection::connect()
 		throw std::runtime_error(error.message());
 	}
 	
-	LOG("Info", "Connected!");
+	HS_INFO << "Connected!" << std::endl;
 }
 
 void connection::run()
@@ -79,7 +80,7 @@ void connection::connect(const std::string& addr, const std::string& port)
 
 void connection::write(const std::string& content)
 {
-	LOG("Write", content);
+	HS_INFO_NOSPACE << "[Write] " << content << std::endl;
 	boost::asio::write(m_socket, boost::asio::buffer(content + "\r\n"));
 }
 

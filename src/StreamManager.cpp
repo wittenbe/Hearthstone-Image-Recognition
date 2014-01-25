@@ -1,12 +1,17 @@
 #include "StreamManager.h"
 #include "Config.h"
 #include "SystemInterface.h"
+#include "Logger.h"
 
+#include <fstream>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/assign/list_inserter.hpp>
 #include <boost/assign/list_of.hpp>
 #include <boost/assign/std/vector.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 #include "opencv2/highgui/highgui.hpp"
 
@@ -39,8 +44,8 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->bot = bot;
 	param_strawpolling = true;
 	param_backupscoring = true;
-	param_debug_level = 0;
 	currentDeck.clear();
+	param_debug_level = 0;
 
 	recognizer = RecognizerPtr(new Recognizer());
 
@@ -54,9 +59,44 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 		enable(currentGame.state, RECOGNIZER_GAME_END);
 	}
 
+	loadState();
 
 	sName = Config::getConfig().get<std::string>("config.stream.streamer_name");
 	numThreads = Config::getConfig().get<int>("config.image_recognition.threads");
+}
+
+void StreamManager::loadState() {
+	boost::property_tree::ptree state;
+    std::ifstream stateFile(std::string(STATE_PATH).c_str());
+    if (stateFile.fail()) {
+    	HS_INFO << "no state to load, using default values" << std::endl;
+    } else {
+        boost::property_tree::read_xml(stateFile, state);
+        //using default values in case I want to save more later; so this won't break if someone uses an old state format
+        currentDeck.url = state.get<decltype(currentDeck.url)>("state.deckURL", currentDeck.url);
+        currentDeck.state = state.get<decltype(currentDeck.state)>("state.deckState", currentDeck.state);
+        currentGame.state = state.get<decltype(currentGame.state)>("state.gameState", currentGame.state);
+        param_backupscoring = state.get<decltype(param_backupscoring)>("state.backupscoring", param_backupscoring);
+        param_strawpolling = state.get<decltype(param_strawpolling)>("state.strawpolling", param_strawpolling);
+        HS_INFO << "state loaded" << std::endl;
+    }
+}
+
+void StreamManager::saveState() {
+	HS_INFO << "attempting to save state" << std::endl;
+	std::ifstream stateFile(STATE_PATH);
+	boost::property_tree::ptree state;
+//	boost::property_tree::read_xml(stateFile, state, boost::property_tree::xml_parser::trim_whitespace);
+
+    state.put("state.deckURL", currentDeck.url);
+    state.put("state.deckState", currentDeck.state);
+    state.put("state.gameState", currentGame.state);
+    state.put("state.backupscoring", param_backupscoring);
+    state.put("state.strawpolling", param_strawpolling);
+
+    boost::property_tree::xml_writer_settings<char> settings('\t', 1);
+    write_xml(STATE_PATH, state, std::locale(""), settings);
+    HS_INFO << "state saved" << std::endl;
 }
 
 void StreamManager::setStream(StreamPtr stream) {
@@ -90,15 +130,18 @@ void StreamManager::run() {
 			cv::waitKey();
 		}
 
-		boost::timer t;
+		auto startTime = boost::posix_time::microsec_clock::local_time();
 
 		std::vector<Recognizer::RecognitionResult> results = recognizer->recognize(image, currentDeck.state | currentGame.state);
 
 		if (param_debug_level & 1) {
+			auto endTime = boost::posix_time::microsec_clock::local_time();
+			boost::posix_time::time_duration diff = endTime - startTime;
+			const auto elapsed = diff.total_milliseconds();
 			if (stream->isLivestream()) {
-				std::cout << "Processed frame in " << t.elapsed() << "s" << std::endl;
+				std::cout << "Processed frame in " << elapsed << "ms" << std::endl;
 			} else {
-				std::cout << "Processed frame " << stream->getFramePos() << " in " << t.elapsed() << "s" << std::endl;
+				std::cout << "Processed frame " << stream->getFramePos() << " in " << elapsed << "ms" << std::endl;
 			}
 		}
 
@@ -109,7 +152,7 @@ void StreamManager::run() {
 				currentDeck.clear();
 				disable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
 				enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
-				std::cout << "new draft: " << result.results[0] << ", " << result.results[1] << ", " << result.results[2] << std::endl;
+				HS_INFO << "new draft: " << result.results[0] << ", " << result.results[1] << ", " << result.results[2] << std::endl;
 
 				if (param_strawpolling) {
 					bot->message("!subon");
@@ -146,7 +189,7 @@ void StreamManager::run() {
 					enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_CHOSEN);
 					disable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
 					currentDeck.picks.push_back(result.results);
-					std::cout << "pick " << currentDeck.cards.size() + 1 << ": " + result.results[0] + ", " + result.results[1] + ", " << result.results[2] << std::endl;
+					HS_INFO << "pick " << currentDeck.cards.size() + 1 << ": " + result.results[0] + ", " + result.results[1] + ", " << result.results[2] << std::endl;
 				}
 			}
 			else if (RECOGNIZER_DRAFT_CARD_CHOSEN  == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CARD_CHOSEN)) {
@@ -155,7 +198,7 @@ void StreamManager::run() {
 				disable(currentDeck.state, RECOGNIZER_DRAFT_CARD_CHOSEN);
 
 				size_t index = boost::lexical_cast<int>(result.results[0]);
-				std::cout << "picked " << currentDeck.picks.back()[index] << std::endl;
+				HS_INFO << "picked " << currentDeck.picks.back()[index] << std::endl;
 				currentDeck.cards.push_back(currentDeck.picks.back()[index]);
 
 				if (currentDeck.cards.size() == 30) {
@@ -174,7 +217,6 @@ void StreamManager::run() {
 				}
 			}
 			else if (RECOGNIZER_GAME_CLASS_SHOW  == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_CLASS_SHOW)) {
-				std::cout << "new game: " << result.results[0] << " " << result.results[1] << std::endl;
 				enable(currentGame.state, RECOGNIZER_GAME_COIN);
 				disable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
 				currentGame.player = result.results[0];
@@ -182,7 +224,6 @@ void StreamManager::run() {
 
 			}
 			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_COIN)) {
-				std::cout << "coin: " << result.results[0] << std::endl;
 				enable(currentGame.state, RECOGNIZER_GAME_END);
 				enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
 				disable(currentGame.state, RECOGNIZER_GAME_COIN);
@@ -192,7 +233,6 @@ void StreamManager::run() {
 				}
 			}
 			else if (RECOGNIZER_GAME_END == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_END)) {
-				std::cout << "end: " << result.results[0] << std::endl;
 				enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
 				disable(currentGame.state, RECOGNIZER_GAME_END);
 				currentGame.end = result.results[0];
@@ -308,6 +348,9 @@ std::string StreamManager::processCommand(std::string user, std::vector<std::str
 				"Additionally, SIFT feature detection is used for automated (backup) scoring. "
 				"The Bot is written in C++ by ZeForte. "
 				"Check out the (poorly commented) source on GitHub: http://bit.ly/1eGgN5g";
+	}
+	else if (isSuperUser && cmdParams[0] == "!crash") {
+		response = (boost::format(CMD_DECK_FORMAT) % currentDeck.url).str();
 	}
 
 //	commandMutex.unlock();

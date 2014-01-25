@@ -1,6 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include "Logger.h"
+
 #include <string>
 #include <fstream>
 #include <boost/property_tree/ptree.hpp>
@@ -15,6 +17,9 @@ public:
         static boost::property_tree::ptree instance;
         if (instance.empty()) {
             std::ifstream cfgFile(std::string(CONFIG_PATH).c_str());
+            if (cfgFile.fail()) {
+            	HS_ERROR << "Could not find config file at " << CONFIG_PATH << std::endl;
+            }
             boost::property_tree::read_xml(cfgFile, instance);
         }
         return instance;

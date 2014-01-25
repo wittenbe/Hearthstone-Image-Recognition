@@ -21,18 +21,16 @@ add_executable(${EXECUTABLE_NAME}
 	StreamManager.cpp
     bot/bot.cpp
     bot/connection.cpp
-    bot/logger.cpp
- #  bot/mainbot.cpp
 )
 
-set(Boost_NO_SYSTEM_PATHS ON)
+#set(Boost_NO_SYSTEM_PATHS ON)
 #set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost 1.54 REQUIRED COMPONENTS system thread regex chrono)
 include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
 
 #set(OpenCV_SHARED OFF)
-find_package(OpenCV 2.4.5 REQUIRED)
+find_package(OpenCV 2.4.6 REQUIRED)
 target_link_libraries(${EXECUTABLE_NAME} ${OpenCV_LIBS})
 
 IF(WIN32)

@@ -12,6 +12,7 @@
 namespace hs {
 
 #define DEFAULT_DECKURL "draft is in progress (if I missed draft, have a mod do !deckforcepublish for a partial draft)"
+#define STATE_PATH "state.xml"
 
 class StreamManager {
 public:
@@ -36,6 +37,8 @@ public:
 	};
 
 	StreamManager(StreamPtr stream, clever_bot::botPtr bot);
+	void loadState();
+	void saveState();
 	void setStream(StreamPtr stream);
 	void startAsyn();
 	void wait();

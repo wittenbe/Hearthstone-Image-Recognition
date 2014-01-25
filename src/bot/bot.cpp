@@ -5,7 +5,6 @@
 #include <boost/foreach.hpp>
 #include <boost/bind.hpp>
 
-#include "logger.h"
 #include "connection.h"
 #include "bot.h"
 #include "../Config.h"
