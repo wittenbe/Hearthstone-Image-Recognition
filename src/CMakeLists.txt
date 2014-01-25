@@ -19,6 +19,7 @@ add_executable(${EXECUTABLE_NAME}
     Recognizer.cpp
 	PerceptualHash.cpp
 	StreamManager.cpp
+	CommandProcessor.cpp
     bot/bot.cpp
     bot/connection.cpp
 )

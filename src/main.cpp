@@ -5,12 +5,13 @@
 #include "Config.h"
 #include "Logger.h"
 
+#include <boost/algorithm/string/find_iterator.hpp>
+#include <boost/algorithm/string.hpp>
 #include <string>
 #include <iostream>
 #include <stdio.h>
 #include <signal.h>
 #include <boost/shared_ptr.hpp>
-#include <boost/algorithm/string.hpp>
 #include <boost/thread.hpp>
 #include <boost/chrono.hpp>
 #include <boost/foreach.hpp>
@@ -33,9 +34,10 @@ void botThread(clever_bot::botPtr& bot) {
 }
 
 void signalHandler(int signal) {
-	HS_INFO << "crash detected" << std::endl;
+	HS_INFO << "Termination request received" << std::endl;
 	if (smPtrGlobal) {
 		smPtrGlobal->saveState();
+		exit(0);
 	}
 }
 
@@ -62,14 +64,12 @@ int main(int argc, char* argv[]) {
 		boost::regex_match(m, what, regx);
 
 		if (what[2].length() != 0 && what[3] == "PRIVMSG") {
-			std::string user = what[1];
-			std::string cmdArgsString = what[5];
-			std::vector<std::string> cmdArgs;
-			boost::split(cmdArgs, cmdArgsString, boost::is_any_of(" "), boost::token_compress_on);
+			const std::string user = what[1];
+			const std::string cmd = what[5];
 
 			const bool owner = bot->isowner(user);
-			const bool allowed = owner || bot->isallowed(user);
-			std::string response = smPtr->processCommand(user, cmdArgs, allowed, owner);
+			const bool allowed = bot->isallowed(user);
+			std::string response = smPtr->processCommand(user, cmd, allowed, owner);
 			if (!response.empty()) {
 				bot->message(response);
 			}
@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
 	    smPtr->wait();
 	} else {
 		int retryTimer = 60;
-		while (true) {
+		while (smPtr) {
 			bool connected = true;
 			const std::string execOutput = SystemInterface::callLivestreamer(streamer);
 			if (execOutput.find("\"error\"") <= execOutput.length()) {

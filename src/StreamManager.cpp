@@ -19,29 +19,10 @@ using namespace boost::assign;
 
 namespace hs {
 
-#define CMD_DECK_FORMAT "%s's current decklist: %s"
-
-#define DECK_PICK_FORMAT "Pick %02i: (%s, %s, %s)"
-#define DECK_PICKED_FORMAT " --> %s picked %s"
-
-#define MSG_CLASS_POLL "Which class should %s pick next?"
-#define MSG_CLASS_POLL_ERROR_RETRY_COUNT 1
-#define MSG_CLASS_POLL_ERROR "Could not connect to strawpoll, retrying %d more time(s)"
-#define MSG_CLASS_POLL_ERROR_GIVEUP "Could not create a strawpoll"
-#define MSG_CLASS_POLL_VOTE "Vote for %s's next class: %s"
-#define MSG_CLASS_POLL_VOTE_REPEAT "relink: %s"
-
-#define MSG_WINS_POLL "How many wins do you think %s will be able to achieve with this deck?"
-#define MSG_WINS_POLL_VOTE "How many wins do you think %s will get? %s"
-#define MSG_WINS_POLL_VOTE_REPEAT "relink: %s"
-
-#define MSG_GAME_START "!score -as %s -vs %s -%s"
-#define MSG_GAME_END "!score -%s"
-
-
 StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->stream = stream;
 	this->bot = bot;
+	cp = CommandProcessorPtr(new CommandProcessor(this));
 	param_strawpolling = true;
 	param_backupscoring = true;
 	currentDeck.clear();
@@ -63,6 +44,10 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 
 	sName = Config::getConfig().get<std::string>("config.stream.streamer_name");
 	numThreads = Config::getConfig().get<int>("config.image_recognition.threads");
+}
+
+StreamManager::~StreamManager() {
+	cp.reset();
 }
 
 void StreamManager::loadState() {
@@ -117,6 +102,8 @@ void StreamManager::run() {
 	cv::Mat image;
 //	stream->setStream(4);
 //	stream->setFramePos(37228);
+
+	HS_INFO << "started" << std::endl;
 
 	bool running = true;
 	while (running) {
@@ -275,86 +262,9 @@ std::string StreamManager::createDeckString(Deck deck) {
 	return deckString;
 }
 
-std::string StreamManager::processCommand(std::string user, std::vector<std::string> cmdParams, bool isAllowed, bool isSuperUser) {
-	std::string response;
-	if (cmdParams.size() == 0) return response;
-
-//	commandMutex.lock();
-	bool toggle = cmdParams.size() >= 2;
-	bool toggleEnable = toggle && (cmdParams[1] == "1" || cmdParams[1] == "on" || cmdParams[1] == "true");
-	std::vector<std::string> params;
-	for (size_t i = 1; i < cmdParams.size(); i++) {params.push_back(cmdParams[i]);}
-	std::string allParams = boost::algorithm::join(params, " ");
-
-	if ("!deck" == cmdParams[0] || "!decklist" == cmdParams[0]) {
-		response = (boost::format(CMD_DECK_FORMAT) % sName % currentDeck.url).str();
-	}
-	else if ("!deckprogress" == cmdParams[0]) {
-		if (currentDeck.cards.size() < 30) {
-			response = "Arena draft progress: " + boost::lexical_cast<std::string>(currentDeck.cards.size()) + "/30";
-			if (currentDeck.cards.size() != 0) {
-				response += ", latest pick: " + currentDeck.cards.back();
-			}
-		} else {
-			response = "Deck complete";
-		}
-	}
-	else if ("!deckforcepublish" == cmdParams[0] && isAllowed) {
-		stateMutex.lock();
-		while (currentDeck.picks.size() < 30) {
-			std::vector<std::string> pick;
-			pick.push_back("?"); pick.push_back("?"); pick.push_back("?");
-			currentDeck.picks.push_back(pick);
-		}
-		while (currentDeck.cards.size() < 30) currentDeck.cards.push_back("?");
-		std::string deckString = createDeckString(currentDeck);
-		currentDeck.url = SystemInterface::createHastebin(deckString);
-		response = (boost::format(CMD_DECK_FORMAT) % sName % currentDeck.url).str();
-		stateMutex.unlock();
-	}
-	else if (cmdParams.size() >= 2 &&  isAllowed &&
-			"!setdeck" == cmdParams[0]) {
-		stateMutex.lock();
-		currentDeck.url = allParams;
-		stateMutex.unlock();
-	}
-	else if ("!backupscoring" == cmdParams[0] && isAllowed) {
-		if (toggle) {
-			param_backupscoring = toggleEnable;
-			stateMutex.lock();
-			if (toggleEnable) {
-				currentDeck.state = RECOGNIZER_GAME_CLASS_SHOW | RECOGNIZER_GAME_END;
-			} else {
-				currentDeck.state = 0;
-			}
-			stateMutex.unlock();
-		}
-		response = "Backup scoring is: ";
-		response += (param_backupscoring)? "on" : "off";
-	}
-	else if ("!strawpolling" == cmdParams[0] && isAllowed) {
-		if (toggle) {
-			param_strawpolling = toggleEnable;
-		}
-		response = "Automated strawpolling is: ";
-		response += (param_strawpolling)? "on" : "off";
-	}
-	else if ("!fb_debuglevel" == cmdParams[0] && isSuperUser && cmdParams.size() == 2) {
-		param_debug_level = boost::lexical_cast<unsigned int>(cmdParams[1]);
-	}
-	else if (cmdParams.size() >= 2 &&  isAllowed &&
-			"!info" == cmdParams[0] && "fortebot" == cmdParams[1]) {
-		response = "ForteBot uses OpenCV and perceptual hashing to very quickly compare all card images against the stream image to find a match. "
-				"Additionally, SIFT feature detection is used for automated (backup) scoring. "
-				"The Bot is written in C++ by ZeForte. "
-				"Check out the (poorly commented) source on GitHub: http://bit.ly/1eGgN5g";
-	}
-	else if (isSuperUser && cmdParams[0] == "!crash") {
-		response = (boost::format(CMD_DECK_FORMAT) % currentDeck.url).str();
-	}
-
-//	commandMutex.unlock();
-	return response;
+std::string StreamManager::processCommand(const std::string& user, const std::string& cmd, bool isMod, bool isSuperUser) {
+	if (cmd.empty() || cmd.find("!") != 0) return std::string("");
+	return cp->process(user, cmd, isMod, isSuperUser);
 }
 
 }
