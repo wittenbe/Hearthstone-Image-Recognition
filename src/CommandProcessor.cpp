@@ -81,9 +81,9 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 	}));
 
 	cmdMap["!fb_state"] = CCP(new CommandCallback(0, 0, UL_SUPER, false, [this](const CommandInfo& ci, std::string& response){
-		response = sm->currentDeck.state;
+		response = boost::lexical_cast<std::string>(sm->currentDeck.state);
 		response += " ";
-		response += sm->currentGame.state;
+		response += boost::lexical_cast<std::string>(sm->currentGame.state);
 	}));
 
 	cmdMap["!fb_quit"] = CCP(new CommandCallback(0, 0, UL_MOD, false, [this](const CommandInfo& ci, std::string& response){
