@@ -11,6 +11,7 @@ namespace hs {
 
 CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 	this->sm = smPtr;
+	userCooldownTimer.restart();
 
 	//set up all commands
 	cmdMap["!deck"] = CCP(new CommandCallback(0, 0, UL_USER, false, [this](const CommandInfo& ci, std::string& response){
@@ -18,7 +19,7 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 	}));
 	alias("!deck", "!decklist");
 
-	cmdMap["!deckprogress"] = CCP(new CommandCallback(0, 0, UL_MOD, false, [this](const CommandInfo& ci, std::string& response){
+	cmdMap["!deckprogress"] = CCP(new CommandCallback(0, 0, UL_USER, false, [this](const CommandInfo& ci, std::string& response){
 		if (sm->currentDeck.cards.size() < 30) {
 			response = "Arena draft progress: " + boost::lexical_cast<std::string>(sm->currentDeck.cards.size()) + "/30";
 			if (sm->currentDeck.cards.size() != 0) {
@@ -79,6 +80,12 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 		sm->param_debug_level = boost::lexical_cast<unsigned int>(ci.allArgs);
 	}));
 
+	cmdMap["!fb_state"] = CCP(new CommandCallback(0, 0, UL_SUPER, false, [this](const CommandInfo& ci, std::string& response){
+		response = sm->currentDeck.state;
+		response += " ";
+		response += sm->currentGame.state;
+	}));
+
 	cmdMap["!fb_quit"] = CCP(new CommandCallback(0, 0, UL_MOD, false, [this](const CommandInfo& ci, std::string& response){
 		raise(SIGINT);
 	}));
@@ -108,6 +115,11 @@ std::string CommandProcessor::process(const std::string& user, const std::string
 		ci.userlevel = UL_MOD;
 	} else {
 		ci.userlevel = UL_USER;
+		if (userCooldownTimer.elapsed() < TIME_BETWEEN_COMMANDS) {
+			ci.userlevel = UL_SUBUSER;
+		} else {
+			userCooldownTimer.restart();
+		}
 	}
 
 	//process command

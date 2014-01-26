@@ -74,8 +74,8 @@ void StreamManager::saveState() {
 //	boost::property_tree::read_xml(stateFile, state, boost::property_tree::xml_parser::trim_whitespace);
 
     state.put("state.deckURL", currentDeck.url);
-    state.put("state.deckState", currentDeck.state);
-    state.put("state.gameState", currentGame.state);
+//    state.put("state.deckState", currentDeck.state);
+//    state.put("state.gameState", currentGame.state);
     state.put("state.backupscoring", param_backupscoring);
     state.put("state.strawpolling", param_strawpolling);
 
@@ -103,7 +103,7 @@ void StreamManager::run() {
 //	stream->setStream(4);
 //	stream->setFramePos(37228);
 
-	HS_INFO << "started" << std::endl;
+	HS_INFO << "Started thread" << std::endl;
 
 	bool running = true;
 	while (running) {
@@ -113,8 +113,8 @@ void StreamManager::run() {
 
 		if (param_debug_level & 2) {
 			cv::imshow("Debug", image);
-//			cv::waitKey(10);
-			cv::waitKey();
+			cv::waitKey(10);
+//			cv::waitKey();
 		}
 
 		auto startTime = boost::posix_time::microsec_clock::local_time();
@@ -133,6 +133,7 @@ void StreamManager::run() {
 		}
 
 		if (results.empty()) continue;
+
 		stateMutex.lock();
 		for (auto& result : results) {
 			if (RECOGNIZER_DRAFT_CLASS_PICK == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CLASS_PICK)) {
@@ -208,7 +209,6 @@ void StreamManager::run() {
 				disable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
 				currentGame.player = result.results[0];
 				currentGame.opponent = result.results[1];
-
 			}
 			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_COIN)) {
 				enable(currentGame.state, RECOGNIZER_GAME_END);
