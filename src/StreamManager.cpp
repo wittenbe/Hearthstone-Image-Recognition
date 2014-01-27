@@ -235,11 +235,12 @@ void StreamManager::run() {
 				if (currentGame.end == "w") currentGame.wins++;
 				else currentGame.losses++;
 
-				if (currentGame.wins == 12 || currentGame.losses == 3) {
-					bot->message("!score -constructed (I will set to -arena on next arena start)");
-				}
 				if (param_backupscoring) {
 					bot->message((boost::format(MSG_GAME_END) % currentGame.end).str());
+				}
+
+				if (currentGame.wins == 12 || currentGame.losses == 3) {
+					bot->message("!score -constructed (I will set it to -arena on next arena start)", 10);
 				}
 			}
 		}
