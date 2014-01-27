@@ -123,7 +123,6 @@ int main(int argc, char* argv[]) {
 				}
 				connected = false;
 			} else {
-				HS_INFO << "connected to vod!" << std::endl;
 				const std::string subStr = execOutput.substr(execOutput.find("http"), execOutput.npos);
 				std::string streamUrl = subStr.substr(0, subStr.find("\""));
 				addrs.clear();

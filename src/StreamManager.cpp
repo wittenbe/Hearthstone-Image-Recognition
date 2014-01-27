@@ -32,6 +32,8 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 
 	currentDeck.state = 0;
 	currentGame.state = 0;
+	currentGame.wins = 0;
+	currentGame.losses = 0;
 	enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
 	enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
 
@@ -61,6 +63,8 @@ void StreamManager::loadState() {
         currentDeck.url = state.get<decltype(currentDeck.url)>("state.deckURL", currentDeck.url);
         currentDeck.state = state.get<decltype(currentDeck.state)>("state.deckState", currentDeck.state);
         currentGame.state = state.get<decltype(currentGame.state)>("state.gameState", currentGame.state);
+        currentGame.wins = state.get<decltype(currentGame.wins)>("state.currentWins", currentGame.wins);
+        currentGame.losses = state.get<decltype(currentGame.losses)>("state.currentLosses", currentGame.losses);
         param_backupscoring = state.get<decltype(param_backupscoring)>("state.backupscoring", param_backupscoring);
         param_strawpolling = state.get<decltype(param_strawpolling)>("state.strawpolling", param_strawpolling);
         HS_INFO << "state loaded" << std::endl;
@@ -78,6 +82,8 @@ void StreamManager::saveState() {
 //    state.put("state.gameState", currentGame.state);
     state.put("state.backupscoring", param_backupscoring);
     state.put("state.strawpolling", param_strawpolling);
+    state.put("state.currentWins", currentGame.wins);
+    state.put("state.currentLosses", currentGame.losses);
 
     boost::property_tree::xml_writer_settings<char> settings('\t', 1);
     write_xml(STATE_PATH, state, std::locale(""), settings);
@@ -141,6 +147,9 @@ void StreamManager::run() {
 				disable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
 				enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
 				HS_INFO << "new draft: " << result.results[0] << ", " << result.results[1] << ", " << result.results[2] << std::endl;
+				bot->message("!score -arena");
+				currentGame.losses = 0;
+				currentGame.wins = 0;
 
 				if (param_strawpolling) {
 					bot->message("!subon");
@@ -223,6 +232,12 @@ void StreamManager::run() {
 				enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
 				disable(currentGame.state, RECOGNIZER_GAME_END);
 				currentGame.end = result.results[0];
+				if (currentGame.end == "w") currentGame.wins++;
+				else currentGame.losses++;
+
+				if (currentGame.wins == 12 || currentGame.losses == 3) {
+					bot->message("!score -constructed (I will set to -arena on next arena start)");
+				}
 				if (param_backupscoring) {
 					bot->message((boost::format(MSG_GAME_END) % currentGame.end).str());
 				}

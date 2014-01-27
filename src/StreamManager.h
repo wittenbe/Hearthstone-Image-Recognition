@@ -56,6 +56,8 @@ public:
 		std::string opponent;
 		std::string fs;
 		std::string end;
+		int wins;
+		int losses;
 
 		unsigned int state;
 	};
