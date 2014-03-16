@@ -26,7 +26,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	param_strawpolling = true;
 	param_backupscoring = true;
 	currentDeck.clear();
-	param_debug_level = 2;
+	param_debug_level = 0;
 
 	recognizer = RecognizerPtr(new Recognizer());
 
@@ -117,7 +117,7 @@ void StreamManager::run() {
 //	stream->setStream(1);
 //	stream->setFramePos(45364);
 //	stream->setFramePos(42364);
-	stream->setFramePos(36927);
+//	stream->setFramePos(36927);
 
 	HS_INFO << "Started thread" << std::endl;
 
