@@ -1,10 +1,3 @@
-/*
- * Logger.h
- *
- *  Created on: 25.01.2014
- *      Author: Forte
- */
-
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
@@ -17,7 +10,7 @@
 #define HS_ERROR HS_ERROR_NOSPACE << " "
 
 #define HS_INFO_NOSPACE std::cout << "[" << HS_TIME << "]"
-#define HS_ERROR_NOSPACE std::cerr << "[" << HS_TIME << "][Error]"
+#define HS_ERROR_NOSPACE std::cerr <<  "[" << HS_TIME << "][Error]"
 
 
 #endif /* LOGGER_H_ */

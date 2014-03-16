@@ -42,17 +42,16 @@ const Recognizer::VectorROI Recognizer::GAME_CLASS_SHOW = list_of
 		(cv::Rect_<float>(0.2799f, 0.5938f, 0.1101f, 0.2938f))
 		(cv::Rect_<float>(0.6593f, 0.123f, 0.1101f, 0.2938f));
 
-//regions of interest for SIFT comparison
+//regions of interest for SURF comparison
 const Recognizer::VectorROI Recognizer::GAME_COIN = list_of
 		(cv::Rect_<float>(0.6441f, 0.4f, 0.0996f, 0.2292f));
 
 const Recognizer::VectorROI Recognizer::GAME_END = list_of
-		(cv::Rect_<float>(0.3771f, 0.5542f, 0.2506f, 0.1188f));
+		(cv::Rect_<float>(0.3841f, 0.53751f, 0.2471f, 0.148f));
 
 Recognizer::Recognizer() {
 	auto cfg = Config::getConfig();
 	phashThreshold = cfg.get<int>("config.image_recognition.phash_threshold");
-	phashThresholdSIFT = cfg.get<int>("config.image_recognition.phash_threshold_sift");
 	std::string dataPath = cfg.get<std::string>("config.paths.recognition_data_path");
 	std::ifstream dataFile(dataPath);
 	boost::property_tree::read_xml(dataFile, data, boost::property_tree::xml_parser::trim_whitespace);
@@ -63,44 +62,26 @@ Recognizer::Recognizer() {
     populateFromData("hs_data.cards", setCards);
     populateFromData("hs_data.heroes", setClasses);
 
-    //prepare the SIFT stuff
-	detector = SiftFeatureDetectorPtr(new cv::SiftFeatureDetector(cfg.get<int>("config.image_recognition.sift_feature_count")));
-	extractor = SiftDescriptorExtractorPtr(new cv::SiftDescriptorExtractor());
-	matcher = FlannBasedMatcherPtr(new cv::FlannBasedMatcher());
+	surf = cv::SURF(100, 4, 3, true, true);
+    HS_INFO << "Using SURF parameters: " << surf.hessianThreshold << " " << surf.nOctaves << " " << surf.nOctaveLayers << " " << surf.extended << " " << surf.upright << std::endl;
+//	matcher = FlannBasedMatcherPtr(new cv::FlannBasedMatcher());
+	matcher = BFMatcherPtr(new cv::BFMatcher(cv::NORM_L2));
 
-    cv::Mat tempImg, gsImg;
+    cv::Mat tempImg;
 
-    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_end_victory.png", CV_LOAD_IMAGE_COLOR);
-    DataSetEntry endV("w", PerceptualHash::phash(tempImg));
-    cv::cvtColor(tempImg, gsImg, CV_BGR2GRAY);
-    descriptorEnd.push_back(std::make_pair(getDescriptor(gsImg), "w"));
-    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_end_defeat.png", CV_LOAD_IMAGE_COLOR);
-    DataSetEntry endD("l", PerceptualHash::phash(tempImg));
-    cv::cvtColor(tempImg, gsImg, CV_BGR2GRAY);
-    descriptorEnd.push_back(std::make_pair(getDescriptor(gsImg), "l"));
-    setEnd.entries.push_back(endV);
-    setEnd.entries.push_back(endD);
-    setEnd.hashes.push_back(endV.phash);
-    setEnd.hashes.push_back(endD.phash);
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_end_victory.png", CV_LOAD_IMAGE_GRAYSCALE);
+    descriptorEnd.push_back(std::make_pair(getDescriptor(tempImg), "w"));
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_end_defeat.png", CV_LOAD_IMAGE_GRAYSCALE);
+    descriptorEnd.push_back(std::make_pair(getDescriptor(tempImg), "l"));
 
-    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_first.png", CV_LOAD_IMAGE_COLOR);
-    DataSetEntry coin1("1", PerceptualHash::phash(tempImg));
-    cv::cvtColor(tempImg, gsImg, CV_BGR2GRAY);
-    descriptorCoin.push_back(std::make_pair(getDescriptor(gsImg), "1"));
-    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_second.png", CV_LOAD_IMAGE_COLOR);
-    DataSetEntry coin2("2", PerceptualHash::phash(tempImg));
-    cv::cvtColor(tempImg, gsImg, CV_BGR2GRAY);
-    descriptorCoin.push_back(std::make_pair(getDescriptor(gsImg), "2"));
-    setCoin.entries.push_back(coin1);
-    setCoin.entries.push_back(coin2);
-    setCoin.hashes.push_back(coin1.phash);
-    setCoin.hashes.push_back(coin2.phash);
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_first.png", CV_LOAD_IMAGE_GRAYSCALE);
+    descriptorCoin.push_back(std::make_pair(getDescriptor(tempImg), "1"));
+    tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_second.png", CV_LOAD_IMAGE_GRAYSCALE);
+    descriptorCoin.push_back(std::make_pair(getDescriptor(tempImg), "2"));
 
     //set each set's phash threshold
     setCards.phashThreshold = phashThreshold;
     setClasses.phashThreshold = phashThreshold;
-    setCoin.phashThreshold = phashThresholdSIFT;
-    setEnd.phashThreshold = phashThresholdSIFT;
 }
 
 void Recognizer::precomputeData(const std::string& dataPath) {
@@ -170,21 +151,14 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 		}
 	}
 
-	//only perform the expensive sift detection if the image succeeded with the phashes
 	if (allowedRecognizers & RECOGNIZER_GAME_COIN) {
-		RecognitionResult rrPH = comparePHashes(image, RECOGNIZER_GAME_COIN, GAME_COIN, setCoin);
-		if (rrPH.valid) {
-			RecognitionResult rr = compareSIFT(image, RECOGNIZER_GAME_COIN, GAME_COIN, descriptorCoin);
-			if (rr.valid) results.push_back(rr);
-		}
+		RecognitionResult rr = compareFeatures(image, RECOGNIZER_GAME_COIN, GAME_COIN, descriptorCoin);
+		if (rr.valid) results.push_back(rr);
 	}
 
 	if (allowedRecognizers & RECOGNIZER_GAME_END) {
-		RecognitionResult rrPH = comparePHashes(image, RECOGNIZER_GAME_END, GAME_END, setEnd);
-		if (rrPH.valid) {
-			RecognitionResult rr = compareSIFT(image, RECOGNIZER_GAME_END, GAME_END, descriptorEnd);
-			if (rr.valid) results.push_back(rr);
-		}
+		RecognitionResult rr = compareFeatures(image, RECOGNIZER_GAME_END, GAME_END, descriptorEnd);
+		if (rr.valid) results.push_back(rr);
 	}
 
 	return results;
@@ -227,7 +201,9 @@ std::vector<std::string> Recognizer::bestPHashMatches(const cv::Mat& image, cons
 
 int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
 	std::vector<float> resultsBlue;
+	std::vector<float> resultsGreen;
 	std::vector<float> resultsRed;
+	std::vector<std::vector<float> > results;
 	for (auto& r : roi) {
 		cv::Mat roiImage = image(
 	    		cv::Range(r.y * image.rows, (r.y + r.height) * image.rows),
@@ -235,37 +211,45 @@ int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
 
 		  cv::Scalar s = cv::mean(roiImage);
 		  resultsBlue.push_back(s[0]);
+		  resultsGreen.push_back(s[1]);
 		  resultsRed.push_back(s[2]);
 	}
+	results.push_back(resultsBlue);
+	results.push_back(resultsGreen);
+	results.push_back(resultsRed);
 
-	//find max and second highest
-	int maxIndex = -1;
-	float maxVal = 0, secondVal = 0;
-	float minRed = 255;
-	float maxRed = 0;
-	for (size_t i = 0; i < resultsBlue.size(); i++) {
-		if (resultsBlue[i] > maxVal) {
-			secondVal = maxVal;
-			maxIndex = i;
-			maxVal = resultsBlue[i];
-		} else if (resultsBlue[i] > secondVal) {
-			secondVal = resultsBlue[i];
+	std::vector<int> maxIndex(3, -1);
+	std::vector<int> minIndex(3, -1);
+	std::vector<float> maxVal(3, 0.f);
+	std::vector<float> minVal(3, 255.f);
+	for (size_t chann = 0; chann < maxIndex.size(); chann++) {
+		for (size_t i = 0; i < results[chann].size(); i++) {
+			if (results[chann][i] > maxVal[chann]) {
+				maxIndex[chann] = i;
+				maxVal[chann] = results[chann][i];
+			}
+
+			if (results[chann][i] < minVal[chann]) {
+				minIndex[chann] = i;
+				minVal[chann] = results[chann][i];
+			}
 		}
-
-		minRed = std::min(minRed, resultsRed[i]);
-		maxRed = std::max(maxRed, resultsRed[i]);
 	}
-	float redRatioDeviation = fabs(maxRed/minRed - 1);
 
-	// a roi is considered "pretty blue" if the blue channel is at least 60% higher
-	//than other roi's blue and if it's past an absolute threshold
-	int bluest = (maxVal > (1.6 * secondVal) && maxVal > 180)? maxIndex : -1;
-	if (redRatioDeviation >= 0.3) bluest = -1; //to prevent some false positives; real matches have a ratio very close to 1, i.e. the deviation 0
-
-	return bluest;
+	int best = -1;
+	if (maxIndex[0] == minIndex[2]) {
+		float blueRatio = maxVal[0] / minVal[0];
+		float greenRatio = maxVal[1] / minVal[1];
+		float redRatio = maxVal[2] / minVal[2];
+		if (blueRatio >= 1.9 || (blueRatio >= 1.4 && redRatio >= 1.4)) {
+			best = maxIndex[0];
+		}
+	}
+//	HS_INFO << "(" << maxVal[0] << " " << minVal[0] << ") (" << maxVal[1] << " " << minVal[1] << ") (" << maxVal[2] << " " << minVal[2] << ") (" << maxIndex[0] << " " << maxIndex[1] << " " << maxIndex[2] << ") (" << minIndex[0] << " " << minIndex[1] << " " << minIndex[2] << ")" << std::endl;
+	return best;
 }
 
-Recognizer::RecognitionResult Recognizer::compareSIFT(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const std::vector<std::pair<cv::Mat, std::string> > descriptors) {
+Recognizer::RecognitionResult Recognizer::compareFeatures(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const VectorDescriptor& descriptors) {
     RecognitionResult rr;
     rr.valid = false;
 
@@ -274,61 +258,69 @@ Recognizer::RecognitionResult Recognizer::compareSIFT(const cv::Mat& image, unsi
 	    		cv::Range(r.y * image.rows, (r.y + r.height) * image.rows),
 	    		cv::Range(r.x * image.cols, (r.x + r.width) * image.cols));
 	    cv::Mat greyscaleImage;
-	    cv::cvtColor(roiImage, greyscaleImage, CV_BGR2GRAY);
+	    if (roiImage.channels() == 1) {
+	    	greyscaleImage = roiImage.clone();
+	    } else {
+	    	cv::cvtColor(roiImage, greyscaleImage, CV_BGR2GRAY);
+	    }
+
 	    cv::Mat descriptorImage = getDescriptor(greyscaleImage);
+//		std::cout << descriptorImage << std::endl;
+
+	    int bestResultMatchesCount = 0;
+	    std::string bestResult;
 
 	    if (!descriptorImage.data) continue;
 
+	    std::vector<cv::DMatch> matches;
 	    for (size_t i = 0; i < descriptors.size(); i++) {
-	    	if (isSIFTMatch(descriptorImage, descriptors[i].first)) {
-	    		rr.valid = true;
-	    		rr.sourceRecognizer = recognizer;
-	    		rr.results.push_back(descriptors[i].second);
-	    		break;
+	    	matches = getMatches(descriptorImage, descriptors[i].first);
+	    	if (isGoodDescriptorMatch(matches) && matches.size() > bestResultMatchesCount) {
+	    		bestResult = descriptors[i].second;
+	    		bestResultMatchesCount = matches.size();
 	    	}
 	    }
-	    if (rr.valid) break;
+	    if (!bestResult.empty()) {
+    		rr.results.push_back(bestResult);
+			rr.valid = true;
+			rr.sourceRecognizer = recognizer;
+	    }
 	}
 
 	return rr;
 }
 
-//get descriptor of SIFT features
 cv::Mat Recognizer::getDescriptor(cv::Mat& image) {
 	std::vector<cv::KeyPoint> keypoints;
 	cv::Mat descriptor;
-	detector->detect(image, keypoints);
-
-	if (keypoints.size() > 0) {
-		extractor->compute(image, keypoints, descriptor);
-	}
-
+	surf(image, cv::Mat(), keypoints, descriptor);
 	return descriptor;
 }
 
-bool Recognizer::isSIFTMatch(const cv::Mat& descriptorObj, const cv::Mat& descriptorScene) {
-	bool match = false;
-	std::vector<std::vector<cv::DMatch> > matches;
-	std::vector<cv::DMatch> good_matches;
-	matcher->knnMatch(descriptorObj, descriptorScene, matches, 2);
+bool Recognizer::isGoodDescriptorMatch(const std::vector<cv::DMatch>& matches) {
+	return matches.size() >= 7;
+}
 
-	//the 0.4 constant is a measure on how similar the features are, with lower being more strict (but also unlikely to find matches)
-	//there's a tradeoff of strictness and the initial amount of features calculated
-	for (int i = 0; i < std::min(descriptorScene.rows - 1,(int) matches.size()); i++) {
-		if ((matches[i].size() <= 2 && matches[i].size() > 0) && (matches[i][0].distance < 0.4 * (matches[i][1].distance))) {
-			good_matches.push_back(matches[i][0]);
+std::vector<cv::DMatch> Recognizer::getMatches(const cv::Mat& descriptorObj, const cv::Mat& descriptorScene) {
+	std::vector<std::vector<cv::DMatch> > matches;
+	matcher->knnMatch(descriptorObj, descriptorScene, matches, 2);
+	std::vector<cv::DMatch> goodMatches;
+
+	//ratio test
+	for (size_t i = 0; i < matches.size(); ++i) {
+		if (matches[i].size() < 2)
+				continue;
+
+		const cv::DMatch &m1 = matches[i][0];
+		const cv::DMatch &m2 = matches[i][1];
+
+		if (m1.distance <= 0.6f * m2.distance) {
+			goodMatches.push_back(m1);
+//			HS_INFO << m1.distance << " " << m2.distance << std::endl;
 		}
 	}
 
-	//to identify where the object is in the scene, i.e. what the homography is, we'd need 4 known points to solve for 4 unknowns (2 rotation, 2 translation)
-	//that means taht if we HAVE 4 or more points, we can most likely calculate a homography to find the reference image in the stream image
-	if (good_matches.size() >= 4) {
-		//the actual homography isn't calculated to save time; and its analysis is probably not that simple anyway
-		//this also means that it's actually unknown WHERE the object is in the scene, only THAT it probably appears somewhere
-		match = true;
-	}
-
-	return match;
+	return goodMatches;
 }
 
 }

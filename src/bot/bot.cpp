@@ -8,6 +8,7 @@
 #include "connection.h"
 #include "bot.h"
 #include "../Config.h"
+#include "../Logger.h"
 
 namespace clever_bot {
 
@@ -56,7 +57,7 @@ void bot::connect() {
 }
 
 void bot::pong_handler(const std::string& message) {
-	std::cout << message << std::endl;
+	HS_INFO << message << std::endl;
 }
 
 void bot::write_handler()
@@ -96,7 +97,7 @@ void bot::write_handler()
     	}
 	}
 
-	std::cout << "IRC connection died" << std::endl;
+	HS_INFO << "IRC connection died" << std::endl;
 }
 
 void bot::read_handler(const std::string& message)

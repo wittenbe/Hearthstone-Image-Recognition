@@ -9,6 +9,8 @@
 #include <fstream>
 #include <stdio.h>
 
+#include <cv.h>
+
 class SystemInterface {
 public:
 
@@ -80,6 +82,11 @@ public:
 		}
 
 		return response;
+	}
+
+	static void saveImage(const cv::Mat& image, std::string name) {
+		HS_INFO << "writing image " << name << std::endl;
+		cv::imwrite(name, image);
 	}
 
 };

@@ -7,7 +7,11 @@ cv::Mat PerceptualHash::k = 1.f/9.f * (cv::Mat_<float>(3,3) << 1, 1, 1, 1, 1, 1,
 
 ulong64 PerceptualHash::phash(const cv::Mat& image) {
 	cv::Mat temp1, temp2;
-	cv::cvtColor(image, temp1, CV_BGR2GRAY);
+	if (image.channels() == 1) {
+		temp1 = image.clone();
+	} else {
+		cv::cvtColor(image, temp1, CV_BGR2GRAY);
+	}
 	cv::filter2D(temp1, temp1, CV_32FC1, k);
 
 	cv::resize(temp1, temp2, cv::Size(32, 32), 0, 0, CV_INTER_LINEAR);

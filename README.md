@@ -23,7 +23,7 @@ This alone is enough for the card and hero detection, i.e. automated deck buildi
 
 What's missing is the detection of who's first and second as well as the game's end. This is done by looking at the coin at the start of the game and at the "Defeat!" or "Victory!" text at the end of it.
 Unfortunately, the pHashes for both coins and for both Victory/Defeat messages are very similar. In case of a "recognition hit", the image region of interest is further analysed by performing the more expensive
-SIFT feature detection, which can easily differentiate between both coins and both texts.
+SURF feature detection, which can easily differentiate between both coins and both texts.
 
 ## Compiling the bot
 

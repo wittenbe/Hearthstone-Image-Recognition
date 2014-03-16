@@ -118,7 +118,7 @@ int main(int argc, char* argv[]) {
 				if (execOutput.find("No streams found on this URL") <= execOutput.length()) {
 					retryTimer = 60;
 				} else {
-					HS_ERROR << std::endl << execOutput << std::endl;
+					HS_ERROR  << execOutput << std::endl;
 					retryTimer = 1; //retry aggressively if some issue occured not related to the streamer being offline
 				}
 				connected = false;

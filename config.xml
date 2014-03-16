@@ -4,7 +4,7 @@
 		<server>irc.twitch.tv</server>
 		<server_port>6667</server_port>
 		<!-- if channel is empty, "#<streamer>" will be chosen as the channel --> 
-		<channel></channel>
+		<channel>#fortebot</channel>
 
 		<bot_nick>ForteBot</bot_nick>
 		<bot_pass></bot_pass> <!-- use an oauth token -->
@@ -18,18 +18,15 @@
 		<streamer>trumpsc</streamer>
 		<streamer_name>Trump</streamer_name>
 		<stream_quality>mobile_Medium</stream_quality>
-		<vod>http://api.justin.tv/api/broadcast/by_archive/491119986.xml</vod> <!-- in case live == false -->
+		<vod>http://api.justin.tv/api/broadcast/by_archive/510772942.xml</vod> <!-- in case live == false -->
 	</stream>
 	<image_recognition>
+		<!-- using any non-positive value here will cause the program to use as many threads as there are cores -->
 		<threads>1</threads>
 		<!-- just p-hashes for now; if false the data is alread assumed to be in data.xml -->
 		<precompute_data>false</precompute_data>
 		
 		<phash_threshold>13</phash_threshold>
-		<!-- the phash method has to be less acurate if we use sift feature detection afterwards -->
-		<phash_threshold_sift>20</phash_threshold_sift> 
-		
-		<sift_feature_count>100</sift_feature_count>
 	</image_recognition>
 	<paths>
 		<!-- relative to where you execute the program -->

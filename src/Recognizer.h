@@ -2,6 +2,8 @@
 #define RECOGNIZER_H_
 
 #include "PerceptualHash.h"
+#include "Calibration/Calibration.h"
+#include "Calibration/Calibrator.h"
 
 #include <fstream>
 #include <boost/shared_ptr.hpp>
@@ -17,6 +19,8 @@
 
 namespace hs {
 
+class Calibrator;
+
 //supported
 #define RECOGNIZER_DRAFT_CLASS_PICK 1
 #define RECOGNIZER_DRAFT_CARD_PICK 4
@@ -31,13 +35,15 @@ namespace hs {
 #define RECOGNIZER_ALLOW_ALL -1
 #define RECOGNIZER_ALLOW_NONE 0
 
-typedef boost::shared_ptr<cv::SiftFeatureDetector> SiftFeatureDetectorPtr;
-typedef boost::shared_ptr<cv::SiftDescriptorExtractor> SiftDescriptorExtractorPtr;
-typedef boost::shared_ptr<cv::FlannBasedMatcher> FlannBasedMatcherPtr;
+//typedef boost::shared_ptr<cv::FlannBasedMatcher> FlannBasedMatcherPtr;
+typedef boost::shared_ptr<cv::BFMatcher> BFMatcherPtr;
 
 class Recognizer {
+friend class Calibrator;
+
 public:
 	typedef std::vector<cv::Rect_<float> > VectorROI;
+	typedef std::vector<std::pair<cv::Mat, std::string> > VectorDescriptor;
 	static const VectorROI DRAFT_CLASS_PICK;
 	static const VectorROI DRAFT_CARD_PICK;
 	static const VectorROI DRAFT_CARD_CHOSEN;
@@ -66,32 +72,32 @@ public:
 
 	Recognizer();
 	std::vector<RecognitionResult> recognize(const cv::Mat& image, unsigned int allowedRecognizers);
-private:
-	void precomputeData(const std::string& dataPath);
-	void populateFromData(const std::string& dataPath, DataSet& dataSet);
-
-	RecognitionResult compareSIFT(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const std::vector<std::pair<cv::Mat, std::string> > descriptors);
+	RecognitionResult compareFeatures(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const VectorDescriptor& descriptors);
 	RecognitionResult comparePHashes(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const DataSet& dataSet);
 	std::vector<std::string> bestPHashMatches(const cv::Mat& image, const VectorROI& roi, const DataSet& dataSet);
 	int getIndexOfBluest(const cv::Mat& image, const VectorROI& roi);
 
 	cv::Mat getDescriptor(cv::Mat& image);
-	bool isSIFTMatch(const cv::Mat& descriptorObj, const cv::Mat& descriptorScene);
+	bool isGoodDescriptorMatch(const std::vector<cv::DMatch>& matches);
+	std::vector<cv::DMatch> getMatches(const cv::Mat& descriptorObj, const cv::Mat& descriptorScene);
+private:
+	void precomputeData(const std::string& dataPath);
+	void populateFromData(const std::string& dataPath, DataSet& dataSet);
+
+
 
 	boost::property_tree::ptree data;
 	int phashThreshold;
-	int phashThresholdSIFT;
 	DataSet setCards;
 	DataSet setClasses;
 	DataSet setCoin;
 	DataSet setEnd;
 
-	//SIFT stuff
-	SiftFeatureDetectorPtr detector;
-	SiftDescriptorExtractorPtr extractor;
-	FlannBasedMatcherPtr matcher;
-	std::vector<std::pair<cv::Mat, std::string> > descriptorCoin;
-	std::vector<std::pair<cv::Mat, std::string> > descriptorEnd;
+	cv::SURF surf;
+//	FlannBasedMatcherPtr matcher;
+	BFMatcherPtr matcher;
+	VectorDescriptor descriptorCoin;
+	VectorDescriptor descriptorEnd;
 };
 
 typedef boost::shared_ptr<Recognizer> RecognizerPtr;

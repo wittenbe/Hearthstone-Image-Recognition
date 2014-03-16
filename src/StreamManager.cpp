@@ -26,7 +26,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	param_strawpolling = true;
 	param_backupscoring = true;
 	currentDeck.clear();
-	param_debug_level = 0;
+	param_debug_level = 2;
 
 	recognizer = RecognizerPtr(new Recognizer());
 
@@ -46,6 +46,14 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 
 	sName = Config::getConfig().get<std::string>("config.stream.streamer_name");
 	numThreads = Config::getConfig().get<int>("config.image_recognition.threads");
+
+	if (numThreads <= 0) {
+		numThreads = boost::thread::hardware_concurrency();
+		if (numThreads <= 0) {
+			HS_ERROR << "Unknown amount of cores, setting to 1" << std::endl;
+			numThreads = 1;
+		}
+	}
 }
 
 StreamManager::~StreamManager() {
@@ -106,8 +114,10 @@ void StreamManager::wait() {
 
 void StreamManager::run() {
 	cv::Mat image;
-//	stream->setStream(4);
-//	stream->setFramePos(37228);
+//	stream->setStream(1);
+//	stream->setFramePos(45364);
+//	stream->setFramePos(42364);
+	stream->setFramePos(36927);
 
 	HS_INFO << "Started thread" << std::endl;
 
@@ -119,8 +129,8 @@ void StreamManager::run() {
 
 		if (param_debug_level & 2) {
 			cv::imshow("Debug", image);
-			cv::waitKey(10);
-//			cv::waitKey();
+//			cv::waitKey(10);
+			cv::waitKey();
 		}
 
 		auto startTime = boost::posix_time::microsec_clock::local_time();
@@ -132,9 +142,9 @@ void StreamManager::run() {
 			boost::posix_time::time_duration diff = endTime - startTime;
 			const auto elapsed = diff.total_milliseconds();
 			if (stream->isLivestream()) {
-				std::cout << "Processed frame in " << elapsed << "ms" << std::endl;
+				HS_INFO << "Processed frame in " << elapsed << "ms" << std::endl;
 			} else {
-				std::cout << "Processed frame " << stream->getFramePos() << " in " << elapsed << "ms" << std::endl;
+				HS_INFO << "Processed frame " << stream->getFramePos() << " in " << elapsed << "ms" << std::endl;
 			}
 		}
 
@@ -204,7 +214,7 @@ void StreamManager::run() {
 					currentDeck.url = SystemInterface::createHastebin(deckString);
 
 					bot->message((boost::format(CMD_DECK_FORMAT) % sName % currentDeck.url).str());
-					if (!param_strawpolling) {
+					if (param_strawpolling) {
 //						std::vector<std::string> choices = list_of("9")("8")("7")("6")("4-5")("0-3");
 //						std::string strawpoll = SystemInterface::createStrawpoll(MSG_WINS_POLL, choices);
 //						bot->message((boost::format(MSG_WINS_POLL_VOTE) % sName % strawpoll).str());
@@ -227,6 +237,11 @@ void StreamManager::run() {
 				if (param_backupscoring) {
 					bot->message((boost::format(MSG_GAME_START) % currentGame.player % currentGame.opponent % currentGame.fs).str());
 				}
+				if (param_debug_level & 4) {
+					const std::string& time = boost::lexical_cast<std::string>(boost::posix_time::microsec_clock::local_time().time_of_day().total_milliseconds());
+					std::string name = "coin" + currentGame.fs + time + ".png";
+					SystemInterface::saveImage(image, name);
+				}
 			}
 			else if (RECOGNIZER_GAME_END == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_END)) {
 				enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
@@ -240,14 +255,19 @@ void StreamManager::run() {
 				}
 
 				if (currentGame.wins == 12 || currentGame.losses == 3) {
-					bot->message("!score -constructed (I will set it to -arena on next arena start)", 10);
+//					bot->message("!score -constructed", 10);
+				}
+				if (param_debug_level & 4) {
+					const std::string& time = boost::lexical_cast<std::string>(boost::posix_time::microsec_clock::local_time().time_of_day().total_milliseconds());
+					std::string name = currentGame.end + time + ".png";
+					SystemInterface::saveImage(image, name);
 				}
 			}
 		}
 		stateMutex.unlock();
 	}
 
-	std::cout << "an error while reading a frame occured" << std::endl;
+	HS_ERROR << "an error while reading a frame occured" << std::endl;
 }
 
 std::string StreamManager::createDeckString(Deck deck) {
