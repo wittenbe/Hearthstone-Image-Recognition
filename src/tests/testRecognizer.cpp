@@ -19,7 +19,7 @@ string data(string filename) {
 }
 
 void testRecognition(string image, string expected, int recognizers) {
-	printf("\n------- %20s ...", image.c_str());
+	printf("------- %20s ...", image.c_str());
 	cv::Mat img = cv::imread(data(image), CV_LOAD_IMAGE_COLOR);
 	auto startTime = boost::posix_time::microsec_clock::local_time();
 	rr = r.recognize(img, recognizers);
@@ -43,9 +43,9 @@ void testRecognition(string image, string expected, int recognizers) {
 	const auto elapsed = diff.total_milliseconds();
 
 	if (success) {
-		printf("PASS (%3dms)", elapsed);
+		printf("PASS (%3dms)\n", elapsed);
 	} else {
-		printf("FAIL (%3dms) !!!!!!!!", elapsed);
+		printf("FAIL (%3dms) !!!!!!!!\n", elapsed);
 	}
 }
 
