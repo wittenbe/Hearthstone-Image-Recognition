@@ -62,7 +62,7 @@ Recognizer::Recognizer() {
     populateFromData("hs_data.cards", setCards);
     populateFromData("hs_data.heroes", setClasses);
 
-	surf = cv::SURF(100, 4, 3, true, true);
+	surf = cv::SURF(100, 2, 2, true, true);
     HS_INFO << "Using SURF parameters: " << surf.hessianThreshold << " " << surf.nOctaves << " " << surf.nOctaveLayers << " " << surf.extended << " " << surf.upright << std::endl;
 //	matcher = FlannBasedMatcherPtr(new cv::FlannBasedMatcher());
 	matcher = BFMatcherPtr(new cv::BFMatcher(cv::NORM_L2));

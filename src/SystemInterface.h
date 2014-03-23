@@ -3,17 +3,23 @@
 
 #include "Config.h"
 
-#include <boost/algorithm/string.hpp>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
 
+#include <boost/algorithm/string.hpp>
+#include <boost/format.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
 #include <cv.h>
+
+#define FORMAT_ACCESS_TOKEN "http://api.twitch.tv/api/channels/%s/access_token"
+#define FORMAT_USHER "\"http://usher.twitch.tv/select/%s.xml?nauth=%s&nauthsig=%s&allow_source=true&type=any&private_code=\""
 
 class SystemInterface {
 public:
-
 	static std::string exec(const std::string& cmd) {
 	    FILE* pipe = popen(cmd.c_str(), "r");
 	    if (!pipe) return "ERROR";
@@ -89,6 +95,92 @@ public:
 		cv::imwrite(name, image);
 	}
 
+	static std::string getStreamURL(const std::string& streamer, const std::string& quality) {
+		std::string result;
+		std::string accessToken = callCurl((boost::format(FORMAT_ACCESS_TOKEN) % streamer).str());
+		boost::property_tree::ptree pt;
+		std::stringstream ss; ss << accessToken;
+		boost::property_tree::read_json(ss, pt);
+
+		std::string token = pt.get<std::string>("token");
+		std::string sig = pt.get<std::string>("sig");
+		token = urlencode(token);
+
+		std::string usher = (boost::format(FORMAT_USHER) % streamer % token % sig).str();
+		std::string m3u8 = SystemInterface::callCurl(usher);
+		auto resultMap = getStreamURLsFromM3U8(m3u8);
+		auto it = resultMap.find(quality);
+		if (it != resultMap.end()) {
+			result = it->second;
+		}
+		return result;
+	}
+
+private:
+	static std::map<std::string, std::string> getStreamURLsFromM3U8(const std::string& m3u8) {
+		static const std::string nameHeuristic = "NAME=\"";
+
+		std::map<std::string, std::string> m;
+		std::istringstream is(m3u8);
+
+		std::string line;
+		std::string name;
+
+		int streamUrl = -1;
+		while (std::getline(is, line)) {
+			size_t heuristicStart = line.find(nameHeuristic);
+			if (heuristicStart <= line.length() && streamUrl < 0) {
+				size_t nameStart = heuristicStart + nameHeuristic.length();
+				name = line.substr(nameStart, std::string::npos);
+				name = name.substr(0, name.find("\""));
+				streamUrl = 2;
+			}
+			if (streamUrl == 0) {
+				m[name] = line;
+			}
+
+			streamUrl--;
+		}
+		return m;
+	}
+
+	static std::string char2hex(char dec) {
+	    char dig1 = (dec&0xF0)>>4;
+	    char dig2 = (dec&0x0F);
+	    if ( 0<= dig1 && dig1<= 9) dig1+=48;    //0,48inascii
+	    if (10<= dig1 && dig1<=15) dig1+=97-10; //a,97inascii
+	    if ( 0<= dig2 && dig2<= 9) dig2+=48;
+	    if (10<= dig2 && dig2<=15) dig2+=97-10;
+
+	    std::string r;
+	    r.append( &dig1, 1);
+	    r.append( &dig2, 1);
+	    return r;
+	}
+
+	static std::string urlencode(const std::string &c)
+	{
+
+		std::string escaped="";
+	    int max = c.length();
+	    for(int i=0; i<max; i++)
+	    {
+	        if ( (48 <= c[i] && c[i] <= 57) ||//0-9
+	             (65 <= c[i] && c[i] <= 90) ||//abc...xyz
+	             (97 <= c[i] && c[i] <= 122) || //ABC...XYZ
+	             (c[i]=='~' || c[i]=='!' || c[i]=='*' || c[i]=='(' || c[i]==')' || c[i]=='\'' || c[i]=='_')
+	        )
+	        {
+	            escaped.append( &c[i], 1);
+	        }
+	        else
+	        {
+	            escaped.append("%");
+	            escaped.append( char2hex(c[i]) );//converts char 255 to string "ff"
+	        }
+	    }
+	    return escaped;
+	}
 };
 
 #endif /* SYSTEMINTERFACE_H_ */

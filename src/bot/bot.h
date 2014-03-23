@@ -1,10 +1,9 @@
 #ifndef BOT_H
 #define BOT_H
 
-#include <map>
 #include <deque>
+#include <algorithm>
 #include <string>
-#include <functional>
 #include "connection.h"
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
@@ -37,7 +36,7 @@ public:
 
 	template <class T>
 	bool is_contained(std::vector<T> vec, T elem) {
-		auto elem_ptr = std::find(vec.begin(), vec.end(), elem);
+		typename std::vector<T>::iterator elem_ptr = std::find(vec.begin(), vec.end(), elem);
 		return elem_ptr != vec.end();
 	}
 

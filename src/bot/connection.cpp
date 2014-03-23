@@ -2,7 +2,6 @@
 #include "../Logger.h"
 
 #include <stdexcept>
-#include <functional>
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 
@@ -15,9 +14,9 @@ void connection::connect()
 	boost::asio::ip::tcp::resolver resolver(m_io_service);
 	boost::asio::ip::tcp::resolver::query query(m_addr, m_port);
 	boost::system::error_code error = boost::asio::error::host_not_found;
-	auto iter = resolver.resolve(query);
+	boost::asio::ip::tcp::resolver::iterator iter = resolver.resolve(query);
 	
-	decltype(iter) end;
+	boost::asio::ip::tcp::resolver::iterator end;
 
 	while (iter != end) {
 		if (!error) {

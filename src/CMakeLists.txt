@@ -1,6 +1,6 @@
 PROJECT(hs_image_recognition)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0)
 CMAKE_POLICY(VERSION 2.6)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -51,7 +51,6 @@ target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
 target_link_libraries(${CALIBRATOR_NAME} ${Boost_LIBRARIES})
 target_link_libraries(${TESTS_NAME} ${Boost_LIBRARIES})
 
-#set(BUILD_SHARED_LIBS OFF)
 find_package(OpenCV 2.4.6 REQUIRED)
 target_link_libraries(${EXECUTABLE_NAME} ${OpenCV_LIBS})
 target_link_libraries(${CALIBRATOR_NAME} ${OpenCV_LIBS})

@@ -115,9 +115,7 @@ void StreamManager::wait() {
 void StreamManager::run() {
 	cv::Mat image;
 //	stream->setStream(1);
-//	stream->setFramePos(45364);
-//	stream->setFramePos(42364);
-//	stream->setFramePos(36927);
+//	stream->setFramePos(25879);
 
 	HS_INFO << "Started thread" << std::endl;
 

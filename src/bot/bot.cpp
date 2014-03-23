@@ -14,7 +14,7 @@ namespace clever_bot {
 
 bot::bot()
 {
-	auto cfg = Config::getConfig();
+	boost::property_tree::ptree cfg = Config::getConfig();
 	// -3 to be on the safe side
 	m_max_msg = cfg.get<size_t>("config.twitch_bot.max_msg") - 3;
 	m_timeframe = cfg.get<float>("config.twitch_bot.timeframe");

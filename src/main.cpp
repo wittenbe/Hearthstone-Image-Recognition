@@ -14,13 +14,13 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 #include <boost/chrono.hpp>
-#include <boost/foreach.hpp>
-#include <boost/format.hpp>
 #include <boost/regex.hpp>
+#include <boost/format.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
-//this include causes some errors with asio/winsock, at least on windows
-//#include <boost/property_tree/json_parser.hpp>
+//this include causes some errors with asio/winsock, at least on windows (edit: welp, suddenly not anymore?)
+#include <boost/property_tree/json_parser.hpp>
 
 boost::shared_ptr<hs::StreamManager> smPtrGlobal;
 
@@ -49,6 +49,7 @@ int main(int argc, char* argv[]) {
     boost::property_tree::ptree cfg = Config::getConfig();
 	bool live = cfg.get<bool>("config.stream.live");
 	std::string streamer = cfg.get<std::string>("config.stream.streamer");
+	std::string quality = Config::getConfig().get<std::string>("config.stream.stream_quality");
 	bool connected = true;
 	std::vector<std::string> addrs;
 
@@ -94,11 +95,10 @@ int main(int argc, char* argv[]) {
 	if (!live) {
 		const std::string execOutput = SystemInterface::callCurl(cfg.get<std::string>("config.stream.vod"));
 		boost::property_tree::ptree pt;
-		std::stringstream ss;
-		ss << execOutput;
+		std::stringstream ss; ss << execOutput;
 		boost::property_tree::read_xml(ss, pt);
 
-	    BOOST_FOREACH(boost::property_tree::ptree::value_type &v, pt.get_child("archives")) {
+	    for (auto& v : pt.get_child("archives")) {
 	    	if (v.first == "archive") {
 	            addrs.push_back(v.second.get<std::string>("transcode_file_urls.transcode_480p"));
 //	    		addrs.push_back(v.second.get<std::string>("video_file_url"));
@@ -112,19 +112,14 @@ int main(int argc, char* argv[]) {
 		int retryTimer = 60;
 		while (smPtr) {
 			bool connected = true;
-			const std::string execOutput = SystemInterface::callLivestreamer(streamer);
-			if (execOutput.find("\"error\"") <= execOutput.length()) {
-
-				if (execOutput.find("No streams found on this URL") <= execOutput.length()) {
-					retryTimer = 60;
-				} else {
-					HS_ERROR  << execOutput << std::endl;
-					retryTimer = 1; //retry aggressively if some issue occured not related to the streamer being offline
-				}
+//			const std::string execOutput = SystemInterface::callLivestreamer(streamer);
+			std::string streamUrl = SystemInterface::getStreamURL(streamer, quality);
+			if (streamUrl.empty()) {
+				HS_ERROR  << "No streams found on provided URL" << std::endl;
 				connected = false;
 			} else {
-				const std::string subStr = execOutput.substr(execOutput.find("http"), execOutput.npos);
-				std::string streamUrl = subStr.substr(0, subStr.find("\""));
+//				const std::string subStr = execOutput.substr(execOutput.find("http"), execOutput.npos);
+//				std::string streamUrl = subStr.substr(0, subStr.find("\""));
 				addrs.clear();
 				addrs.push_back(streamUrl);
 				smPtr->setStream(hs::StreamPtr(new hs::Stream(addrs)));

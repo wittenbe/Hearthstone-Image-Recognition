@@ -2,7 +2,6 @@
 #define CLEVERBOT_CONNECTION_H
 
 #include <string>
-#include <functional>
 #include <boost/asio.hpp>
 #include <boost/function.hpp>
 #include <boost/array.hpp>

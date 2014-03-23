@@ -33,8 +33,7 @@ void testRecognition(string image, string expected, int recognizers) {
 	if (expected.empty()) {
 		success = rr.size() == 0;
 	} else {
-		success = rr.size() == 1;
-		success &= rr[0].results[0] == expected;
+		success = rr.size() == 1 && rr[0].results[0] == expected;
 	}
 
 	//time stuff
