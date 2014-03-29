@@ -98,6 +98,7 @@ public:
 	static std::string getStreamURL(const std::string& streamer, const std::string& quality) {
 		std::string result;
 		std::string accessToken = callCurl((boost::format(FORMAT_ACCESS_TOKEN) % streamer).str());
+		if (accessToken.empty()) return result;
 		boost::property_tree::ptree pt;
 		std::stringstream ss; ss << accessToken;
 		boost::property_tree::read_json(ss, pt);
