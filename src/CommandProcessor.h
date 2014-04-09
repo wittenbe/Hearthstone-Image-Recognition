@@ -17,7 +17,7 @@ class StreamManager;
 #define UL_MOD 2
 #define UL_SUPER 3
 
-#define TIME_BETWEEN_COMMANDS 15
+#define TIME_BETWEEN_COMMANDS 3
 
 class CommandProcessor {
 public:

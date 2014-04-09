@@ -6,6 +6,7 @@
 #include <fstream>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/assign/list_inserter.hpp>
@@ -25,13 +26,17 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	cp = CommandProcessorPtr(new CommandProcessor(this));
 	param_strawpolling = true;
 	param_backupscoring = true;
+	param_drawhandling = true;
 	currentDeck.clear();
 	param_debug_level = 0;
+	passedFrames = PASSED_FRAMES_THRESHOLD;
+	currentCard.second = 0;
 
 	recognizer = RecognizerPtr(new Recognizer());
 
 	currentDeck.state = 0;
 	currentGame.state = 0;
+	currentDraw.state = 0;
 	currentGame.wins = 0;
 	currentGame.losses = 0;
 	enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
@@ -40,6 +45,9 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	if (param_backupscoring) {
 		enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
 		enable(currentGame.state, RECOGNIZER_GAME_END);
+	}
+	if (param_drawhandling) {
+		enable(currentDraw.state, RECOGNIZER_GAME_DRAW);
 	}
 
 	loadState();
@@ -53,6 +61,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 			HS_ERROR << "Unknown amount of cores, setting to 1" << std::endl;
 			numThreads = 1;
 		}
+		HS_INFO << "Using " << numThreads << " threads";
 	}
 }
 
@@ -114,14 +123,14 @@ void StreamManager::wait() {
 
 void StreamManager::run() {
 	cv::Mat image;
-//	stream->setStream(1);
-//	stream->setFramePos(25879);
+//	stream->setStream(4);
+//	stream->setFramePos(42782);
+//	stream->setFramePos(11525);
 
 	HS_INFO << "Started thread" << std::endl;
 
 	bool running = true;
 	while (running) {
-
 		const bool validImage = stream->read(image);
 		if (!validImage) break;
 
@@ -133,7 +142,7 @@ void StreamManager::run() {
 
 		auto startTime = boost::posix_time::microsec_clock::local_time();
 
-		std::vector<Recognizer::RecognitionResult> results = recognizer->recognize(image, currentDeck.state | currentGame.state);
+		std::vector<Recognizer::RecognitionResult> results = recognizer->recognize(image, currentDeck.state | currentGame.state | currentDraw.state);
 
 		if (param_debug_level & 1) {
 			auto endTime = boost::posix_time::microsec_clock::local_time();
@@ -146,6 +155,7 @@ void StreamManager::run() {
 			}
 		}
 
+		passedFrames++;
 		if (results.empty()) continue;
 
 		stateMutex.lock();
@@ -178,22 +188,24 @@ void StreamManager::run() {
 					if (!success) {
 						bot->message(MSG_CLASS_POLL_ERROR_GIVEUP);
 					}
-
 				}
 			}
 			else if (RECOGNIZER_DRAFT_CARD_PICK == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CARD_PICK)) {
-				bool isNew = currentDeck.cards.size() == 0;
 				const size_t last = currentDeck.picks.size() - 1;
+				bool isNew = currentDeck.cards.size() == 0 && last == -1;
 				for (size_t i = 0; i < result.results.size() && !isNew; i++) {
 					//is there at least one new card in the current recognized pick?
 					isNew |= (result.results[i] != currentDeck.picks[last][i]);
 				}
 
 				if (isNew) {
+					currentDeck.picks.push_back(result.results);
+					if ((currentDeck.state & RECOGNIZER_DRAFT_CARD_CHOSEN) && currentDeck.picks.size() == currentDeck.cards.size() + 2) {
+						currentDeck.cards.push_back("?");
+						HS_WARNING << "Missed pick " << currentDeck.cards.size() << std::endl;
+					}
 					enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
 					enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_CHOSEN);
-					disable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
-					currentDeck.picks.push_back(result.results);
 					HS_INFO << "pick " << currentDeck.cards.size() + 1 << ": " + result.results[0] + ", " + result.results[1] + ", " << result.results[2] << std::endl;
 				}
 			}
@@ -240,6 +252,13 @@ void StreamManager::run() {
 					std::string name = "coin" + currentGame.fs + time + ".png";
 					SystemInterface::saveImage(image, name);
 				}
+				if (currentGame.fs == "1" && param_drawhandling) {
+					enable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_1);
+				} else if (currentGame.fs == "2" && param_drawhandling) {
+//					raise(SIGINT);
+					enable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_2);
+				}
+				currentDraw.latestDraw.clear();
 			}
 			else if (RECOGNIZER_GAME_END == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_END)) {
 				enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
@@ -259,6 +278,30 @@ void StreamManager::run() {
 					const std::string& time = boost::lexical_cast<std::string>(boost::posix_time::microsec_clock::local_time().time_of_day().total_milliseconds());
 					std::string name = currentGame.end + time + ".png";
 					SystemInterface::saveImage(image, name);
+				}
+			}
+			else if (RECOGNIZER_GAME_DRAW_INIT_1 == result.sourceRecognizer && (currentDraw.state & RECOGNIZER_GAME_DRAW_INIT_1)) {
+				currentDraw.initialDraw = result.results;
+			}
+			else if (RECOGNIZER_GAME_DRAW_INIT_2 == result.sourceRecognizer && (currentDraw.state & RECOGNIZER_GAME_DRAW_INIT_2)) {
+				currentDraw.initialDraw = result.results;
+			}
+			else if (RECOGNIZER_GAME_DRAW == result.sourceRecognizer && (currentDraw.state & RECOGNIZER_GAME_DRAW) && passedFrames.load() >= PASSED_FRAMES_THRESHOLD) {
+				bool pass = result.results[0] == currentCard.first && ++currentCard.second >= PASSED_CARD_RECOGNITIONS;
+				if (result.results[0] != currentCard.first) currentCard.second = 0;
+				currentCard.first = result.results[0];
+				if (pass) {
+					passedFrames = 0;
+					currentCard.second = 0;
+					currentCard.first = "";
+					if (currentDraw.latestDraw.empty()) {
+						std::string initDraw = boost::algorithm::join(currentDraw.initialDraw, "; ");
+						bot->message((boost::format(MSG_INITIAL_DRAW) % initDraw).str());
+						disable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_1);
+						disable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_2);
+					}
+					bot->message((boost::format(MSG_DRAW) % result.results[0]).str());
+					currentDraw.latestDraw = result.results[0];
 				}
 			}
 		}

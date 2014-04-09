@@ -8,6 +8,7 @@
 
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/atomic.hpp>
 #include "opencv2/core/core.hpp"
 
 namespace hs {
@@ -31,8 +32,14 @@ const std::string MSG_WINS_POLL_VOTE_REPEAT = "relink: %s";
 const std::string MSG_GAME_START = "!score -as %s -vs %s -%s";
 const std::string MSG_GAME_END = "!score -%s";
 
-const std::string DEFAULT_DECKURL = "draft is in progress (if I missed draft, have a mod do !deckforcepublish for a partial draft)";
+const std::string MSG_INITIAL_DRAW = "Initial Draw: %s";
+const std::string MSG_DRAW = "Drew \"%s\"";
+
+const std::string DEFAULT_DECKURL = "draft is in progress (!deckprogress for more info)";
 const std::string STATE_PATH = "state.xml";
+
+const unsigned int PASSED_FRAMES_THRESHOLD = 20;
+const unsigned int PASSED_CARD_RECOGNITIONS = 2;
 
 class CommandProcessor;
 
@@ -62,6 +69,13 @@ public:
 		unsigned int state;
 	};
 
+	struct Draw {
+		std::vector<std::string> initialDraw;
+		std::string latestDraw;
+
+		unsigned int state;
+	};
+
 	StreamManager(StreamPtr stream, clever_bot::botPtr bot);
 	~StreamManager();
 	void loadState();
@@ -84,6 +98,7 @@ private:
 
 	bool param_strawpolling;
 	bool param_backupscoring;
+	bool param_drawhandling;
 	unsigned int param_debug_level;
 
 	int numThreads;
@@ -92,6 +107,9 @@ private:
 	std::string sName; //streamer name
 	Deck currentDeck;
 	Game currentGame;
+	Draw currentDraw;
+	boost::atomic<unsigned int> passedFrames;
+	std::pair<std::string, size_t> currentCard;
 
 	//make sure the execution of commands doesn't interfere with other vars
     boost::mutex stateMutex;

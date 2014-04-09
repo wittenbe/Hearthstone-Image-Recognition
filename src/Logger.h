@@ -8,6 +8,7 @@
 
 #define HS_INFO HS_INFO_NOSPACE << " "
 #define HS_ERROR HS_ERROR_NOSPACE << " "
+#define HS_WARNING std::cout << "[" << HS_TIME << "][Warning] "
 
 #define HS_INFO_NOSPACE std::cout << "[" << HS_TIME << "]"
 #define HS_ERROR_NOSPACE std::cerr <<  "[" << HS_TIME << "][Error]"

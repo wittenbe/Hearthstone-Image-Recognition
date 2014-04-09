@@ -4,1907 +4,3440 @@
 		<entry>
 			<ID>000</ID>
 			<name>Edwin VanCleef</name>
+			<class>Rogue</class>
+			<cost>3</cost>
+			<quality>5</quality>
 			<phash>11283977362048714141</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>001</ID>
 			<name>Perdition&apos;s Blade</name>
+			<class>Rogue</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>17548414800193024238</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>002</ID>
 			<name>Bloodsail Raider</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>3837405339022510261</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>003</ID>
 			<name>Bloodmage Thalnos</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>5</quality>
 			<phash>3808056302327140530</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>004</ID>
 			<name>Wisp</name>
+			<class>None</class>
+			<cost>0</cost>
+			<quality>2</quality>
 			<phash>15646950697232694879</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>005</ID>
 			<name>Sen&apos;jin Shieldmasta</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>644531765710366484</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>006</ID>
 			<name>Totemic Might</name>
+			<class>Shaman</class>
+			<cost>0</cost>
+			<quality>1</quality>
 			<phash>15376392666274483912</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>007</ID>
 			<name>Dragonling Mechanic</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>1382178493503765454</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>008</ID>
 			<name>Mogu&apos;shan Warden</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>15671625408991121525</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>009</ID>
 			<name>Hungry Crab</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>4</quality>
 			<phash>10690899428999774925</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>010</ID>
 			<name>Misdirection</name>
+			<class>Hunter</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>566223113449381425</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>011</ID>
 			<name>Patient Assassin</name>
+			<class>Rogue</class>
+			<cost>2</cost>
+			<quality>4</quality>
 			<phash>15558632311962481153</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>012</ID>
 			<name>Violet Teacher</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>17330976793585178861</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>013</ID>
 			<name>Arathi Weaponsmith</name>
+			<class>Warrior</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>4771063707066544073</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>014</ID>
 			<name>Acolyte of Pain</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>16672493740472370831</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>015</ID>
 			<name>Holy Nova</name>
+			<class>Priest</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>9223299518504737900</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>016</ID>
 			<name>Commanding Shout</name>
+			<class>Warrior</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>12942576924077132540</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>017</ID>
 			<name>Unbound Elemental</name>
+			<class>Shaman</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>13166341059815784927</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>018</ID>
 			<name>Blessing of Might</name>
+			<class>Paladin</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>6837360107838787894</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>019</ID>
 			<name>Blessing of Kings</name>
+			<class>Paladin</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>17033826152425001982</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>020</ID>
 			<name>Polymorph</name>
+			<class>Mage</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>11287927235773725048</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>021</ID>
 			<name>Dark Iron Dwarf</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>17253349165181744332</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>022</ID>
 			<name>Charge</name>
+			<class>Warrior</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>1635807621481542030</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>023</ID>
 			<name>Stampeding Kodo</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>3</quality>
 			<phash>6150604605528537867</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>024</ID>
 			<name>Humility</name>
+			<class>Paladin</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>488177114288693625</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>025</ID>
 			<name>Gruul</name>
+			<class>None</class>
+			<cost>8</cost>
+			<quality>5</quality>
 			<phash>5452756507958665689</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>026</ID>
 			<name>Mark of the Wild</name>
+			<class>Druid</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>560278943227130832</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>027</ID>
 			<name>Worgen Infiltrator</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>15496517072659762672</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>028</ID>
 			<name>Frostbolt</name>
+			<class>Mage</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>9460861271011586964</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>029</ID>
 			<name>Flametongue Totem</name>
+			<class>Shaman</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>14693929080797033678</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>030</ID>
 			<name>Assassinate</name>
+			<class>Rogue</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>17514046941286077064</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>031</ID>
 			<name>Lord of the Arena</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>1</quality>
 			<phash>10877565753935042547</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>032</ID>
 			<name>Injured Blademaster</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>2438409161148419731</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>033</ID>
 			<name>Siphon Soul</name>
+			<class>Warlock</class>
+			<cost>6</cost>
+			<quality>3</quality>
 			<phash>4061172258028793223</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>034</ID>
 			<name>Lay on Hands</name>
+			<class>Paladin</class>
+			<cost>8</cost>
+			<quality>4</quality>
 			<phash>6333479565090472734</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>035</ID>
 			<name>Silvermoon Guardian</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>782276847668419094</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>036</ID>
 			<name>Mind Vision</name>
+			<class>Priest</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>1106656059573835689</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>037</ID>
 			<name>Core Hound</name>
+			<class>None</class>
+			<cost>7</cost>
+			<quality>1</quality>
 			<phash>13942118910378940590</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>038</ID>
 			<name>Grimscale Oracle</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>6460796354428322034</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>039</ID>
 			<name>Lightning Storm</name>
+			<class>Shaman</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>13599008700597865450</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>040</ID>
 			<name>Lightwell</name>
+			<class>Priest</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>9125800708162390640</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>041</ID>
 			<name>Coldlight Seer</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>8607251555004888153</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>042</ID>
 			<name>Gorehowl</name>
-			<phash>4592758178902884409</phash>
+			<class>Warrior</class>
+			<cost>7</cost>
+			<quality>4</quality>
+			<phash>4556729381883924537</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>043</ID>
 			<name>Far Sight</name>
+			<class>Shaman</class>
+			<cost>3</cost>
+			<quality>4</quality>
 			<phash>6515326366644956960</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>044</ID>
 			<name>Chillwind Yeti</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>5167954692385914358</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>045</ID>
 			<name>Moonfire</name>
+			<class>Druid</class>
+			<cost>0</cost>
+			<quality>1</quality>
 			<phash>7468329827043733144</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>046</ID>
 			<name>Blade Flurry</name>
-			<phash>4173871149620608153</phash>
+			<class>Rogue</class>
+			<cost>2</cost>
+			<quality>3</quality>
+			<phash>4317986337696464025</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>047</ID>
 			<name>Mass Dispel</name>
+			<class>Priest</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>10876443948658365387</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>048</ID>
 			<name>Crazed Alchemist</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>8928544522421252924</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>049</ID>
 			<name>Shadow Madness</name>
+			<class>Priest</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>7754432119112971246</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>050</ID>
 			<name>Equality</name>
+			<class>Paladin</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>833858644124564521</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>051</ID>
 			<name>Alarm-o-Bot</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>7601092436241890276</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>052</ID>
 			<name>Animal Companion</name>
+			<class>Hunter</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>3355555194408125679</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>053</ID>
 			<name>Young Priestess</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>3</quality>
 			<phash>4476515479522654849</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>054</ID>
 			<name>Gadgetzan Auctioneer</name>
-			<phash>15933530451443955909</phash>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>3</quality>
+			<phash>15645300075292244165</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>055</ID>
 			<name>Starfall</name>
+			<class>Druid</class>
+			<cost>5</cost>
+			<quality>3</quality>
 			<phash>14314997693489356367</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>056</ID>
 			<name>Cone of Cold</name>
+			<class>Mage</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>3437615064627620702</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>057</ID>
 			<name>Earth Shock</name>
+			<class>Shaman</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>1868499095484133257</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>058</ID>
 			<name>Tirion Fordring</name>
+			<class>Paladin</class>
+			<cost>8</cost>
+			<quality>5</quality>
 			<phash>2034182735280328257</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>059</ID>
 			<name>Ironfur Grizzly</name>
-			<phash>2177116523409236297</phash>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>1</quality>
+			<phash>1600655771105816905</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>060</ID>
 			<name>Headcrack</name>
+			<class>Rogue</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>14866007835774505185</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>061</ID>
 			<name>Arcane Shot</name>
+			<class>Hunter</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>8992495881430212256</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>062</ID>
 			<name>Void Terror</name>
+			<class>Warlock</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>4047684070278845660</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>063</ID>
 			<name>Mortal Coil</name>
+			<class>Warlock</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>18132765590160824929</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>064</ID>
 			<name>Execute</name>
+			<class>Warrior</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>6655761498494636811</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>065</ID>
 			<name>Bloodlust</name>
+			<class>Shaman</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>9709406557288420073</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>066</ID>
 			<name>Kidnapper</name>
+			<class>Rogue</class>
+			<cost>6</cost>
+			<quality>4</quality>
 			<phash>18175174538011484540</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>067</ID>
 			<name>Old Murk-Eye</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>5</quality>
 			<phash>10484877802410070522</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>068</ID>
 			<name>Backstab</name>
+			<class>Rogue</class>
+			<cost>0</cost>
+			<quality>1</quality>
 			<phash>2718746691434287657</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>069</ID>
 			<name>Murloc Warleader</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>4</quality>
 			<phash>5212592151257089375</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>070</ID>
 			<name>Shadowstep</name>
+			<class>Rogue</class>
+			<cost>0</cost>
+			<quality>2</quality>
 			<phash>10996135313778753594</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>071</ID>
 			<name>Ancestral Spirit</name>
+			<class>Shaman</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>10851547356615995918</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>072</ID>
 			<name>Defender of Argus</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>4597837383887230524</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>073</ID>
 			<name>Assassin&apos;s Blade</name>
+			<class>Rogue</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>2593007622574437363</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>074</ID>
 			<name>Big Game Hunter</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>4</quality>
 			<phash>14209335853986303181</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>075</ID>
 			<name>Aldor Peacekeeper</name>
+			<class>Paladin</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>4713117886611828187</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>076</ID>
 			<name>Blizzard</name>
+			<class>Mage</class>
+			<cost>6</cost>
+			<quality>3</quality>
 			<phash>6477229464543462800</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>077</ID>
 			<name>Unleash the Hounds</name>
+			<class>Hunter</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>16614947208427461089</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>078</ID>
 			<name>Sap</name>
+			<class>Rogue</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>15558553985519333536</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>079</ID>
 			<name>Gnomish Inventor</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>571209459462943030</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>080</ID>
 			<name>Mind Control</name>
+			<class>Priest</class>
+			<cost>10</cost>
+			<quality>1</quality>
 			<phash>11797867913399234278</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>081</ID>
 			<name>Ravenholdt Assassin</name>
+			<class>None</class>
+			<cost>7</cost>
+			<quality>3</quality>
 			<phash>17598271809618141199</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>082</ID>
 			<name>Ice Lance</name>
+			<class>Mage</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>8560606823680035920</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>083</ID>
 			<name>Acidic Swamp Ooze</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>2228403262071227022</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>084</ID>
 			<name>Blessed Champion</name>
+			<class>Paladin</class>
+			<cost>5</cost>
+			<quality>3</quality>
 			<phash>6812122170020832874</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>085</ID>
 			<name>Savannah Highmane</name>
+			<class>Hunter</class>
+			<cost>6</cost>
+			<quality>3</quality>
 			<phash>916858227312666202</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>086</ID>
 			<name>Dire Wolf Alpha</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>4165679291858910398</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>087</ID>
 			<name>Blessing of Wisdom</name>
+			<class>Paladin</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>16390999236955113013</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>088</ID>
 			<name>Abusive Sergeant</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>6686612541820710393</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>089</ID>
 			<name>Sylvanas Windrunner</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>5</quality>
 			<phash>14043215639067021191</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>090</ID>
 			<name>Cruel Taskmaster</name>
+			<class>Warrior</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>2792124405268415820</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>091</ID>
 			<name>Lightning Bolt</name>
+			<class>Shaman</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>12913019276973100667</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>092</ID>
 			<name>Keeper of the Grove</name>
+			<class>Druid</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>13911572838570066623</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>093</ID>
 			<name>Multi-Shot</name>
+			<class>Hunter</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>10874518014300220259</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>094</ID>
 			<name>Pint-Sized Summoner</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>1020370130752877818</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>095</ID>
 			<name>Spellbreaker</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>7720022522519395707</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>096</ID>
 			<name>Deadly Poison</name>
-			<phash>17717870740038726831</phash>
+			<class>Rogue</class>
+			<cost>1</cost>
+			<quality>1</quality>
+			<phash>13106184721619727535</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>097</ID>
 			<name>Fan of Knives</name>
+			<class>Rogue</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>14530259806515252153</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>098</ID>
 			<name>Shieldbearer</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>10101145450489323423</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>099</ID>
 			<name>Sense Demons</name>
+			<class>Warlock</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>8329928594624520825</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>100</ID>
 			<name>Shield Block</name>
+			<class>Warrior</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>11897264187830752745</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>101</ID>
 			<name>Ancient of Lore</name>
+			<class>Druid</class>
+			<cost>7</cost>
+			<quality>4</quality>
 			<phash>10720910338476729499</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>102</ID>
 			<name>Oasis Snapjaw</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>2695029496489097072</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>103</ID>
 			<name>Frostwolf Grunt</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>8256053495606947809</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>104</ID>
 			<name>Wild Pyromancer</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>14400125532656457012</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>105</ID>
 			<name>Razorfen Hunter</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>1995891443326509123</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>106</ID>
 			<name>Twisting Nether</name>
+			<class>Warlock</class>
+			<cost>8</cost>
+			<quality>4</quality>
 			<phash>11109516186037957091</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>107</ID>
 			<name>Malygos</name>
+			<class>None</class>
+			<cost>9</cost>
+			<quality>5</quality>
 			<phash>18121038682512312052</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>108</ID>
 			<name>Millhouse Manastorm</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>5</quality>
 			<phash>4781122124303689348</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>109</ID>
 			<name>Inner Fire</name>
+			<class>Priest</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>529357619319238812</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>110</ID>
 			<name>Soul of the Forest</name>
+			<class>Druid</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>16184875391067643635</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>111</ID>
 			<name>Bloodsail Corsair</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>3</quality>
 			<phash>17364876109776574179</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>112</ID>
 			<name>Tinkmaster Overspark</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>5</quality>
 			<phash>5729109159259711224</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>113</ID>
 			<name>Ice Block</name>
+			<class>Mage</class>
+			<cost>3</cost>
+			<quality>4</quality>
 			<phash>2555387407288795435</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>114</ID>
 			<name>Brawl</name>
+			<class>Warrior</class>
+			<cost>5</cost>
+			<quality>4</quality>
 			<phash>8521522236966676656</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>115</ID>
 			<name>Vanish</name>
+			<class>Rogue</class>
+			<cost>6</cost>
+			<quality>1</quality>
 			<phash>4371189824216949501</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>116</ID>
 			<name>King Mukla</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>5</quality>
 			<phash>15085060165845533977</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>117</ID>
 			<name>Truesilver Champion</name>
+			<class>Paladin</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>3785680372497265353</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>118</ID>
 			<name>Harrison Jones</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>5</quality>
 			<phash>9327639591571654596</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>119</ID>
 			<name>War Golem</name>
+			<class>None</class>
+			<cost>7</cost>
+			<quality>1</quality>
 			<phash>5182091735314639257</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>120</ID>
 			<name>Warsong Commander</name>
+			<class>Warrior</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>5371577443339834587</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>121</ID>
 			<name>Mana Wyrm</name>
+			<class>Mage</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>17147719618170832082</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>122</ID>
 			<name>Savagery</name>
+			<class>Druid</class>
+			<cost>1</cost>
+			<quality>3</quality>
 			<phash>4109327924405462168</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>123</ID>
 			<name>Spiteful Smith</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>2</quality>
 			<phash>5664363093415716401</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>124</ID>
 			<name>Shattered Sun Cleric</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>8947341417214739409</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>125</ID>
 			<name>Eye for an Eye</name>
+			<class>Paladin</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>16681061226229436161</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>126</ID>
 			<name>Azure Drake</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>3</quality>
 			<phash>1629312216515703366</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>127</ID>
 			<name>Mountain Giant</name>
+			<class>None</class>
+			<cost>12</cost>
+			<quality>4</quality>
 			<phash>3250815774806098802</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>128</ID>
 			<name>Kor&apos;kron Elite</name>
+			<class>Warrior</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>3308112972900456547</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>129</ID>
 			<name>Jungle Panther</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>15967089423739746874</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>130</ID>
 			<name>Baron Geddon</name>
+			<class>None</class>
+			<cost>7</cost>
+			<quality>5</quality>
 			<phash>2955441011925578700</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>131</ID>
 			<name>Pit Lord</name>
+			<class>Warlock</class>
+			<cost>4</cost>
+			<quality>4</quality>
 			<phash>13649500896784032436</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>132</ID>
 			<name>Fiery War Axe</name>
+			<class>Warrior</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>7176465469886200785</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>133</ID>
 			<name>Mind Blast</name>
+			<class>Priest</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>350361757218901851</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>134</ID>
 			<name>Timber Wolf</name>
+			<class>Hunter</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>6859204043735134798</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>135</ID>
 			<name>Captain Greenskin</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>5</quality>
 			<phash>17030533338155010952</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>136</ID>
 			<name>Elven Archer</name>
-			<phash>15909102122589669217</phash>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>1</quality>
+			<phash>6685730635490707297</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>137</ID>
 			<name>Master Swordsmith</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>12003533982485870619</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>138</ID>
 			<name>Grommash Hellscream</name>
+			<class>Warrior</class>
+			<cost>8</cost>
+			<quality>5</quality>
 			<phash>4380508841139674061</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>139</ID>
 			<name>Sea Giant</name>
+			<class>None</class>
+			<cost>10</cost>
+			<quality>4</quality>
 			<phash>10557408344453338732</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>140</ID>
 			<name>Doomguard</name>
+			<class>Warlock</class>
+			<cost>5</cost>
+			<quality>3</quality>
 			<phash>5186052992078624163</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>141</ID>
 			<name>Al&apos;Akir the Windlord</name>
+			<class>Shaman</class>
+			<cost>8</cost>
+			<quality>5</quality>
 			<phash>10513849941576885399</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>142</ID>
 			<name>Frothing Berserker</name>
+			<class>Warrior</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>5641167851297814838</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>143</ID>
 			<name>Power of the Wild</name>
+			<class>Druid</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>1912005541509140974</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>144</ID>
 			<name>Hellfire</name>
-			<phash>5048521138792403241</phash>
+			<class>Warlock</class>
+			<cost>4</cost>
+			<quality>1</quality>
+			<phash>5066535537301885225</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>145</ID>
 			<name>Archmage</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>1</quality>
 			<phash>12470226915974981739</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>146</ID>
 			<name>Reckless Rocketeer</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>1</quality>
 			<phash>5905312458298760542</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>147</ID>
 			<name>Power Word: Shield</name>
+			<class>Priest</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>17193516847312474046</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>148</ID>
 			<name>Arcane Intellect</name>
+			<class>Mage</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>14059928020503435112</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>149</ID>
 			<name>Nourish</name>
+			<class>Druid</class>
+			<cost>5</cost>
+			<quality>3</quality>
 			<phash>4254246373030160111</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>150</ID>
 			<name>Angry Chicken</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>3</quality>
 			<phash>10615405350377846484</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>151</ID>
 			<name>Mindgames</name>
+			<class>Priest</class>
+			<cost>4</cost>
+			<quality>4</quality>
 			<phash>4530210164702933794</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>152</ID>
 			<name>Leeroy Jenkins</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>5</quality>
 			<phash>4798677700507786134</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>153</ID>
 			<name>Gurubashi Berserker</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>15614009317364293061</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>154</ID>
 			<name>Windspeaker</name>
+			<class>Shaman</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>17689404876468158547</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>155</ID>
 			<name>Force of Nature</name>
+			<class>Druid</class>
+			<cost>6</cost>
+			<quality>4</quality>
 			<phash>15486012580273052442</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>156</ID>
 			<name>Lightspawn</name>
+			<class>Priest</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>5029974495977032272</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>157</ID>
 			<name>Frost Elemental</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>2</quality>
 			<phash>12897381483081355208</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>158</ID>
 			<name>Thoughtsteal</name>
-			<phash>4944704637381482486</phash>
+			<class>Priest</class>
+			<cost>3</cost>
+			<quality>2</quality>
+			<phash>4944704637381478390</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>159</ID>
 			<name>Scavenging Hyena</name>
+			<class>Hunter</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>16550092907056677482</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>160</ID>
 			<name>SI:7 Agent</name>
+			<class>Rogue</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>8155497597358225889</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>161</ID>
 			<name>Prophet Velen</name>
+			<class>Priest</class>
+			<cost>7</cost>
+			<quality>5</quality>
 			<phash>11277537959012103753</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>162</ID>
 			<name>Soulfire</name>
+			<class>Warlock</class>
+			<cost>0</cost>
+			<quality>1</quality>
 			<phash>5652631774332428574</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>163</ID>
 			<name>Ogre Magi</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>7621142443876696786</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>164</ID>
 			<name>Murloc Tidecaller</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>3</quality>
 			<phash>2067602944824509983</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>165</ID>
 			<name>Kirin Tor Mage</name>
+			<class>Mage</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>16530877428178685476</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>166</ID>
 			<name>Thrallmar Farseer</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>7741946871761167779</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>167</ID>
 			<name>Frostwolf Warlord</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>12911694016190997538</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>168</ID>
 			<name>Sorcerer&apos;s Apprentice</name>
-			<phash>14520854769702515597</phash>
+			<class>Mage</class>
+			<cost>2</cost>
+			<quality>2</quality>
+			<phash>14520854769702515589</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>169</ID>
 			<name>Holy Fire</name>
+			<class>Priest</class>
+			<cost>6</cost>
+			<quality>3</quality>
 			<phash>1408227206768551957</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>170</ID>
 			<name>Mana Wraith</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>14099568724389684241</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>171</ID>
 			<name>Argent Squire</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>17543099637914896097</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>172</ID>
 			<name>Ancient Watcher</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>5794053884304020248</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>173</ID>
 			<name>Novice Engineer</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>5924950832845333423</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>174</ID>
 			<name>Stonetusk Boar</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>13623179890178634590</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>175</ID>
 			<name>Ancestral Healing</name>
+			<class>Shaman</class>
+			<cost>0</cost>
+			<quality>1</quality>
 			<phash>1668971358797555094</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>176</ID>
 			<name>Conceal</name>
+			<class>Rogue</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>13142369087826190871</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>177</ID>
 			<name>Arcanite Reaper</name>
+			<class>Warrior</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>12746363398245342665</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>178</ID>
 			<name>Raging Worgen</name>
-			<phash>12709002980755130191</phash>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>2</quality>
+			<phash>12709002705877225295</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>179</ID>
 			<name>Earthen Ring Farseer</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>12230609524331080960</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>180</ID>
 			<name>Onyxia</name>
+			<class>None</class>
+			<cost>9</cost>
+			<quality>5</quality>
 			<phash>7597787579975321211</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>181</ID>
 			<name>Mana Addict</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>5474913302623397057</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>182</ID>
 			<name>Shiv</name>
+			<class>Rogue</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>12829004884257078450</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>183</ID>
 			<name>Blood Knight</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>4</quality>
 			<phash>487330898810858517</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>184</ID>
 			<name>Holy Smite</name>
+			<class>Priest</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>7755141807338305081</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>185</ID>
 			<name>Holy Wrath</name>
+			<class>Paladin</class>
+			<cost>5</cost>
+			<quality>3</quality>
 			<phash>4585634244131266743</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>186</ID>
 			<name>Ironforge Rifleman</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>10096425439018669595</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>187</ID>
 			<name>Bluegill Warrior</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>1953838726627056430</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>188</ID>
 			<name>Battle Rage</name>
+			<class>Warrior</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>5327824108227744883</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>189</ID>
 			<name>Nightblade</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>15289031323438339137</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>190</ID>
 			<name>Youthful Brewmaster</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>10509129584543467156</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>191</ID>
 			<name>The Black Knight</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>5</quality>
 			<phash>4021602707365523738</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>192</ID>
 			<name>Demonfire</name>
+			<class>Warlock</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>8829112359360729246</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>193</ID>
 			<name>Redemption</name>
+			<class>Paladin</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>7375936280708870242</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>194</ID>
 			<name>Lord Jaraxxus</name>
+			<class>Warlock</class>
+			<cost>9</cost>
+			<quality>5</quality>
 			<phash>14853204411450437417</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>195</ID>
 			<name>Cold Blood</name>
+			<class>Rogue</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>5970399244243783056</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>196</ID>
 			<name>Lightwarden</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>3</quality>
 			<phash>12055051897240236899</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>197</ID>
 			<name>Questing Adventurer</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>11729300495302848536</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>198</ID>
 			<name>Kobold Geomancer</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>13039546052462276064</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>199</ID>
 			<name>Cenarius</name>
+			<class>Druid</class>
+			<cost>9</cost>
+			<quality>5</quality>
 			<phash>16739859601608556010</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>200</ID>
 			<name>Tauren Warrior</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>15225406886504547611</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>201</ID>
 			<name>Explosive Trap</name>
+			<class>Hunter</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>1653909688539293100</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>202</ID>
 			<name>Hogger</name>
-			<phash>13751901780298436239</phash>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>5</quality>
+			<phash>13751901230542622351</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>203</ID>
 			<name>Cult Master</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>10945545949376771067</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>204</ID>
 			<name>Wild Growth</name>
+			<class>Druid</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>10567897677313088619</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>205</ID>
 			<name>Sprint</name>
+			<class>Rogue</class>
+			<cost>7</cost>
+			<quality>1</quality>
 			<phash>3003291727324984784</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>206</ID>
 			<name>Master of Disguise</name>
+			<class>Rogue</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>2696544088873530985</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>207</ID>
 			<name>Druid of the Claw</name>
+			<class>Druid</class>
+			<cost>5</cost>
+			<quality>2</quality>
 			<phash>15095851980869731087</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>208</ID>
 			<name>Auchenai Soulpriest</name>
+			<class>Priest</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>11296302098326148052</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>209</ID>
 			<name>Bestial Wrath</name>
+			<class>Hunter</class>
+			<cost>1</cost>
+			<quality>4</quality>
 			<phash>12992468480062199401</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>210</ID>
 			<name>Rockbiter Weapon</name>
+			<class>Shaman</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>8054578780774887491</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>211</ID>
 			<name>Starving Buzzard</name>
+			<class>Hunter</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>2519002772014683513</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>212</ID>
 			<name>Mirror Image</name>
+			<class>Mage</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>12079555777434834008</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>213</ID>
 			<name>Corruption</name>
+			<class>Warlock</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>5519504154586029354</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>214</ID>
 			<name>Preparation</name>
+			<class>Rogue</class>
+			<cost>0</cost>
+			<quality>4</quality>
 			<phash>16481020456328337190</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>215</ID>
 			<name>Cairne Bloodhoof</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>5</quality>
 			<phash>7223304062179376242</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>216</ID>
 			<name>Mortal Strike</name>
+			<class>Warrior</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>5425459547611786733</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>217</ID>
 			<name>Flare</name>
+			<class>Hunter</class>
+			<cost>1</cost>
+			<quality>3</quality>
 			<phash>12022401983334570279</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>218</ID>
 			<name>Silver Hand Knight</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>2</quality>
 			<phash>10928382313480807763</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>219</ID>
 			<name>Guardian of Kings</name>
+			<class>Paladin</class>
+			<cost>7</cost>
+			<quality>1</quality>
 			<phash>2052476059169866725</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>220</ID>
 			<name>Ancient Brewmaster</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>14405404859485694612</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>221</ID>
 			<name>Young Dragonhawk</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>14170852198340381313</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>222</ID>
 			<name>Frost Shock</name>
+			<class>Shaman</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>12931791189711140073</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>223</ID>
 			<name>Healing Touch</name>
+			<class>Druid</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>3197228810372346865</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>224</ID>
 			<name>Venture Co. Mercenary</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>2</quality>
 			<phash>5809324398229301508</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>225</ID>
 			<name>Sacrificial Pact</name>
+			<class>Warlock</class>
+			<cost>0</cost>
+			<quality>1</quality>
 			<phash>7037022315316307963</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>226</ID>
 			<name>Bane of Doom</name>
+			<class>Warlock</class>
+			<cost>5</cost>
+			<quality>4</quality>
 			<phash>18194737535704359768</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>227</ID>
 			<name>Abomination</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>3</quality>
 			<phash>3731044752860427347</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>228</ID>
 			<name>Flesheating Ghoul</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>6988359793891367910</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>229</ID>
 			<name>Loot Hoarder</name>
-			<phash>7886584865009474082</phash>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>2</quality>
+			<phash>7904599263518956066</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>230</ID>
 			<name>Betrayal</name>
+			<class>Rogue</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>14908066615024314156</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>231</ID>
 			<name>The Beast</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>5</quality>
 			<phash>6512297401283436756</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>232</ID>
 			<name>Flame Imp</name>
+			<class>Warlock</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>7562979212089799161</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>233</ID>
 			<name>Freezing Trap</name>
+			<class>Hunter</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>4844632359706066496</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>234</ID>
 			<name>Southsea Deckhand</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>5954361012623080342</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>235</ID>
 			<name>Bloodfen Raptor</name>
-			<phash>5599851127853378425</phash>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>1</quality>
+			<phash>5598725227946535801</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>236</ID>
 			<name>Cleave</name>
+			<class>Warrior</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>9379739951528113633</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>237</ID>
 			<name>Fen Creeper</name>
-			<phash>3289690079803569237</phash>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>2</quality>
+			<phash>3289672487617524805</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>238</ID>
 			<name>Starfire</name>
+			<class>Druid</class>
+			<cost>6</cost>
+			<quality>1</quality>
 			<phash>2068252034324028969</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>239</ID>
 			<name>Goldshire Footman</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>16876051763066313037</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>240</ID>
 			<name>Ragnaros the Firelord</name>
+			<class>None</class>
+			<cost>8</cost>
+			<quality>5</quality>
 			<phash>9544187104695893108</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>241</ID>
 			<name>Rampage</name>
+			<class>Warrior</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>3714527736797195161</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>242</ID>
 			<name>Captain&apos;s Parrot</name>
-			<phash>8559416087038434855</phash>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>4</quality>
+			<phash>8560541985871535655</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>243</ID>
 			<name>Windfury Harpy</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>2</quality>
 			<phash>8384680295213471765</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>244</ID>
 			<name>Stranglethorn Tiger</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>2</quality>
 			<phash>3277853512478565745</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>245</ID>
 			<name>Circle of Healing</name>
+			<class>Priest</class>
+			<cost>0</cost>
+			<quality>2</quality>
 			<phash>5897837110575951456</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>246</ID>
 			<name>Snake Trap</name>
+			<class>Hunter</class>
+			<cost>2</cost>
+			<quality>4</quality>
 			<phash>16657256505845289646</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>247</ID>
 			<name>Cabal Shadow Priest</name>
+			<class>Priest</class>
+			<cost>6</cost>
+			<quality>4</quality>
 			<phash>16241056751693574857</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>248</ID>
 			<name>Upgrade!</name>
-			<phash>7078963518197986487</phash>
+			<class>Warrior</class>
+			<cost>1</cost>
+			<quality>3</quality>
+			<phash>7078963518197982455</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>249</ID>
 			<name>Shield Slam</name>
+			<class>Warrior</class>
+			<cost>1</cost>
+			<quality>4</quality>
 			<phash>3641974210395405875</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>250</ID>
 			<name>Windfury</name>
+			<class>Shaman</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>15396536223808342264</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>251</ID>
 			<name>Nat Pagle</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>5</quality>
 			<phash>17145752859822068110</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>252</ID>
 			<name>Houndmaster</name>
+			<class>Hunter</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>13221924683429975326</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>253</ID>
 			<name>Water Elemental</name>
+			<class>Mage</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>9671049488846137115</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>254</ID>
 			<name>Eaglehorn Bow</name>
+			<class>Hunter</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>6527236798999744099</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>255</ID>
 			<name>Archmage Antonidas</name>
+			<class>Mage</class>
+			<cost>7</cost>
+			<quality>5</quality>
 			<phash>4178790545464170272</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>256</ID>
 			<name>Kill Command</name>
+			<class>Hunter</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>749901219383705651</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>257</ID>
 			<name>Mana Tide Totem</name>
+			<class>Shaman</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>4140724769699063004</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>258</ID>
 			<name>Drain Life</name>
+			<class>Warlock</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>9635350156161572424</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>259</ID>
 			<name>Doomsayer</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>4</quality>
 			<phash>16705810923562044189</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>260</ID>
 			<name>Darkscale Healer</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>2824801855869226392</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>261</ID>
 			<name>Shadowform</name>
+			<class>Priest</class>
+			<cost>3</cost>
+			<quality>4</quality>
 			<phash>2696007248369686777</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>262</ID>
 			<name>Frost Nova</name>
+			<class>Mage</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>6806523820961805652</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>263</ID>
 			<name>Mirror Entity</name>
+			<class>Mage</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>10334695525220688873</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>264</ID>
 			<name>Counterspell</name>
+			<class>Mage</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>14802019911221340988</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>265</ID>
 			<name>Magma Rager</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>3980560574657624178</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>266</ID>
 			<name>Wolfrider</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>15125620166990332882</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>267</ID>
 			<name>Gelbin Mekkatorque</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>5</quality>
 			<phash>15177937358788597864</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>268</ID>
 			<name>Inner Rage</name>
+			<class>Warrior</class>
+			<cost>0</cost>
+			<quality>2</quality>
 			<phash>4934734108990956693</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>269</ID>
 			<name>Heroic Strike</name>
+			<class>Warrior</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>13568012467513892580</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>270</ID>
 			<name>Doomhammer</name>
+			<class>Shaman</class>
+			<cost>5</cost>
+			<quality>4</quality>
 			<phash>6544625120255309725</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>271</ID>
 			<name>Tracking</name>
+			<class>Hunter</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>6008464657382587226</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>272</ID>
 			<name>Fireball</name>
+			<class>Mage</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>16824674936167158291</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>273</ID>
 			<name>Booty Bay Bodyguard</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>4501745633556259152</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>274</ID>
 			<name>Scarlet Crusader</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>10156186987252396717</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>275</ID>
 			<name>Voodoo Doctor</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>9766299675678651445</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>276</ID>
 			<name>Shadow Bolt</name>
+			<class>Warlock</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>647505626760078983</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>277</ID>
 			<name>Ethereal Arcanist</name>
+			<class>Mage</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>3835294925793631129</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>278</ID>
 			<name>Succubus</name>
+			<class>Warlock</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>17967446831328604841</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>279</ID>
 			<name>Emperor Cobra</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>12861965478466574906</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>280</ID>
 			<name>Deadly Shot</name>
+			<class>Hunter</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>7556968785474353765</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>281</ID>
 			<name>Claw</name>
+			<class>Druid</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>16612888810366387620</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>282</ID>
 			<name>Explosive Shot</name>
+			<class>Hunter</class>
+			<cost>5</cost>
+			<quality>3</quality>
 			<phash>6584998956204008588</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>283</ID>
 			<name>Avenging Wrath</name>
+			<class>Paladin</class>
+			<cost>6</cost>
+			<quality>4</quality>
 			<phash>9399781905788521876</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>284</ID>
 			<name>Argent Protector</name>
+			<class>Paladin</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>9511976170578895850</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>285</ID>
 			<name>Felguard</name>
+			<class>Warlock</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>6590620449964838354</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>286</ID>
 			<name>Northshire Cleric</name>
+			<class>Priest</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>7515783718144172319</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>287</ID>
 			<name>Leper Gnome</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>15195724964867381582</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>288</ID>
 			<name>Fire Elemental</name>
+			<class>Shaman</class>
+			<cost>6</cost>
+			<quality>1</quality>
 			<phash>2221888713296495216</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>289</ID>
 			<name>Snipe</name>
+			<class>Hunter</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>8558861407774513660</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>290</ID>
 			<name>Southsea Captain</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>4</quality>
 			<phash>18091685609485485283</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>291</ID>
 			<name>Bite</name>
+			<class>Druid</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>426917040287747430</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>292</ID>
 			<name>Defias Ringleader</name>
+			<class>Rogue</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>2939635492797584529</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>293</ID>
 			<name>Harvest Golem</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>12731831546909789146</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>294</ID>
 			<name>King Krush</name>
+			<class>Hunter</class>
+			<cost>9</cost>
+			<quality>5</quality>
 			<phash>15364532847345551931</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>295</ID>
 			<name>Lorewalker Cho</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>5</quality>
 			<phash>16267257411089713751</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>296</ID>
 			<name>Hunter&apos;s Mark</name>
+			<class>Hunter</class>
+			<cost>0</cost>
+			<quality>1</quality>
 			<phash>12293116405982386148</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>297</ID>
 			<name>Dalaran Mage</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>12949358266991792963</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>298</ID>
 			<name>Twilight Drake</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>16403067585473942215</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>299</ID>
 			<name>Coldlight Oracle</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>8947625135741811276</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>300</ID>
 			<name>Molten Giant</name>
+			<class>None</class>
+			<cost>20</cost>
+			<quality>4</quality>
 			<phash>6144314972178547119</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>301</ID>
 			<name>Shadowflame</name>
+			<class>Warlock</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>7072373368257626338</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>302</ID>
 			<name>Argent Commander</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>3</quality>
 			<phash>14760667719203529546</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>303</ID>
 			<name>Arcane Missiles</name>
+			<class>Mage</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>15275651529103392762</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>304</ID>
 			<name>Ancient of War</name>
+			<class>Druid</class>
+			<cost>7</cost>
+			<quality>4</quality>
 			<phash>270201213235991113</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>305</ID>
 			<name>Stormwind Champion</name>
+			<class>None</class>
+			<cost>7</cost>
+			<quality>1</quality>
 			<phash>2753096672365900147</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>306</ID>
 			<name>Swipe</name>
+			<class>Druid</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>4219992208913826686</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>307</ID>
 			<name>Hex</name>
+			<class>Shaman</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>15616604182189741930</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>308</ID>
 			<name>Ysera</name>
+			<class>None</class>
+			<cost>9</cost>
+			<quality>5</quality>
 			<phash>13429650659887663371</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>309</ID>
 			<name>Arcane Golem</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>13395418782103128471</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>310</ID>
 			<name>Blood Imp</name>
+			<class>Warlock</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>8440540039466965023</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>311</ID>
 			<name>Pyroblast</name>
+			<class>Mage</class>
+			<cost>10</cost>
+			<quality>4</quality>
 			<phash>14770067458624685838</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>312</ID>
 			<name>Murloc Raider</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>8312744299665859732</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>313</ID>
 			<name>Spellbender</name>
+			<class>Mage</class>
+			<cost>3</cost>
+			<quality>4</quality>
 			<phash>17228867579510883362</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>314</ID>
 			<name>Faerie Dragon</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>3684283675391065638</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>315</ID>
 			<name>Sinister Strike</name>
+			<class>Rogue</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>14811167345952854444</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>316</ID>
 			<name>Power Overwhelming</name>
+			<class>Warlock</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>14143475640194913258</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>317</ID>
 			<name>Arcane Explosion</name>
-			<phash>15140124202939686265</phash>
+			<class>Mage</class>
+			<cost>2</cost>
+			<quality>1</quality>
+			<phash>17445967212153380217</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>318</ID>
 			<name>Shadow Word: Pain</name>
+			<class>Priest</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>15142381707456402584</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>319</ID>
 			<name>Noble Sacrifice</name>
+			<class>Paladin</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>15769943186928132366</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>320</ID>
 			<name>Dread Infernal</name>
+			<class>Warlock</class>
+			<cost>6</cost>
+			<quality>1</quality>
 			<phash>1360879481946487004</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>321</ID>
 			<name>Naturalize</name>
+			<class>Druid</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>10875402246580332826</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>322</ID>
 			<name>Wrath</name>
+			<class>Druid</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>15667292111776334273</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>323</ID>
 			<name>Secretkeeper</name>
+			<class>None</class>
+			<cost>1</cost>
+			<quality>3</quality>
 			<phash>14977016523046736440</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>324</ID>
 			<name>Dread Corsair</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>17589196465465116307</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>325</ID>
 			<name>Forked Lightning</name>
-			<phash>8560501901885639800</phash>
+			<class>Shaman</class>
+			<cost>1</cost>
+			<quality>2</quality>
+			<phash>4525276635761675384</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>326</ID>
 			<name>Hand of Protection</name>
+			<class>Paladin</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>6029042223502028316</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>327</ID>
 			<name>Vaporize</name>
+			<class>Mage</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>1649668057201494588</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>328</ID>
 			<name>Nozdormu</name>
+			<class>None</class>
+			<cost>9</cost>
+			<quality>5</quality>
 			<phash>16197634862632988811</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>329</ID>
 			<name>Divine Spirit</name>
+			<class>Priest</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>6020752503545230319</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>330</ID>
 			<name>Armorsmith</name>
+			<class>Warrior</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>10487963085650072334</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>331</ID>
 			<name>Murloc Tidehunter</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>4492940798108511649</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>332</ID>
 			<name>Tundra Rhino</name>
+			<class>Hunter</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>16434245541720542739</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>333</ID>
 			<name>Summoning Portal</name>
+			<class>Warlock</class>
+			<cost>4</cost>
+			<quality>2</quality>
 			<phash>9362186538322712307</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>334</ID>
 			<name>Hammer of Wrath</name>
+			<class>Paladin</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>13660352441217360532</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>335</ID>
 			<name>Stormwind Knight</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>12259460216071251856</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>336</ID>
 			<name>Mad Bomber</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>16848757970445390437</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>337</ID>
 			<name>Consecration</name>
+			<class>Paladin</class>
+			<cost>4</cost>
+			<quality>1</quality>
 			<phash>17337426062867566573</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>338</ID>
 			<name>Knife Juggler</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>12944843103274045966</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>339</ID>
 			<name>Ice Barrier</name>
+			<class>Mage</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>2157437318575546704</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>340</ID>
 			<name>Light&apos;s Justice</name>
+			<class>Paladin</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>871895002282707254</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>341</ID>
 			<name>Lava Burst</name>
+			<class>Shaman</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>17578398095864209056</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>342</ID>
 			<name>Mind Control Tech</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>13927853904921793207</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>343</ID>
 			<name>Boulderfist Ogre</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>1</quality>
 			<phash>947514579530064594</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>344</ID>
 			<name>Priestess of Elune</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>2</quality>
 			<phash>4755364041339039809</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>345</ID>
 			<name>Ancient Mage</name>
+			<class>None</class>
+			<cost>4</cost>
+			<quality>3</quality>
 			<phash>13305309683495638284</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>346</ID>
 			<name>Mark of Nature</name>
+			<class>Druid</class>
+			<cost>3</cost>
+			<quality>2</quality>
 			<phash>1975768358397454086</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>347</ID>
 			<name>Shadow Word: Death</name>
+			<class>Priest</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>1065904129203513015</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>348</ID>
 			<name>Ironbeak Owl</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>14251510681331451529</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>349</ID>
 			<name>Eviscerate</name>
+			<class>Rogue</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>12865690634334080616</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>350</ID>
 			<name>Repentance</name>
+			<class>Paladin</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>767674973710893837</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>351</ID>
 			<name>Sunwalker</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>3</quality>
 			<phash>17357721086525288215</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>352</ID>
 			<name>Slam</name>
+			<class>Warrior</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>13432767981893193921</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>353</ID>
 			<name>Sword of Justice</name>
+			<class>Paladin</class>
+			<cost>3</cost>
+			<quality>4</quality>
 			<phash>10114075091724719593</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>354</ID>
 			<name>Whirlwind</name>
+			<class>Warrior</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>16973950873734256688</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>355</ID>
 			<name>Illidan Stormrage</name>
+			<class>None</class>
+			<cost>6</cost>
+			<quality>5</quality>
 			<phash>11600078154874649904</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>356</ID>
 			<name>Alexstrasza</name>
+			<class>None</class>
+			<cost>9</cost>
+			<quality>5</quality>
 			<phash>17469922289772188774</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>357</ID>
 			<name>Silence</name>
+			<class>Priest</class>
+			<cost>0</cost>
+			<quality>2</quality>
 			<phash>9689472179757953275</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>358</ID>
 			<name>Voidwalker</name>
+			<class>Warlock</class>
+			<cost>1</cost>
+			<quality>1</quality>
 			<phash>15162411935795511763</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>359</ID>
 			<name>Flamestrike</name>
+			<class>Mage</class>
+			<cost>7</cost>
+			<quality>1</quality>
 			<phash>16298203185738012409</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>360</ID>
 			<name>River Crocolisk</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>14572788461000671212</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>361</ID>
 			<name>Stormforged Axe</name>
+			<class>Shaman</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>11936224275506419214</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>362</ID>
 			<name>Temple Enforcer</name>
+			<class>Priest</class>
+			<cost>6</cost>
+			<quality>2</quality>
 			<phash>1124878877394585478</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>363</ID>
 			<name>Imp Master</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>7832978468433108953</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>364</ID>
 			<name>Savage Roar</name>
+			<class>Druid</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>6253288409892376758</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>365</ID>
 			<name>Innervate</name>
-			<phash>8673339429940196020</phash>
+			<class>Druid</class>
+			<cost>0</cost>
+			<quality>1</quality>
+			<phash>8673339429940191925</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>366</ID>
 			<name>Earth Elemental</name>
+			<class>Shaman</class>
+			<cost>5</cost>
+			<quality>4</quality>
 			<phash>6461484109258334591</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>367</ID>
 			<name>Faceless Manipulator</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>4</quality>
 			<phash>12045866451104673804</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>368</ID>
 			<name>Divine Favor</name>
+			<class>Paladin</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>5174199461480560803</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>369</ID>
 			<name>Demolisher</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>15405640942082048749</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>370</ID>
 			<name>Sunfury Protector</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>3</quality>
 			<phash>3690108777956938143</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>371</ID>
 			<name>Dust Devil</name>
+			<class>Shaman</class>
+			<cost>1</cost>
+			<quality>2</quality>
 			<phash>3772446356590441798</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>372</ID>
 			<name>Holy Light</name>
+			<class>Paladin</class>
+			<cost>2</cost>
+			<quality>1</quality>
 			<phash>10040262219258205294</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>373</ID>
 			<name>Feral Spirit</name>
+			<class>Shaman</class>
+			<cost>3</cost>
+			<quality>3</quality>
 			<phash>7699543898437038472</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>374</ID>
 			<name>Raid Leader</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>69239315543519332</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>375</ID>
 			<name>Amani Berserker</name>
+			<class>None</class>
+			<cost>2</cost>
+			<quality>2</quality>
 			<phash>14729504658304610460</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>376</ID>
 			<name>Ironbark Protector</name>
+			<class>Druid</class>
+			<cost>8</cost>
+			<quality>1</quality>
 			<phash>6977226991328246660</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>377</ID>
 			<name>Deathwing</name>
+			<class>None</class>
+			<cost>10</cost>
+			<quality>5</quality>
 			<phash>6657342328178276559</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>378</ID>
 			<name>Stormpike Commando</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>1</quality>
 			<phash>6770627268460267894</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>379</ID>
 			<name>Silverback Patriarch</name>
+			<class>None</class>
+			<cost>3</cost>
+			<quality>1</quality>
 			<phash>7757334954199331124</phash>
+			<phash_golden/>
 		</entry>
 		<entry>
 			<ID>380</ID>
 			<name>Gladiator&apos;s Longbow</name>
+			<class>Hunter</class>
+			<cost>7</cost>
+			<quality>4</quality>
 			<phash>14714197701030295402</phash>
+			<phash_golden/>
+		</entry>
+		<entry>
+			<ID>381</ID>
+			<name>Elite Tauren Chieftain</name>
+			<class>None</class>
+			<cost>5</cost>
+			<quality>5</quality>
+			<phash>18260758076762935969</phash>
+			<phash_golden/>
 		</entry>
 	</cards>
 	<heroes>

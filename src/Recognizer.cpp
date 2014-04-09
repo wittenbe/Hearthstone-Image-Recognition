@@ -49,7 +49,22 @@ const Recognizer::VectorROI Recognizer::GAME_COIN = list_of
 const Recognizer::VectorROI Recognizer::GAME_END = list_of
 		(cv::Rect_<float>(0.3841f, 0.53751f, 0.2471f, 0.148f));
 
+const Recognizer::VectorROI Recognizer::GAME_DRAW = list_of
+		(cv::Rect_<float>(0.6815f, 0.3375f, 0.06207f, 0.1625f));
+
+const Recognizer::VectorROI Recognizer::GAME_DRAW_INIT_1 = list_of
+		(cv::Rect_<float>(0.3033f, 0.3521f, 0.0469f, 0.1125f))
+		(cv::Rect_<float>(0.4778f, 0.3480f, 0.0469f, 0.1125f))
+		(cv::Rect_<float>(0.6523f, 0.3459f, 0.0469f, 0.1125f));
+
+const Recognizer::VectorROI Recognizer::GAME_DRAW_INIT_2 = list_of
+		(cv::Rect_<float>(0.2823f, 0.3500f, 0.0469f, 0.1125f))
+		(cv::Rect_<float>(0.4134f, 0.3500f, 0.0469f, 0.1125f))
+		(cv::Rect_<float>(0.5434f, 0.348f, 0.0469f, 0.1125f))
+		(cv::Rect_<float>(0.6748f, 0.3459f, 0.0469f, 0.1125f));
+
 Recognizer::Recognizer() {
+	recognitionHint = -1;
 	auto cfg = Config::getConfig();
 	phashThreshold = cfg.get<int>("config.image_recognition.phash_threshold");
 	std::string dataPath = cfg.get<std::string>("config.paths.recognition_data_path");
@@ -91,7 +106,7 @@ void Recognizer::precomputeData(const std::string& dataPath) {
     for (auto& v : data.get_child("hs_data.cards")) {
     	if (v.first == "entry") {
             std::string id = v.second.get<std::string>("ID");
-            cv::Mat image = cv::imread(cardImagePath + id + ".png");
+            cv::Mat image = cv::imread(cardImagePath + id + ".png", CV_LOAD_IMAGE_GRAYSCALE);
             auto phash = PerceptualHash::phash(image);
 
             v.second.put("phash", phash);
@@ -101,7 +116,7 @@ void Recognizer::precomputeData(const std::string& dataPath) {
     for (auto& v : data.get_child("hs_data.heroes")) {
     	if (v.first == "entry") {
             std::string id = v.second.get<std::string>("ID");
-            cv::Mat image = cv::imread(heroImagePath + id + ".png");
+            cv::Mat image = cv::imread(heroImagePath + id + ".png", CV_LOAD_IMAGE_GRAYSCALE);
             auto phash = PerceptualHash::phash(image);
 
             v.second.put("phash", phash);
@@ -116,7 +131,9 @@ void Recognizer::populateFromData(const std::string& dataPath, DataSet& dataSet)
     	if (v.first == "entry") {
             const std::string name = v.second.get<std::string>("name");
             const ulong64 phash = v.second.get<ulong64>("phash");
-            DataSetEntry o(name, phash);
+            const int quality = v.second.get<ulong64>("quality", -1);
+            DataSetEntry o(name, phash, quality);
+//            o.valid = true;
             dataSet.entries.push_back(o);
         	dataSet.hashes.push_back(phash);
     	}
@@ -133,7 +150,10 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CARD_PICK) {
 		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CARD_PICK, DRAFT_CARD_PICK, setCards);
-		if (rr.valid) results.push_back(rr);
+		if (rr.valid) {
+			results.push_back(rr);
+			recognitionHint = rr.miscInfo;
+		}
 	}
 
 	if (allowedRecognizers & RECOGNIZER_GAME_CLASS_SHOW) {
@@ -142,7 +162,7 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 	}
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CARD_CHOSEN) {
-		int index = getIndexOfBluest(image, DRAFT_CARD_CHOSEN);
+		int index = getIndexOfBluest(image, DRAFT_CARD_CHOSEN, recognitionHint);
 		if (index >= 0) {
 			RecognitionResult rr;
 			rr.sourceRecognizer = RECOGNIZER_DRAFT_CARD_CHOSEN;
@@ -161,91 +181,125 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 		if (rr.valid) results.push_back(rr);
 	}
 
+	if (allowedRecognizers & RECOGNIZER_GAME_DRAW) {
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW, GAME_DRAW, setCards);
+		if (rr.valid) results.push_back(rr);
+	}
+
+	if (allowedRecognizers & RECOGNIZER_GAME_DRAW_INIT_1) {
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW_INIT_1, GAME_DRAW_INIT_1, setCards);
+		if (rr.valid) results.push_back(rr);
+	}
+
+	if (allowedRecognizers & RECOGNIZER_GAME_DRAW_INIT_2) {
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW_INIT_2, GAME_DRAW_INIT_2, setCards);
+		if (rr.valid) results.push_back(rr);
+	}
+
 	return results;
 }
 
 Recognizer::RecognitionResult Recognizer::comparePHashes(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const DataSet& dataSet) {
-	std::vector<std::string> bestMatches = bestPHashMatches(image, roi, dataSet);
+	std::vector<DataSetEntry> bestMatches = bestPHashMatches(image, roi, dataSet);
 	bool valid = true;
 	for (auto& bestMatch : bestMatches) {
-		valid &= !bestMatch.empty();
+		valid &= bestMatch.valid;
 	}
 	RecognitionResult rr;
 	rr.valid = valid;
 	if (valid) {
 		rr.sourceRecognizer = recognizer;
-		rr.results = bestMatches;
+		for (DataSetEntry dse : bestMatches) {
+			rr.results.push_back(dse.name);
+		}
+		rr.miscInfo = bestMatches[0].quality;
 	}
 
 	return rr;
 }
 
-std::vector<std::string> Recognizer::bestPHashMatches(const cv::Mat& image, const VectorROI& roi, const DataSet& dataSet) {
-	std::vector<std::string> results;
+std::vector<Recognizer::DataSetEntry> Recognizer::bestPHashMatches(const cv::Mat& image, const VectorROI& roi, const DataSet& dataSet) {
+	std::vector<DataSetEntry> results;
 	for (auto& r : roi) {
 		cv::Mat roiImage = image(
 	    		cv::Range(r.y * image.rows, (r.y + r.height) * image.rows),
 	    		cv::Range(r.x * image.cols, (r.x + r.width) * image.cols));
+//		if (roi.size() == 3) 		{	cv::imshow("Debug", roiImage);
+//		//			cv::waitKey(10);
+//					cv::waitKey();}
 		ulong64 phash = PerceptualHash::phash(roiImage);
 		PerceptualHash::ComparisonResult best = PerceptualHash::best(phash, dataSet.hashes);
 
 		if (best.distance < dataSet.phashThreshold) {
-			results.push_back(dataSet.entries[best.index].name);
+			results.push_back(dataSet.entries[best.index]);
+//			HS_INFO << "Found " << dataSet.entries[best.index].name << " with confidence " << best.distance << std::endl;
 		} else {
-			results.push_back("");
+//			DataSetEntry dse;
+			results.push_back(DataSetEntry());
 		}
 	}
 
 	return results;
 }
 
-int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
-	std::vector<float> resultsBlue;
-	std::vector<float> resultsGreen;
-	std::vector<float> resultsRed;
-	std::vector<std::vector<float> > results;
+int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi, const int quality) {
+	std::vector<float> hV;
+	std::vector<float> sV;
+	std::vector<float> vV;
+	std::vector<std::vector<float> > hsv;
 	for (auto& r : roi) {
 		cv::Mat roiImage = image(
 	    		cv::Range(r.y * image.rows, (r.y + r.height) * image.rows),
 	    		cv::Range(r.x * image.cols, (r.x + r.width) * image.cols));
+		cv::Mat hsvImage;
+		cv::cvtColor(roiImage, hsvImage, CV_BGR2HSV);
 
-		  cv::Scalar s = cv::mean(roiImage);
-		  resultsBlue.push_back(s[0]);
-		  resultsGreen.push_back(s[1]);
-		  resultsRed.push_back(s[2]);
+		cv::Scalar means = cv::mean(hsvImage);
+		hV.push_back(means[0]);
+		sV.push_back(means[1]);
+		vV.push_back(means[2]);
 	}
-	results.push_back(resultsBlue);
-	results.push_back(resultsGreen);
-	results.push_back(resultsRed);
-
-	std::vector<int> maxIndex(3, -1);
-	std::vector<int> minIndex(3, -1);
-	std::vector<float> maxVal(3, 0.f);
-	std::vector<float> minVal(3, 255.f);
-	for (size_t chann = 0; chann < maxIndex.size(); chann++) {
-		for (size_t i = 0; i < results[chann].size(); i++) {
-			if (results[chann][i] > maxVal[chann]) {
-				maxIndex[chann] = i;
-				maxVal[chann] = results[chann][i];
-			}
-
-			if (results[chann][i] < minVal[chann]) {
-				minIndex[chann] = i;
-				minVal[chann] = results[chann][i];
-			}
-		}
-	}
+	//hsv[0] == h of all slots, hsv[1][2] s value of third slot
+	hsv.push_back(hV);
+	hsv.push_back(sV);
+	hsv.push_back(vV);
 
 	int best = -1;
-	if (maxIndex[0] == minIndex[2]) {
-		float blueRatio = maxVal[0] / minVal[0];
-		float greenRatio = maxVal[1] / minVal[1];
-		float redRatio = maxVal[2] / minVal[2];
-		if (blueRatio >= 1.9 || (blueRatio >= 1.4 && redRatio >= 1.4)) {
-			best = maxIndex[0];
+	int cand = -1;
+//	HS_INFO << "(" << hsv[0][0] << "; " << hsv[0][1] << "; " << hsv[0][2] << ") (" << hsv[1][0] << "; " << hsv[1][1] << "; " << hsv[1][2] << ") (" << hsv[2][0] << "; " << hsv[2][1] << "; " << hsv[2][2] << ")" << std::endl;
+	float averageValue = 1/3.0f * (hsv[2][0] + hsv[2][1] + hsv[2][2]);
+
+	const bool averageAboveThres =
+			((quality == 5) && averageValue >= 200) ||
+			((quality != 5) && averageValue >= 220);
+	if (!averageAboveThres) return best;
+
+	std::vector<bool> red(3);
+	std::vector<bool> candidateColor(3);
+	bool match = true;
+	size_t minSIndex = 0;
+	float minS = hsv[1][0];
+
+	//h value comparison
+	for (size_t i = 0; i < hsv[0].size(); i++) {
+		if (hsv[1][i] < minS) {
+			minS = hsv[1][i];
+			minSIndex = i;
 		}
+		const float h = hsv[0][i];
+		const bool candidateEpic = (quality == 4) && 130 <= h && h <= 150;
+		const bool candidateOther = (quality != 4) && ((90 <= h && h <= 110) || (50 <= h && h <= 70));
+		red[i] = h < 30;
+		candidateColor[i] = candidateEpic || candidateOther;
+		//this is only true if there was another blue/green/purple candidate before
+		if (cand >= 0 && candidateColor[i]) match = false;
+		//chose a blue as candidate
+		if (candidateColor[i]) cand = (int)i;
+		//make sure the others are red
+		match &= (candidateColor[i] || red[i]);
 	}
-//	HS_INFO << "(" << maxVal[0] << " " << minVal[0] << ") (" << maxVal[1] << " " << minVal[1] << ") (" << maxVal[2] << " " << minVal[2] << ") (" << maxIndex[0] << " " << maxIndex[1] << " " << maxIndex[2] << ") (" << minIndex[0] << " " << minIndex[1] << " " << minIndex[2] << ")" << std::endl;
+	if (match && minSIndex == cand) best = cand;
+
 	return best;
 }
 

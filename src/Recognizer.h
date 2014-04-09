@@ -28,6 +28,9 @@ class Calibrator;
 #define RECOGNIZER_GAME_CLASS_SHOW 16
 #define RECOGNIZER_GAME_COIN 32
 #define RECOGNIZER_GAME_END 64
+#define RECOGNIZER_GAME_DRAW 128
+#define RECOGNIZER_GAME_DRAW_INIT_1 256
+#define RECOGNIZER_GAME_DRAW_INIT_2 512
 
 //partial support or planned
 #define RECOGNIZER_DRAFT_CLASS_CHOSEN 2
@@ -50,18 +53,24 @@ public:
 	static const VectorROI GAME_CLASS_SHOW;
 	static const VectorROI GAME_COIN;
 	static const VectorROI GAME_END;
+	static const VectorROI GAME_DRAW;
+	static const VectorROI GAME_DRAW_INIT_1;
+	static const VectorROI GAME_DRAW_INIT_2;
 
 	struct RecognitionResult {
 		bool valid;
 		unsigned int sourceRecognizer;
 		std::vector<std::string> results;
+		int miscInfo;
 	};
 
 	struct DataSetEntry {
-		DataSetEntry();
-		DataSetEntry(std::string name, ulong64 phash) : name(name), phash(phash) {}
+		DataSetEntry() : name(""), phash(0), quality(-1), valid(false) {}
+		DataSetEntry(std::string name, ulong64 phash, int quality) : name(name), phash(phash), quality(quality), valid(true) {}
+		bool valid;
 		std::string name;
 		ulong64 phash;
+		int quality;
 	};
 
 	struct DataSet {
@@ -74,8 +83,8 @@ public:
 	std::vector<RecognitionResult> recognize(const cv::Mat& image, unsigned int allowedRecognizers);
 	RecognitionResult compareFeatures(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const VectorDescriptor& descriptors);
 	RecognitionResult comparePHashes(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const DataSet& dataSet);
-	std::vector<std::string> bestPHashMatches(const cv::Mat& image, const VectorROI& roi, const DataSet& dataSet);
-	int getIndexOfBluest(const cv::Mat& image, const VectorROI& roi);
+	std::vector<DataSetEntry> bestPHashMatches(const cv::Mat& image, const VectorROI& roi, const DataSet& dataSet);
+	int getIndexOfBluest(const cv::Mat& image, const VectorROI& roi, const int quality);
 
 	cv::Mat getDescriptor(cv::Mat& image);
 	bool isGoodDescriptorMatch(const std::vector<cv::DMatch>& matches);
@@ -84,14 +93,13 @@ private:
 	void precomputeData(const std::string& dataPath);
 	void populateFromData(const std::string& dataPath, DataSet& dataSet);
 
-
-
 	boost::property_tree::ptree data;
 	int phashThreshold;
 	DataSet setCards;
 	DataSet setClasses;
 	DataSet setCoin;
 	DataSet setEnd;
+	int recognitionHint;
 
 	cv::SURF surf;
 //	FlannBasedMatcherPtr matcher;
