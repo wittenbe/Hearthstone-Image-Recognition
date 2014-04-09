@@ -99,6 +99,7 @@ public:
 		std::string result;
 		std::string accessToken = callCurl((boost::format(FORMAT_ACCESS_TOKEN) % streamer).str());
 		if (accessToken.empty()) return result;
+		if (accessToken.find("html") < accessToken.length()) return result;
 		boost::property_tree::ptree pt;
 		std::stringstream ss; ss << accessToken;
 		boost::property_tree::read_json(ss, pt);
