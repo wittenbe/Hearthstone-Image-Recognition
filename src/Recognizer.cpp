@@ -58,9 +58,9 @@ const Recognizer::VectorROI Recognizer::GAME_DRAW_INIT_1 = list_of
 		(cv::Rect_<float>(0.6523f, 0.3459f, 0.0469f, 0.1125f));
 
 const Recognizer::VectorROI Recognizer::GAME_DRAW_INIT_2 = list_of
-		(cv::Rect_<float>(0.2823f, 0.3500f, 0.0469f, 0.1125f))
+		(cv::Rect_<float>(0.2834f, 0.3521f, 0.0469f, 0.1125f))
 		(cv::Rect_<float>(0.4134f, 0.3500f, 0.0469f, 0.1125f))
-		(cv::Rect_<float>(0.5434f, 0.348f, 0.0469f, 0.1125f))
+		(cv::Rect_<float>(0.5445f, 0.348f, 0.0469f, 0.1125f))
 		(cv::Rect_<float>(0.6748f, 0.3459f, 0.0469f, 0.1125f));
 
 Recognizer::Recognizer() {
@@ -224,7 +224,7 @@ std::vector<Recognizer::DataSetEntry> Recognizer::bestPHashMatches(const cv::Mat
 		cv::Mat roiImage = image(
 	    		cv::Range(r.y * image.rows, (r.y + r.height) * image.rows),
 	    		cv::Range(r.x * image.cols, (r.x + r.width) * image.cols));
-//		if (roi.size() == 3) 		{	cv::imshow("Debug", roiImage);
+//		if (roi.size() == 4) 		{	cv::imshow("Debug", roiImage);
 //		//			cv::waitKey(10);
 //					cv::waitKey();}
 		ulong64 phash = PerceptualHash::phash(roiImage);
@@ -232,12 +232,13 @@ std::vector<Recognizer::DataSetEntry> Recognizer::bestPHashMatches(const cv::Mat
 
 		if (best.distance < dataSet.phashThreshold) {
 			results.push_back(dataSet.entries[best.index]);
-//			HS_INFO << "Found " << dataSet.entries[best.index].name << " with confidence " << best.distance << std::endl;
+//			std::cout << "(" << dataSet.entries[best.index].name << " " << best.distance << ")";
 		} else {
-//			DataSetEntry dse;
+//			std::cout << "()";
 			results.push_back(DataSetEntry());
 		}
 	}
+//	std::cout << std::endl;
 
 	return results;
 }
@@ -287,8 +288,8 @@ int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi, con
 			minSIndex = i;
 		}
 		const float h = hsv[0][i];
-		const bool candidateEpic = (quality == 4) && 130 <= h && h <= 150;
-		const bool candidateOther = (quality != 4) && ((90 <= h && h <= 110) || (50 <= h && h <= 70));
+		const bool candidateEpic = (quality == 4) && 110 <= h && h <= 150;
+		const bool candidateOther = (quality != 4) && ((90 <= h && h <= 110) || (50 <= h && h <= 80));
 		red[i] = h < 30;
 		candidateColor[i] = candidateEpic || candidateOther;
 		//this is only true if there was another blue/green/purple candidate before

@@ -123,9 +123,8 @@ void StreamManager::wait() {
 
 void StreamManager::run() {
 	cv::Mat image;
-//	stream->setStream(4);
-//	stream->setFramePos(42782);
-//	stream->setFramePos(11525);
+//	stream->setStreamIndex(7);
+//	stream->setFramePos(11245);
 
 	HS_INFO << "Started thread" << std::endl;
 
@@ -295,8 +294,13 @@ void StreamManager::run() {
 					currentCard.second = 0;
 					currentCard.first = "";
 					if (currentDraw.latestDraw.empty()) {
+//						if (currentDraw.initialDraw.empty()) {
+//							HS_INFO << stream->getStreamIndex() << " " << stream->getFramePos() << std::endl;
+//							raise(SIGINT);
+//						}
 						std::string initDraw = boost::algorithm::join(currentDraw.initialDraw, "; ");
 						bot->message((boost::format(MSG_INITIAL_DRAW) % initDraw).str());
+						currentDraw.initialDraw.clear();
 						disable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_1);
 						disable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_2);
 					}

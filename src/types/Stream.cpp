@@ -41,7 +41,7 @@ bool Stream::read(cv::Mat& image) {
 	return success;
 }
 
-void Stream::setStream(unsigned int i) {
+void Stream::setStreamIndex(size_t i) {
 	if (!isLiveStream) {
 		urlIndex = i;
 		openNextStream();
@@ -50,6 +50,10 @@ void Stream::setStream(unsigned int i) {
 
 void Stream::setFramePos(double n) {
 	vcap.set(CV_CAP_PROP_POS_FRAMES, n);
+}
+
+size_t Stream::getStreamIndex() {
+	return urlIndex - 1;
 }
 
 double Stream::getFramePos() {

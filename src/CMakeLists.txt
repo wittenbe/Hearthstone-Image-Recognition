@@ -10,13 +10,14 @@ ENDIF(WIN32)
 
 add_definitions(-U__STRICT_ANSI__)
 
+include_directories(types)
 include_directories(bot)
 include_directories(Calibration)
 
 set(EXECUTABLE_NAME ${PROJECT_NAME}_main)
 add_executable(${EXECUTABLE_NAME}
     main.cpp
-    Stream.cpp
+    types/Stream.cpp
     Recognizer.cpp
 	PerceptualHash.cpp
 	StreamManager.cpp

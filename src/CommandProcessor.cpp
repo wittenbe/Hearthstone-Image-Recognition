@@ -60,6 +60,10 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 		response += (sm->param_backupscoring)? "on" : "off";
 	}));
 
+	cmdMap["!fb_score"] = CCP(new CommandCallback(0, 0, UL_MOD, false, [this](const CommandInfo& ci, std::string& response){
+		response = (boost::format("[SCORE] Current score is: %d-%d") % sm->currentGame.wins % sm->currentGame.losses).str();
+	}));
+
 	cmdMap["!drawhandling"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
 		if (ci.toggle) {
 			sm->param_drawhandling = ci.toggleEnable;
@@ -84,7 +88,7 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 	cmdMap["!info"] = CCP(new CommandCallback(1, 1, UL_MOD, false, [this](const CommandInfo& ci, std::string& response){
 		if (ci.allArgs != "fortebot") return;
 		response = "ForteBot uses OpenCV and perceptual hashing to very quickly compare all card images against the stream image to find a match. "
-				"Additionally, SURF feature detection is used for automated (backup) scoring. "
+				"Additionally, SURF feature detection is used for automated scoring. "
 				"The Bot is written in C++ by ZeForte. "
 				"Check out the (poorly commented) source on GitHub: http://bit.ly/1eGgN5g";
 	}));

@@ -1,4 +1,4 @@
-#include "Stream.h"
+#include "types/Stream.h"
 #include "StreamManager.h"
 #include "bot.h"
 #include "SystemInterface.h"

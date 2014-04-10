@@ -13,8 +13,9 @@ class Stream {
 public:
 	Stream(std::vector<std::string> urls); //class for managing live streams or vods (which consist of multiple archives/flvs)
 	bool read(cv::Mat& image);
-	void setStream(unsigned int i);
+	void setStreamIndex(size_t i);
 	void setFramePos(double n);
+	size_t getStreamIndex();
 	double getFramePos();
 	void skipFrame();
 	void skipFrames(double n);
@@ -26,7 +27,7 @@ private:
 	cv::VideoCapture vcap;
 	boost::mutex frameMutex; //mutex for sequential frame grabbing
 	std::vector<std::string> urls;
-	unsigned int urlIndex;
+	size_t urlIndex;
 
 	bool isLiveStream;
 	double frameCount;

@@ -3,7 +3,7 @@
 
 #include "CommandProcessor.h"
 #include "Recognizer.h"
-#include "Stream.h"
+#include "types/Stream.h"
 #include "bot.h"
 
 #include <boost/thread.hpp>
@@ -29,8 +29,8 @@ const std::string MSG_WINS_POLL = "How many wins do you think %s will be able to
 const std::string MSG_WINS_POLL_VOTE = "How many wins do you think %s will get? %s";
 const std::string MSG_WINS_POLL_VOTE_REPEAT = "relink: %s";
 
-const std::string MSG_GAME_START = "!score -as %s -vs %s -%s";
-const std::string MSG_GAME_END = "!score -%s";
+const std::string MSG_GAME_START = "#!score -as %s -vs %s -%s";
+const std::string MSG_GAME_END = "#!score -%s";
 
 const std::string MSG_INITIAL_DRAW = "Initial Draw: %s";
 const std::string MSG_DRAW = "Drew \"%s\"";
