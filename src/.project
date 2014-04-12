@@ -9,10 +9,10 @@
 	<natures>
 	</natures>
 	<linkedResources>
-		<link>
+		<!--link>
 			<name>[Subprojects]</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
+		</link-->
 	</linkedResources>
 </projectDescription>

@@ -4,7 +4,9 @@
 #include "CommandProcessor.h"
 #include "Recognizer.h"
 #include "types/Stream.h"
+#include "types/Deck.h"
 #include "bot.h"
+#include "Database.h"
 
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
@@ -14,9 +16,6 @@
 namespace hs {
 
 const std::string CMD_DECK_FORMAT = "%s's current decklist: %s";
-
-const std::string DECK_PICK_FORMAT = "Pick %02i: (%s, %s, %s)";
-const std::string DECK_PICKED_FORMAT = " --> %s picked %s";
 
 const std::string MSG_CLASS_POLL = "Which class should %s pick next?";
 const int MSG_CLASS_POLL_ERROR_RETRY_COUNT = 1;
@@ -29,8 +28,8 @@ const std::string MSG_WINS_POLL = "How many wins do you think %s will be able to
 const std::string MSG_WINS_POLL_VOTE = "How many wins do you think %s will get? %s";
 const std::string MSG_WINS_POLL_VOTE_REPEAT = "relink: %s";
 
-const std::string MSG_GAME_START = "#!score -as %s -vs %s -%s";
-const std::string MSG_GAME_END = "#!score -%s";
+const std::string MSG_GAME_START = "!score -as %s -vs %s -%s";
+const std::string MSG_GAME_END = "!score -%s";
 
 const std::string MSG_INITIAL_DRAW = "Initial Draw: %s";
 const std::string MSG_DRAW = "Drew \"%s\"";
@@ -47,31 +46,37 @@ class StreamManager {
 friend class CommandProcessor;
 
 public:
-	struct Deck {
-		std::string url;
-		std::vector<std::string> cards;
-		std::vector<std::vector<std::string> > picks;
+//	struct Deck {
+//		std::string url;
+//		std::vector<std::string> cards;
+//		std::vector<std::vector<std::string> > picks;
+//
+//		bool isValid() {return !url.empty();}
+//		void clear() {url=DEFAULT_DECKURL; cards.clear(); picks.clear();}
+//
+//		unsigned int state;
+//	};
 
-		bool isValid() {return !url.empty();}
-		void clear() {url=DEFAULT_DECKURL; cards.clear(); picks.clear();}
+	struct DeckInfo {
+		std::string textUrl;
+		void clear() {textUrl=DEFAULT_DECKURL;}
 
 		unsigned int state;
 	};
 
-	struct Game {
+	struct GameInfo {
 		std::string player;
 		std::string opponent;
 		std::string fs;
 		std::string end;
-		int wins;
-		int losses;
 
 		unsigned int state;
 	};
 
-	struct Draw {
-		std::vector<std::string> initialDraw;
-		std::string latestDraw;
+	struct DrawInfo {
+		bool buildFromDraws;
+		std::vector<int> initialDraw;
+		int latestDraw;
 
 		unsigned int state;
 	};
@@ -90,9 +95,9 @@ public:
 	void setDeckURL(std::string deckURL);
 
 private:
-	std::string createDeckString(Deck deck);
 	boost::shared_ptr<CommandProcessor> cp;
 	StreamPtr stream;
+	DatabasePtr db;
 	clever_bot::botPtr bot;
 	RecognizerPtr recognizer;
 
@@ -105,11 +110,13 @@ private:
 	boost::thread_group processingThreads;
 
 	std::string sName; //streamer name
-	Deck currentDeck;
-	Game currentGame;
-	Draw currentDraw;
+	Deck deck;
+	DeckInfo currentDeck;
+	GameInfo currentGame;
+	DrawInfo currentDraw;
 	boost::atomic<unsigned int> passedFrames;
-	std::pair<std::string, size_t> currentCard;
+	std::pair<int, size_t> currentCard;
+	std::pair<int, int> winsLosses;
 
 	//make sure the execution of commands doesn't interfere with other vars
     boost::mutex stateMutex;

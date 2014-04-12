@@ -42,13 +42,6 @@ const Recognizer::VectorROI Recognizer::GAME_CLASS_SHOW = list_of
 		(cv::Rect_<float>(0.2799f, 0.5938f, 0.1101f, 0.2938f))
 		(cv::Rect_<float>(0.6593f, 0.123f, 0.1101f, 0.2938f));
 
-//regions of interest for SURF comparison
-const Recognizer::VectorROI Recognizer::GAME_COIN = list_of
-		(cv::Rect_<float>(0.6441f, 0.4f, 0.0996f, 0.2292f));
-
-const Recognizer::VectorROI Recognizer::GAME_END = list_of
-		(cv::Rect_<float>(0.3841f, 0.53751f, 0.2471f, 0.148f));
-
 const Recognizer::VectorROI Recognizer::GAME_DRAW = list_of
 		(cv::Rect_<float>(0.6815f, 0.3375f, 0.06207f, 0.1625f));
 
@@ -63,81 +56,73 @@ const Recognizer::VectorROI Recognizer::GAME_DRAW_INIT_2 = list_of
 		(cv::Rect_<float>(0.5445f, 0.348f, 0.0469f, 0.1125f))
 		(cv::Rect_<float>(0.6748f, 0.3459f, 0.0469f, 0.1125f));
 
-Recognizer::Recognizer() {
-	recognitionHint = -1;
+//regions of interest for SURF comparison
+const Recognizer::VectorROI Recognizer::GAME_COIN = list_of
+		(cv::Rect_<float>(0.6441f, 0.4f, 0.0996f, 0.2292f));
+
+const Recognizer::VectorROI Recognizer::GAME_END = list_of
+		(cv::Rect_<float>(0.3841f, 0.53751f, 0.2471f, 0.148f));
+
+Recognizer::Recognizer(DatabasePtr db) {
+	this->db = db;
 	auto cfg = Config::getConfig();
 	phashThreshold = cfg.get<int>("config.image_recognition.phash_threshold");
-	std::string dataPath = cfg.get<std::string>("config.paths.recognition_data_path");
-	std::ifstream dataFile(dataPath);
-	boost::property_tree::read_xml(dataFile, data, boost::property_tree::xml_parser::trim_whitespace);
 	if (cfg.get<bool>("config.image_recognition.precompute_data")) {
-		precomputeData(dataPath);
+		precomputeData();
 	}
 
-    populateFromData("hs_data.cards", setCards);
-    populateFromData("hs_data.heroes", setClasses);
+	setCards.typeID = SETTYPE_CARDS;
+    for (auto& e : db->cards) {
+		DataSetEntry o(e.id);
+		setCards.entries.push_back(o);
+		setCards.hashes.push_back(e.phash);
+    }
+
+	setClasses.typeID = SETTYPE_HEROES;
+    for (auto& e : db->heroes) {
+		DataSetEntry o(e.id);
+		setClasses.entries.push_back(o);
+		setClasses.hashes.push_back(e.phash);
+    }
 
 	surf = cv::SURF(100, 2, 2, true, true);
     HS_INFO << "Using SURF parameters: " << surf.hessianThreshold << " " << surf.nOctaves << " " << surf.nOctaveLayers << " " << surf.extended << " " << surf.upright << std::endl;
-//	matcher = FlannBasedMatcherPtr(new cv::FlannBasedMatcher());
 	matcher = BFMatcherPtr(new cv::BFMatcher(cv::NORM_L2));
 
     cv::Mat tempImg;
 
     tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_end_victory.png", CV_LOAD_IMAGE_GRAYSCALE);
-    descriptorEnd.push_back(std::make_pair(getDescriptor(tempImg), "w"));
+    descriptorEnd.push_back(std::make_pair(getDescriptor(tempImg), RESULT_GAME_END_VICTORY));
     tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_end_defeat.png", CV_LOAD_IMAGE_GRAYSCALE);
-    descriptorEnd.push_back(std::make_pair(getDescriptor(tempImg), "l"));
+    descriptorEnd.push_back(std::make_pair(getDescriptor(tempImg), RESULT_GAME_END_DEFEAT));
 
     tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_first.png", CV_LOAD_IMAGE_GRAYSCALE);
-    descriptorCoin.push_back(std::make_pair(getDescriptor(tempImg), "1"));
+    descriptorCoin.push_back(std::make_pair(getDescriptor(tempImg), RESULT_GAME_COIN_FIRST));
     tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_coin_second.png", CV_LOAD_IMAGE_GRAYSCALE);
-    descriptorCoin.push_back(std::make_pair(getDescriptor(tempImg), "2"));
+    descriptorCoin.push_back(std::make_pair(getDescriptor(tempImg), RESULT_GAME_COIN_SECOND));
 
     //set each set's phash threshold
     setCards.phashThreshold = phashThreshold;
     setClasses.phashThreshold = phashThreshold;
 }
 
-void Recognizer::precomputeData(const std::string& dataPath) {
+void Recognizer::precomputeData() {
 	const std::string cardImagePath = Config::getConfig().get<std::string>("config.paths.card_image_path") + "/";
 	const std::string heroImagePath = Config::getConfig().get<std::string>("config.paths.hero_image_path") + "/";
 
-    for (auto& v : data.get_child("hs_data.cards")) {
-    	if (v.first == "entry") {
-            std::string id = v.second.get<std::string>("ID");
-            cv::Mat image = cv::imread(cardImagePath + id + ".png", CV_LOAD_IMAGE_GRAYSCALE);
-            auto phash = PerceptualHash::phash(image);
-
-            v.second.put("phash", phash);
-    	}
+    for (auto& c : db->cards) {
+    	int id = c.id;
+    	cv::Mat image = cv::imread(cardImagePath + boost::lexical_cast<std::string>(id) + ".png", CV_LOAD_IMAGE_GRAYSCALE);
+    	c.phash = PerceptualHash::phash(image);
     }
 
-    for (auto& v : data.get_child("hs_data.heroes")) {
-    	if (v.first == "entry") {
-            std::string id = v.second.get<std::string>("ID");
-            cv::Mat image = cv::imread(heroImagePath + id + ".png", CV_LOAD_IMAGE_GRAYSCALE);
-            auto phash = PerceptualHash::phash(image);
-
-            v.second.put("phash", phash);
-    	}
+    for (auto& h : db->heroes) {
+    	int id = h.id;
+    	cv::Mat image = cv::imread(heroImagePath + boost::lexical_cast<std::string>(id) + ".png", CV_LOAD_IMAGE_GRAYSCALE);
+    	h.phash = PerceptualHash::phash(image);
     }
-    boost::property_tree::xml_writer_settings<char> settings('\t', 1);
-    write_xml(dataPath, data, std::locale(""), settings);
-}
 
-void Recognizer::populateFromData(const std::string& dataPath, DataSet& dataSet) {
-    for (auto& v : data.get_child(dataPath)) {
-    	if (v.first == "entry") {
-            const std::string name = v.second.get<std::string>("name");
-            const ulong64 phash = v.second.get<ulong64>("phash");
-            const int quality = v.second.get<ulong64>("quality", -1);
-            DataSetEntry o(name, phash, quality);
-//            o.valid = true;
-            dataSet.entries.push_back(o);
-        	dataSet.hashes.push_back(phash);
-    	}
-    }
+    db->save();
 }
 
 std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& image, unsigned int allowedRecognizers) {
@@ -152,7 +137,7 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CARD_PICK, DRAFT_CARD_PICK, setCards);
 		if (rr.valid) {
 			results.push_back(rr);
-			recognitionHint = rr.miscInfo;
+			lastDraftRecognition = rr.results;
 		}
 	}
 
@@ -162,11 +147,11 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 	}
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CARD_CHOSEN) {
-		int index = getIndexOfBluest(image, DRAFT_CARD_CHOSEN, recognitionHint);
+		int index = getIndexOfBluest(image, DRAFT_CARD_CHOSEN);
 		if (index >= 0) {
 			RecognitionResult rr;
 			rr.sourceRecognizer = RECOGNIZER_DRAFT_CARD_CHOSEN;
-			rr.results.push_back(boost::lexical_cast<std::string>(index));
+			rr.results.push_back(index);
 			results.push_back(rr);
 		}
 	}
@@ -210,9 +195,8 @@ Recognizer::RecognitionResult Recognizer::comparePHashes(const cv::Mat& image, u
 	if (valid) {
 		rr.sourceRecognizer = recognizer;
 		for (DataSetEntry dse : bestMatches) {
-			rr.results.push_back(dse.name);
+			rr.results.push_back(dse.id);
 		}
-		rr.miscInfo = bestMatches[0].quality;
 	}
 
 	return rr;
@@ -224,26 +208,22 @@ std::vector<Recognizer::DataSetEntry> Recognizer::bestPHashMatches(const cv::Mat
 		cv::Mat roiImage = image(
 	    		cv::Range(r.y * image.rows, (r.y + r.height) * image.rows),
 	    		cv::Range(r.x * image.cols, (r.x + r.width) * image.cols));
-//		if (roi.size() == 4) 		{	cv::imshow("Debug", roiImage);
-//		//			cv::waitKey(10);
-//					cv::waitKey();}
 		ulong64 phash = PerceptualHash::phash(roiImage);
 		PerceptualHash::ComparisonResult best = PerceptualHash::best(phash, dataSet.hashes);
 
 		if (best.distance < dataSet.phashThreshold) {
 			results.push_back(dataSet.entries[best.index]);
-//			std::cout << "(" << dataSet.entries[best.index].name << " " << best.distance << ")";
 		} else {
-//			std::cout << "()";
 			results.push_back(DataSetEntry());
 		}
 	}
-//	std::cout << std::endl;
 
 	return results;
 }
 
-int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi, const int quality) {
+int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
+	if (lastDraftRecognition.empty()) return -1;
+	int quality = db->cards[lastDraftRecognition[0]].quality;
 	std::vector<float> hV;
 	std::vector<float> sV;
 	std::vector<float> vV;
@@ -297,7 +277,7 @@ int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi, con
 		//chose a blue as candidate
 		if (candidateColor[i]) cand = (int)i;
 		//make sure the others are red
-		match &= (candidateColor[i] || red[i]);
+//		match &= (candidateColor[i] || red[i]);
 	}
 	if (match && minSIndex == cand) best = cand;
 
@@ -320,10 +300,9 @@ Recognizer::RecognitionResult Recognizer::compareFeatures(const cv::Mat& image, 
 	    }
 
 	    cv::Mat descriptorImage = getDescriptor(greyscaleImage);
-//		std::cout << descriptorImage << std::endl;
 
 	    int bestResultMatchesCount = 0;
-	    std::string bestResult;
+	    int bestResult = -1;
 
 	    if (!descriptorImage.data) continue;
 
@@ -335,7 +314,7 @@ Recognizer::RecognitionResult Recognizer::compareFeatures(const cv::Mat& image, 
 	    		bestResultMatchesCount = matches.size();
 	    	}
 	    }
-	    if (!bestResult.empty()) {
+	    if (bestResult != -1) {
     		rr.results.push_back(bestResult);
 			rr.valid = true;
 			rr.sourceRecognizer = recognizer;
@@ -371,7 +350,6 @@ std::vector<cv::DMatch> Recognizer::getMatches(const cv::Mat& descriptorObj, con
 
 		if (m1.distance <= 0.6f * m2.distance) {
 			goodMatches.push_back(m1);
-//			HS_INFO << m1.distance << " " << m2.distance << std::endl;
 		}
 	}
 

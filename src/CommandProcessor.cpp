@@ -15,15 +15,15 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 
 	//set up all commands
 	cmdMap["!deck"] = CCP(new CommandCallback(0, 0, UL_USER, false, [this](const CommandInfo& ci, std::string& response){
-		response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.url).str();
+		response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.textUrl).str();
 	}));
 	alias("!deck", "!decklist");
 
 	cmdMap["!deckprogress"] = CCP(new CommandCallback(0, 0, UL_USER, false, [this](const CommandInfo& ci, std::string& response){
-		if (sm->currentDeck.cards.size() < 30) {
-			response = "Arena draft progress: " + boost::lexical_cast<std::string>(sm->currentDeck.cards.size()) + "/30";
-			if (sm->currentDeck.cards.size() != 0) {
-				response += ", latest pick: " + sm->currentDeck.cards.back();
+		if (!sm->deck.isComplete()) {
+			response = "Arena draft progress: " + boost::lexical_cast<std::string>(sm->deck.pickHistory.size()) + "/30";
+			if (sm->deck.pickHistory.size() != 0) {
+				response += ", latest pick: " + sm->deck.pickHistory.back().name;
 			}
 		} else {
 			response = "Deck complete";
@@ -31,37 +31,22 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 	}));
 
 	cmdMap["!deckforcepublish"] = CCP(new CommandCallback(0, 0, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
-		while (sm->currentDeck.picks.size() < 30) {
-			std::vector<std::string> pick;
-			pick.push_back("?"); pick.push_back("?"); pick.push_back("?");
-			sm->currentDeck.picks.push_back(pick);
-		}
-		while (sm->currentDeck.cards.size() < 30) sm->currentDeck.cards.push_back("?");
-		std::string deckString = sm->createDeckString(sm->currentDeck);
-		sm->currentDeck.url = SystemInterface::createHastebin(deckString);
-		response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.url).str();
+		std::string deckString = sm->deck.createTextRepresentation();
+		sm->currentDeck.textUrl = SystemInterface::createHastebin(deckString);
+		response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.textUrl).str();
 	}));
 
 	cmdMap["!setdeck"] = CCP(new CommandCallback(1, -1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
-		sm->currentDeck.url = ci.allArgs;
-		response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.url).str();
+		sm->currentDeck.textUrl = ci.allArgs;
+		response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.textUrl).str();
 	}));
 
 	cmdMap["!backupscoring"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
 		if (ci.toggle) {
 			sm->param_backupscoring = ci.toggleEnable;
-			if (sm->param_backupscoring) {
-				sm->currentDeck.state = RECOGNIZER_GAME_CLASS_SHOW | RECOGNIZER_GAME_END;
-			} else {
-				sm->currentDeck.state = 0;
-			}
 		}
 		response = "Backup scoring is: ";
 		response += (sm->param_backupscoring)? "on" : "off";
-	}));
-
-	cmdMap["!fb_score"] = CCP(new CommandCallback(0, 0, UL_MOD, false, [this](const CommandInfo& ci, std::string& response){
-		response = (boost::format("[SCORE] Current score is: %d-%d") % sm->currentGame.wins % sm->currentGame.losses).str();
 	}));
 
 	cmdMap["!drawhandling"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
@@ -85,6 +70,14 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 		response += (sm->param_strawpolling)? "on" : "off";
 	}));
 
+	cmdMap["!deckfromdraws"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
+		if (ci.toggle) {
+			sm->currentDraw.buildFromDraws = ci.toggleEnable;
+		}
+		response = "Building decklist from observed draws is: ";
+		response += (sm->currentDraw.buildFromDraws)? "on" : "off";
+	}));
+
 	cmdMap["!info"] = CCP(new CommandCallback(1, 1, UL_MOD, false, [this](const CommandInfo& ci, std::string& response){
 		if (ci.allArgs != "fortebot") return;
 		response = "ForteBot uses OpenCV and perceptual hashing to very quickly compare all card images against the stream image to find a match. "
@@ -95,6 +88,15 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 
 	cmdMap["!fb_debuglevel"] = CCP(new CommandCallback(1, 1, UL_SUPER, true, [this](const CommandInfo& ci, std::string& response){
 		sm->param_debug_level = boost::lexical_cast<unsigned int>(ci.allArgs);
+	}));
+
+	cmdMap["!fb_score"] = CCP(new CommandCallback(0, 0, UL_MOD, false, [this](const CommandInfo& ci, std::string& response){
+		response = (boost::format("[SCORE] Current score is: %d - %d") % sm->winsLosses.first % sm->winsLosses.second).str();
+	}));
+
+	cmdMap["!fb_cleardeck"] = CCP(new CommandCallback(0, 0, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
+		sm->deck.clear();
+		response = "Deck cleared";
 	}));
 
 	cmdMap["!fb_state"] = CCP(new CommandCallback(0, 0, UL_SUPER, false, [this](const CommandInfo& ci, std::string& response){
