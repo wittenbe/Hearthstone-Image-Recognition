@@ -59,6 +59,7 @@ public:
 
 	struct DeckInfo {
 		std::string textUrl;
+		std::string imageUrl;
 		void clear() {textUrl=DEFAULT_DECKURL;}
 
 		unsigned int state;

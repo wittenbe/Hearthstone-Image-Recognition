@@ -3,6 +3,8 @@
 
 #include "../Database.h"
 #include <set>
+#include <cv.h>
+#include "opencv2/highgui/highgui.hpp"
 
 namespace hs {
 
@@ -35,6 +37,7 @@ public:
 
 	Deck();
 	std::string createTextRepresentation();
+	cv::Mat createImageRepresentation();
 	void addCard(const Card& c, int amount = 1);
 	void addSet(const Card& c0, const Card& c1, const Card& c2);
 	void addPickedCard(const Card& c);
@@ -48,10 +51,13 @@ public:
 	int getCardCount();
 
 private:
+	std::string imagePath;
 	Card unknownCard;
 	int cardCount;
 	void removeUnknown(int amount = 1);
 	bool hasCardSpace();
+	bool hasUnknown() {return cards.size() != 0 && cards.begin()->c.id == unknownCard.id;}
+	void overlayImage(cv::Mat &background, const cv::Mat &foreground);
 };
 
 }

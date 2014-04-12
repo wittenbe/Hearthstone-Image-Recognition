@@ -27,7 +27,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	db = DatabasePtr(new Database(Config::getConfig().get<std::string>("config.paths.recognition_data_path")));
 	param_strawpolling = true;
 	param_backupscoring = true;
-	param_drawhandling = false;
+	param_drawhandling = true;
 	param_debug_level = 0;
 	passedFrames = PASSED_FRAMES_THRESHOLD;
 	currentCard.second = -1;
@@ -40,7 +40,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	currentDeck.state = 0;
 	currentGame.state = 0;
 	currentDraw.state = 0;
-	currentDraw.buildFromDraws = false;
+	currentDraw.buildFromDraws = true;
 	enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
 	enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
 
@@ -306,7 +306,7 @@ void StreamManager::run() {
 						std::vector<std::string> initDrawNames;
 						for (int id : currentDraw.initialDraw) initDrawNames.push_back(db->cards[id].name);
 						std::string initDraw = boost::algorithm::join(initDrawNames, "; ");
-						bot->message((boost::format(MSG_INITIAL_DRAW) % initDraw).str());
+//						bot->message((boost::format(MSG_INITIAL_DRAW) % initDraw).str());
 						for (auto& d : currentDraw.initialDraw) {
 							deck.draw(db->cards[d], currentDraw.buildFromDraws);
 						}
@@ -314,7 +314,7 @@ void StreamManager::run() {
 						disable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_1);
 						disable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_2);
 					}
-					bot->message((boost::format(MSG_DRAW) % db->cards[result.results[0]].name).str());
+//					bot->message((boost::format(MSG_DRAW) % db->cards[result.results[0]].name).str());
 					deck.draw(db->cards[result.results[0]], currentDraw.buildFromDraws);
 					currentDraw.latestDraw = result.results[0];
 				}

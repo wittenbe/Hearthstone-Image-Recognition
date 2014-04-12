@@ -1,6 +1,7 @@
 #include "Deck.h"
 #include "../Logger.h"
 #include <boost/format.hpp>
+#include <algorithm>
 
 namespace hs {
 
@@ -13,6 +14,7 @@ Deck::Deck() {
 
 	cardCount = 0;
 	addUnknownCard();
+	imagePath = "../images/decklist/";
 }
 
 std::string Deck::createTextRepresentation() {
@@ -49,6 +51,36 @@ std::string Deck::createTextRepresentation() {
 	deckString += pickString;
 
 	return deckString;
+}
+
+cv::Mat Deck::createImageRepresentation() {
+	cv::Mat unknown = cv::imread(imagePath + "unknown" + ".png", CV_LOAD_IMAGE_COLOR);
+	cv::Mat result(unknown.rows * cards.size(), unknown.cols, unknown.type());
+	cv::Rect roiRect(0, 0, unknown.cols, unknown.rows);
+
+	size_t i = 0;
+	for (auto& e : cards) {
+		roiRect.y = i++ * unknown.rows;
+		cv::Mat cardImage;
+		cv::Mat roi = result(roiRect);
+		if (e.c.id == unknownCard.id) {
+			cardImage = unknown;
+		} else {
+			//center of amount image at 284,25
+			//lu of amount image at 274,12
+			if (e.amount == 1) {
+				cardImage = cv::imread(imagePath + "1/" + (boost::format("%03d") % e.c.id).str() + ".png", CV_LOAD_IMAGE_COLOR);
+			} else {
+				cardImage = cv::imread(imagePath + "n/" + (boost::format("%03d") % e.c.id).str() + ".png", CV_LOAD_IMAGE_COLOR);
+				std::string amount = boost::lexical_cast<std::string>(std::min(e.amount, 9));
+				cv::Mat amountImage = cv::imread(imagePath + "amount/" + amount + ".png", CV_LOAD_IMAGE_UNCHANGED);
+				cv::Mat cardImageRoi = cardImage(cv::Rect(274, 12, amountImage.cols, amountImage.rows));
+				overlayImage(cardImageRoi, amountImage);
+			}
+		}
+		cardImage.copyTo(roi);
+	}
+	return result;
 }
 
 void Deck::addCard(const Card& c, int amount) {
@@ -156,8 +188,20 @@ void Deck::removeUnknown(int amount) {
 }
 
 bool Deck::hasCardSpace() {
-	const bool hasUnknown = cards.size() != 0 && cards.begin()->c.id == unknownCard.id;
-	return !isComplete() || hasUnknown;
+	return !isComplete() || hasUnknown();
+}
+
+void Deck::overlayImage(cv::Mat &background, const cv::Mat &foreground) {
+	for (int y = 0; y < background.rows; ++y) {
+		for (int x = 0; x < background.cols; ++x) {
+			double opacity = ((double)foreground.data[y * foreground.step + x * foreground.channels() + 3]) / 255.;
+			for(int c = 0; opacity > 0 && c < background.channels(); ++c) {
+				unsigned char foregroundPx = foreground.data[y * foreground.step + x * foreground.channels() + c];
+				unsigned char backgroundPx = background.data[y * background.step + x * background.channels() + c];
+				background.data[y*background.step + background.channels()*x + c] = backgroundPx * (1.-opacity) + foregroundPx * opacity;
+			}
+		}
+	}
 }
 
 }

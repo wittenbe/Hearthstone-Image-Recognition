@@ -12,6 +12,7 @@
 #include <boost/format.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 
 #include <cv.h>
 
@@ -90,8 +91,20 @@ public:
 		return response;
 	}
 
+	static std::string createImgur(const cv::Mat& image, std::string key = "b3625162d3418ac51a9ee805b1840452") {
+		saveImage(image, "temp.png");
+		std::string curlParams = "curl -F \"key=" + key + "\" -F \"image=@temp.png\" http://imgur.com/api/upload.xml";
+		std::string keyValue = callCurl(curlParams);
+		boost::property_tree::ptree pt;
+		std::stringstream ss; ss << keyValue;
+		boost::property_tree::read_xml(ss, pt);
+
+		std::string result;
+		result = pt.get<std::string>("rsp.original_image", result);
+		return result;
+	}
+
 	static void saveImage(const cv::Mat& image, std::string name) {
-		HS_INFO << "writing image " << name << std::endl;
 		cv::imwrite(name, image);
 	}
 

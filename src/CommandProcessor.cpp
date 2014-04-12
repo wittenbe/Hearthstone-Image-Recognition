@@ -30,10 +30,17 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 		}
 	}));
 
-	cmdMap["!deckforcepublish"] = CCP(new CommandCallback(0, 0, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
-		std::string deckString = sm->deck.createTextRepresentation();
-		sm->currentDeck.textUrl = SystemInterface::createHastebin(deckString);
-		response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.textUrl).str();
+	cmdMap["!publishdeck"] = CCP(new CommandCallback(0, 0, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
+		if (ci.allArgs == "image") {
+			auto deckImage = sm->deck.createImageRepresentation();
+			sm->currentDeck.imageUrl = SystemInterface::createImgur(deckImage);
+			response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.imageUrl).str();
+		} else {
+			std::string deckString = sm->deck.createTextRepresentation();
+			sm->currentDeck.textUrl = SystemInterface::createHastebin(deckString);
+			response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.textUrl).str();
+		}
+
 	}));
 
 	cmdMap["!setdeck"] = CCP(new CommandCallback(1, -1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
