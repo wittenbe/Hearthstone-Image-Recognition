@@ -3442,47 +3442,47 @@
 	</cards>
 	<heroes>
 		<entry>
-			<ID>002</ID>
+			<ID>000</ID>
 			<name>Rogue</name>
 			<phash>8842104209996382853</phash>
 		</entry>
 		<entry>
-			<ID>110</ID>
+			<ID>001</ID>
 			<name>Priest</name>
 			<phash>13099174485002046004</phash>
 		</entry>
 		<entry>
-			<ID>257</ID>
+			<ID>002</ID>
 			<name>Paladin</name>
 			<phash>10783273458169425378</phash>
 		</entry>
 		<entry>
-			<ID>319</ID>
+			<ID>003</ID>
 			<name>Shaman</name>
 			<phash>11457697254787821665</phash>
 		</entry>
 		<entry>
-			<ID>320</ID>
+			<ID>004</ID>
 			<name>Mage</name>
 			<phash>3299112537646393733</phash>
 		</entry>
 		<entry>
-			<ID>484</ID>
+			<ID>005</ID>
 			<name>Hunter</name>
 			<phash>15359156477766196682</phash>
 		</entry>
 		<entry>
-			<ID>618</ID>
+			<ID>006</ID>
 			<name>Warlock</name>
 			<phash>2930663635059758683</phash>
 		</entry>
 		<entry>
-			<ID>621</ID>
+			<ID>007</ID>
 			<name>Druid</name>
 			<phash>5070558645875687171</phash>
 		</entry>
 		<entry>
-			<ID>635</ID>
+			<ID>008</ID>
 			<name>Warrior</name>
 			<phash>11068045630716829306</phash>
 		</entry>
