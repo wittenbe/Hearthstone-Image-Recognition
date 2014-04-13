@@ -27,8 +27,8 @@ boost::shared_ptr<hs::StreamManager> smPtrGlobal;
 void botThread(clever_bot::botPtr& bot) {
 	while (true) {
 		HS_INFO << "connecting to IRC..." << std::endl;
-		bot->loop();
 		bot->connect();
+		bot->loop();
 		boost::this_thread::sleep_for(boost::chrono::seconds(10));
 	}
 }
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 	std::vector<std::string> addrs;
 
 	clever_bot::botPtr bot = clever_bot::botPtr(new clever_bot::bot());
-
+	boost::thread botT(botThread, bot);
 	boost::shared_ptr<hs::StreamManager> smPtr = boost::shared_ptr<hs::StreamManager>(new hs::StreamManager(hs::StreamPtr(new hs::Stream(addrs)), bot));
 	smPtrGlobal = smPtr;
 
@@ -89,8 +89,6 @@ int main(int argc, char* argv[]) {
 			}
 		}
 	});
-
-	boost::thread botT(botThread, bot);
 
 	if (!live) {
 		const std::string execOutput = SystemInterface::callCurl(cfg.get<std::string>("config.stream.vod"));

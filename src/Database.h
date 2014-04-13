@@ -13,6 +13,7 @@ struct Card {
 	std::string heroClass;
 	int cost;
 	int quality;
+	int type;
 	ulong64 phash;
 };
 
@@ -29,6 +30,7 @@ public:
 
     std::vector<Card> cards;
     std::vector<Hero> heroes;
+    bool hasMissingData(); //phashes for now
 
 private:
     std::string path;

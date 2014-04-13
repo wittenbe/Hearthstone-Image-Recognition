@@ -25,7 +25,10 @@ public:
 	struct DeckSorterLess {
 	    bool operator()(const DeckEntry& c1, const DeckEntry& c2) const {
 	        if (c1.c.cost == c2.c.cost) {
-	        	return c1.c.name < c2.c.name;
+	        	if (c1.c.type == c2.c.type) {
+	        		return c1.c.name < c2.c.name;
+	        	}
+	        	return c1.c.type > c2.c.type;
 	        }
 	        return c1.c.cost < c2.c.cost;
 	    }

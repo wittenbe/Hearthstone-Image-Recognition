@@ -67,7 +67,8 @@ Recognizer::Recognizer(DatabasePtr db) {
 	this->db = db;
 	auto cfg = Config::getConfig();
 	phashThreshold = cfg.get<int>("config.image_recognition.phash_threshold");
-	if (cfg.get<bool>("config.image_recognition.precompute_data")) {
+	if (db->hasMissingData()) {
+		HS_INFO << "pHashes missing from database, filling..." << std::endl;
 		precomputeData();
 	}
 
@@ -111,14 +112,14 @@ void Recognizer::precomputeData() {
 	const std::string heroImagePath = Config::getConfig().get<std::string>("config.paths.hero_image_path") + "/";
 
     for (auto& c : db->cards) {
-    	int id = c.id;
-    	cv::Mat image = cv::imread(cardImagePath + boost::lexical_cast<std::string>(id) + ".png", CV_LOAD_IMAGE_GRAYSCALE);
+    	std::string stringID = (boost::format("%03d") % c.id).str();
+    	cv::Mat image = cv::imread(cardImagePath + stringID + ".png", CV_LOAD_IMAGE_GRAYSCALE);
     	c.phash = PerceptualHash::phash(image);
     }
 
     for (auto& h : db->heroes) {
-    	int id = h.id;
-    	cv::Mat image = cv::imread(heroImagePath + boost::lexical_cast<std::string>(id) + ".png", CV_LOAD_IMAGE_GRAYSCALE);
+    	std::string stringID = (boost::format("%03d") % h.id).str();
+    	cv::Mat image = cv::imread(heroImagePath + stringID + ".png", CV_LOAD_IMAGE_GRAYSCALE);
     	h.phash = PerceptualHash::phash(image);
     }
 

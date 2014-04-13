@@ -64,6 +64,27 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 		}
 	}
 	HS_INFO << "Using " << numThreads << " threads" << std::endl;
+
+//	deck.addCard(db->cards[57], 2);
+//	deck.addCard(db->cards[91], 2);
+//	deck.addCard(db->cards[210], 2);
+//	deck.addCard(db->cards[361], 2);
+//	deck.addCard(db->cards[83], 2);
+//	deck.addCard(db->cards[29], 2);
+//	deck.addCard(db->cards[373], 2);
+//	deck.addCard(db->cards[307], 2);
+//	deck.addCard(db->cards[39], 2);
+//	deck.addCard(db->cards[17], 2);
+//	deck.addCard(db->cards[126], 2);
+//	deck.addCard(db->cards[302], 2);
+//	deck.addCard(db->cards[288], 2);
+//	deck.addCard(db->cards[257], 1);
+//	deck.addCard(db->cards[44], 1);
+//	deck.addCard(db->cards[54], 1);
+//	deck.addCard(db->cards[72], 1);
+//
+//	auto m = deck.createImageRepresentation();
+//	std::cout << SystemInterface::createImgur(m) << std::endl;
 }
 
 StreamManager::~StreamManager() {

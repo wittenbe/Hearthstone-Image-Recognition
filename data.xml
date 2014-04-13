@@ -7,6 +7,7 @@
 			<class>Rogue</class>
 			<cost>3</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>11283977362048714141</phash>
 			<phash_golden/>
 		</entry>
@@ -16,6 +17,7 @@
 			<class>Rogue</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>7</type>
 			<phash>17548414800193024238</phash>
 			<phash_golden/>
 		</entry>
@@ -25,6 +27,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>3837405339022510261</phash>
 			<phash_golden/>
 		</entry>
@@ -34,6 +37,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>3808056302327140530</phash>
 			<phash_golden/>
 		</entry>
@@ -43,6 +47,7 @@
 			<class>None</class>
 			<cost>0</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>15646950697232694879</phash>
 			<phash_golden/>
 		</entry>
@@ -52,6 +57,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>644531765710366484</phash>
 			<phash_golden/>
 		</entry>
@@ -61,6 +67,7 @@
 			<class>Shaman</class>
 			<cost>0</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>15376392666274483912</phash>
 			<phash_golden/>
 		</entry>
@@ -70,6 +77,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>1382178493503765454</phash>
 			<phash_golden/>
 		</entry>
@@ -79,6 +87,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>15671625408991121525</phash>
 			<phash_golden/>
 		</entry>
@@ -88,6 +97,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>10690899428999774925</phash>
 			<phash_golden/>
 		</entry>
@@ -97,6 +107,7 @@
 			<class>Hunter</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>566223113449381425</phash>
 			<phash_golden/>
 		</entry>
@@ -106,6 +117,7 @@
 			<class>Rogue</class>
 			<cost>2</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>15558632311962481153</phash>
 			<phash_golden/>
 		</entry>
@@ -115,6 +127,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>17330976793585178861</phash>
 			<phash_golden/>
 		</entry>
@@ -124,6 +137,7 @@
 			<class>Warrior</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>4771063707066544073</phash>
 			<phash_golden/>
 		</entry>
@@ -133,6 +147,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>16672493740472370831</phash>
 			<phash_golden/>
 		</entry>
@@ -142,6 +157,7 @@
 			<class>Priest</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>9223299518504737900</phash>
 			<phash_golden/>
 		</entry>
@@ -151,6 +167,7 @@
 			<class>Warrior</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>12942576924077132540</phash>
 			<phash_golden/>
 		</entry>
@@ -160,6 +177,7 @@
 			<class>Shaman</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>13166341059815784927</phash>
 			<phash_golden/>
 		</entry>
@@ -169,6 +187,7 @@
 			<class>Paladin</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>6837360107838787894</phash>
 			<phash_golden/>
 		</entry>
@@ -178,6 +197,7 @@
 			<class>Paladin</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>17033826152425001982</phash>
 			<phash_golden/>
 		</entry>
@@ -187,6 +207,7 @@
 			<class>Mage</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>11287927235773725048</phash>
 			<phash_golden/>
 		</entry>
@@ -196,6 +217,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>17253349165181744332</phash>
 			<phash_golden/>
 		</entry>
@@ -205,6 +227,7 @@
 			<class>Warrior</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>1635807621481542030</phash>
 			<phash_golden/>
 		</entry>
@@ -214,6 +237,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>6150604605528537867</phash>
 			<phash_golden/>
 		</entry>
@@ -223,6 +247,7 @@
 			<class>Paladin</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>488177114288693625</phash>
 			<phash_golden/>
 		</entry>
@@ -232,6 +257,7 @@
 			<class>None</class>
 			<cost>8</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>5452756507958665689</phash>
 			<phash_golden/>
 		</entry>
@@ -241,6 +267,7 @@
 			<class>Druid</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>560278943227130832</phash>
 			<phash_golden/>
 		</entry>
@@ -250,6 +277,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>15496517072659762672</phash>
 			<phash_golden/>
 		</entry>
@@ -259,6 +287,7 @@
 			<class>Mage</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>9460861271011586964</phash>
 			<phash_golden/>
 		</entry>
@@ -268,6 +297,7 @@
 			<class>Shaman</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>14693929080797033678</phash>
 			<phash_golden/>
 		</entry>
@@ -277,6 +307,7 @@
 			<class>Rogue</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>17514046941286077064</phash>
 			<phash_golden/>
 		</entry>
@@ -286,6 +317,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>10877565753935042547</phash>
 			<phash_golden/>
 		</entry>
@@ -295,6 +327,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>2438409161148419731</phash>
 			<phash_golden/>
 		</entry>
@@ -304,6 +337,7 @@
 			<class>Warlock</class>
 			<cost>6</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>4061172258028793223</phash>
 			<phash_golden/>
 		</entry>
@@ -313,6 +347,7 @@
 			<class>Paladin</class>
 			<cost>8</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>6333479565090472734</phash>
 			<phash_golden/>
 		</entry>
@@ -322,6 +357,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>782276847668419094</phash>
 			<phash_golden/>
 		</entry>
@@ -331,6 +367,7 @@
 			<class>Priest</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>1106656059573835689</phash>
 			<phash_golden/>
 		</entry>
@@ -340,6 +377,7 @@
 			<class>None</class>
 			<cost>7</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>13942118910378940590</phash>
 			<phash_golden/>
 		</entry>
@@ -349,6 +387,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>6460796354428322034</phash>
 			<phash_golden/>
 		</entry>
@@ -358,6 +397,7 @@
 			<class>Shaman</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>13599008700597865450</phash>
 			<phash_golden/>
 		</entry>
@@ -367,6 +407,7 @@
 			<class>Priest</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>9125800708162390640</phash>
 			<phash_golden/>
 		</entry>
@@ -376,6 +417,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>8607251555004888153</phash>
 			<phash_golden/>
 		</entry>
@@ -385,6 +427,7 @@
 			<class>Warrior</class>
 			<cost>7</cost>
 			<quality>4</quality>
+			<type>7</type>
 			<phash>4556729381883924537</phash>
 			<phash_golden/>
 		</entry>
@@ -394,6 +437,7 @@
 			<class>Shaman</class>
 			<cost>3</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>6515326366644956960</phash>
 			<phash_golden/>
 		</entry>
@@ -403,6 +447,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>5167954692385914358</phash>
 			<phash_golden/>
 		</entry>
@@ -412,6 +457,7 @@
 			<class>Druid</class>
 			<cost>0</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>7468329827043733144</phash>
 			<phash_golden/>
 		</entry>
@@ -421,6 +467,7 @@
 			<class>Rogue</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>4317986337696464025</phash>
 			<phash_golden/>
 		</entry>
@@ -430,6 +477,7 @@
 			<class>Priest</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>10876443948658365387</phash>
 			<phash_golden/>
 		</entry>
@@ -439,6 +487,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>8928544522421252924</phash>
 			<phash_golden/>
 		</entry>
@@ -448,6 +497,7 @@
 			<class>Priest</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>7754432119112971246</phash>
 			<phash_golden/>
 		</entry>
@@ -457,6 +507,7 @@
 			<class>Paladin</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>833858644124564521</phash>
 			<phash_golden/>
 		</entry>
@@ -466,6 +517,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>7601092436241890276</phash>
 			<phash_golden/>
 		</entry>
@@ -475,6 +527,7 @@
 			<class>Hunter</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>3355555194408125679</phash>
 			<phash_golden/>
 		</entry>
@@ -484,6 +537,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>4476515479522654849</phash>
 			<phash_golden/>
 		</entry>
@@ -493,6 +547,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>15645300075292244165</phash>
 			<phash_golden/>
 		</entry>
@@ -502,6 +557,7 @@
 			<class>Druid</class>
 			<cost>5</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>14314997693489356367</phash>
 			<phash_golden/>
 		</entry>
@@ -511,6 +567,7 @@
 			<class>Mage</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>3437615064627620702</phash>
 			<phash_golden/>
 		</entry>
@@ -520,6 +577,7 @@
 			<class>Shaman</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>1868499095484133257</phash>
 			<phash_golden/>
 		</entry>
@@ -529,6 +587,7 @@
 			<class>Paladin</class>
 			<cost>8</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>2034182735280328257</phash>
 			<phash_golden/>
 		</entry>
@@ -538,6 +597,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>1600655771105816905</phash>
 			<phash_golden/>
 		</entry>
@@ -547,6 +607,7 @@
 			<class>Rogue</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>14866007835774505185</phash>
 			<phash_golden/>
 		</entry>
@@ -556,6 +617,7 @@
 			<class>Hunter</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>8992495881430212256</phash>
 			<phash_golden/>
 		</entry>
@@ -565,6 +627,7 @@
 			<class>Warlock</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>4047684070278845660</phash>
 			<phash_golden/>
 		</entry>
@@ -574,6 +637,7 @@
 			<class>Warlock</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>18132765590160824929</phash>
 			<phash_golden/>
 		</entry>
@@ -583,6 +647,7 @@
 			<class>Warrior</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>6655761498494636811</phash>
 			<phash_golden/>
 		</entry>
@@ -592,6 +657,7 @@
 			<class>Shaman</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>9709406557288420073</phash>
 			<phash_golden/>
 		</entry>
@@ -601,6 +667,7 @@
 			<class>Rogue</class>
 			<cost>6</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>18175174538011484540</phash>
 			<phash_golden/>
 		</entry>
@@ -610,6 +677,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>10484877802410070522</phash>
 			<phash_golden/>
 		</entry>
@@ -619,6 +687,7 @@
 			<class>Rogue</class>
 			<cost>0</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>2718746691434287657</phash>
 			<phash_golden/>
 		</entry>
@@ -628,6 +697,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>5212592151257089375</phash>
 			<phash_golden/>
 		</entry>
@@ -637,6 +707,7 @@
 			<class>Rogue</class>
 			<cost>0</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>10996135313778753594</phash>
 			<phash_golden/>
 		</entry>
@@ -646,6 +717,7 @@
 			<class>Shaman</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>10851547356615995918</phash>
 			<phash_golden/>
 		</entry>
@@ -655,6 +727,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>4597837383887230524</phash>
 			<phash_golden/>
 		</entry>
@@ -664,6 +737,7 @@
 			<class>Rogue</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>7</type>
 			<phash>2593007622574437363</phash>
 			<phash_golden/>
 		</entry>
@@ -673,6 +747,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>14209335853986303181</phash>
 			<phash_golden/>
 		</entry>
@@ -682,6 +757,7 @@
 			<class>Paladin</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>4713117886611828187</phash>
 			<phash_golden/>
 		</entry>
@@ -691,6 +767,7 @@
 			<class>Mage</class>
 			<cost>6</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>6477229464543462800</phash>
 			<phash_golden/>
 		</entry>
@@ -700,6 +777,7 @@
 			<class>Hunter</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>16614947208427461089</phash>
 			<phash_golden/>
 		</entry>
@@ -709,6 +787,7 @@
 			<class>Rogue</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>15558553985519333536</phash>
 			<phash_golden/>
 		</entry>
@@ -718,6 +797,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>571209459462943030</phash>
 			<phash_golden/>
 		</entry>
@@ -727,6 +807,7 @@
 			<class>Priest</class>
 			<cost>10</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>11797867913399234278</phash>
 			<phash_golden/>
 		</entry>
@@ -736,6 +817,7 @@
 			<class>None</class>
 			<cost>7</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>17598271809618141199</phash>
 			<phash_golden/>
 		</entry>
@@ -745,6 +827,7 @@
 			<class>Mage</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>8560606823680035920</phash>
 			<phash_golden/>
 		</entry>
@@ -754,6 +837,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>2228403262071227022</phash>
 			<phash_golden/>
 		</entry>
@@ -763,6 +847,7 @@
 			<class>Paladin</class>
 			<cost>5</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>6812122170020832874</phash>
 			<phash_golden/>
 		</entry>
@@ -772,6 +857,7 @@
 			<class>Hunter</class>
 			<cost>6</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>916858227312666202</phash>
 			<phash_golden/>
 		</entry>
@@ -781,6 +867,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>4165679291858910398</phash>
 			<phash_golden/>
 		</entry>
@@ -790,6 +877,7 @@
 			<class>Paladin</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>16390999236955113013</phash>
 			<phash_golden/>
 		</entry>
@@ -799,6 +887,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>6686612541820710393</phash>
 			<phash_golden/>
 		</entry>
@@ -808,6 +897,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>14043215639067021191</phash>
 			<phash_golden/>
 		</entry>
@@ -817,6 +907,7 @@
 			<class>Warrior</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>2792124405268415820</phash>
 			<phash_golden/>
 		</entry>
@@ -826,6 +917,7 @@
 			<class>Shaman</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>12913019276973100667</phash>
 			<phash_golden/>
 		</entry>
@@ -835,6 +927,7 @@
 			<class>Druid</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>13911572838570066623</phash>
 			<phash_golden/>
 		</entry>
@@ -844,6 +937,7 @@
 			<class>Hunter</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>10874518014300220259</phash>
 			<phash_golden/>
 		</entry>
@@ -853,6 +947,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>1020370130752877818</phash>
 			<phash_golden/>
 		</entry>
@@ -862,6 +957,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>7720022522519395707</phash>
 			<phash_golden/>
 		</entry>
@@ -871,6 +967,7 @@
 			<class>Rogue</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>13106184721619727535</phash>
 			<phash_golden/>
 		</entry>
@@ -880,6 +977,7 @@
 			<class>Rogue</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>14530259806515252153</phash>
 			<phash_golden/>
 		</entry>
@@ -889,6 +987,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>10101145450489323423</phash>
 			<phash_golden/>
 		</entry>
@@ -898,6 +997,7 @@
 			<class>Warlock</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>8329928594624520825</phash>
 			<phash_golden/>
 		</entry>
@@ -907,6 +1007,7 @@
 			<class>Warrior</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>11897264187830752745</phash>
 			<phash_golden/>
 		</entry>
@@ -916,6 +1017,7 @@
 			<class>Druid</class>
 			<cost>7</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>10720910338476729499</phash>
 			<phash_golden/>
 		</entry>
@@ -925,6 +1027,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>2695029496489097072</phash>
 			<phash_golden/>
 		</entry>
@@ -934,6 +1037,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>8256053495606947809</phash>
 			<phash_golden/>
 		</entry>
@@ -943,6 +1047,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>14400125532656457012</phash>
 			<phash_golden/>
 		</entry>
@@ -952,6 +1057,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>1995891443326509123</phash>
 			<phash_golden/>
 		</entry>
@@ -961,6 +1067,7 @@
 			<class>Warlock</class>
 			<cost>8</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>11109516186037957091</phash>
 			<phash_golden/>
 		</entry>
@@ -970,6 +1077,7 @@
 			<class>None</class>
 			<cost>9</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>18121038682512312052</phash>
 			<phash_golden/>
 		</entry>
@@ -979,6 +1087,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>4781122124303689348</phash>
 			<phash_golden/>
 		</entry>
@@ -988,6 +1097,7 @@
 			<class>Priest</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>529357619319238812</phash>
 			<phash_golden/>
 		</entry>
@@ -997,6 +1107,7 @@
 			<class>Druid</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>16184875391067643635</phash>
 			<phash_golden/>
 		</entry>
@@ -1006,6 +1117,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>17364876109776574179</phash>
 			<phash_golden/>
 		</entry>
@@ -1015,6 +1127,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>5729109159259711224</phash>
 			<phash_golden/>
 		</entry>
@@ -1024,6 +1137,7 @@
 			<class>Mage</class>
 			<cost>3</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>2555387407288795435</phash>
 			<phash_golden/>
 		</entry>
@@ -1033,6 +1147,7 @@
 			<class>Warrior</class>
 			<cost>5</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>8521522236966676656</phash>
 			<phash_golden/>
 		</entry>
@@ -1042,6 +1157,7 @@
 			<class>Rogue</class>
 			<cost>6</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>4371189824216949501</phash>
 			<phash_golden/>
 		</entry>
@@ -1051,6 +1167,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>15085060165845533977</phash>
 			<phash_golden/>
 		</entry>
@@ -1060,6 +1177,7 @@
 			<class>Paladin</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>7</type>
 			<phash>3785680372497265353</phash>
 			<phash_golden/>
 		</entry>
@@ -1069,6 +1187,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>9327639591571654596</phash>
 			<phash_golden/>
 		</entry>
@@ -1078,6 +1197,7 @@
 			<class>None</class>
 			<cost>7</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>5182091735314639257</phash>
 			<phash_golden/>
 		</entry>
@@ -1087,6 +1207,7 @@
 			<class>Warrior</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>5371577443339834587</phash>
 			<phash_golden/>
 		</entry>
@@ -1096,6 +1217,7 @@
 			<class>Mage</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>17147719618170832082</phash>
 			<phash_golden/>
 		</entry>
@@ -1105,6 +1227,7 @@
 			<class>Druid</class>
 			<cost>1</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>4109327924405462168</phash>
 			<phash_golden/>
 		</entry>
@@ -1114,6 +1237,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>5664363093415716401</phash>
 			<phash_golden/>
 		</entry>
@@ -1123,6 +1247,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>8947341417214739409</phash>
 			<phash_golden/>
 		</entry>
@@ -1132,6 +1257,7 @@
 			<class>Paladin</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>16681061226229436161</phash>
 			<phash_golden/>
 		</entry>
@@ -1141,6 +1267,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>1629312216515703366</phash>
 			<phash_golden/>
 		</entry>
@@ -1150,6 +1277,7 @@
 			<class>None</class>
 			<cost>12</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>3250815774806098802</phash>
 			<phash_golden/>
 		</entry>
@@ -1159,6 +1287,7 @@
 			<class>Warrior</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>3308112972900456547</phash>
 			<phash_golden/>
 		</entry>
@@ -1168,6 +1297,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>15967089423739746874</phash>
 			<phash_golden/>
 		</entry>
@@ -1177,6 +1307,7 @@
 			<class>None</class>
 			<cost>7</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>2955441011925578700</phash>
 			<phash_golden/>
 		</entry>
@@ -1186,6 +1317,7 @@
 			<class>Warlock</class>
 			<cost>4</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>13649500896784032436</phash>
 			<phash_golden/>
 		</entry>
@@ -1195,6 +1327,7 @@
 			<class>Warrior</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>7</type>
 			<phash>7176465469886200785</phash>
 			<phash_golden/>
 		</entry>
@@ -1204,6 +1337,7 @@
 			<class>Priest</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>350361757218901851</phash>
 			<phash_golden/>
 		</entry>
@@ -1213,6 +1347,7 @@
 			<class>Hunter</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>6859204043735134798</phash>
 			<phash_golden/>
 		</entry>
@@ -1222,6 +1357,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>17030533338155010952</phash>
 			<phash_golden/>
 		</entry>
@@ -1231,6 +1367,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>6685730635490707297</phash>
 			<phash_golden/>
 		</entry>
@@ -1240,6 +1377,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>12003533982485870619</phash>
 			<phash_golden/>
 		</entry>
@@ -1249,6 +1387,7 @@
 			<class>Warrior</class>
 			<cost>8</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>4380508841139674061</phash>
 			<phash_golden/>
 		</entry>
@@ -1258,6 +1397,7 @@
 			<class>None</class>
 			<cost>10</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>10557408344453338732</phash>
 			<phash_golden/>
 		</entry>
@@ -1267,6 +1407,7 @@
 			<class>Warlock</class>
 			<cost>5</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>5186052992078624163</phash>
 			<phash_golden/>
 		</entry>
@@ -1276,6 +1417,7 @@
 			<class>Shaman</class>
 			<cost>8</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>10513849941576885399</phash>
 			<phash_golden/>
 		</entry>
@@ -1285,6 +1427,7 @@
 			<class>Warrior</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>5641167851297814838</phash>
 			<phash_golden/>
 		</entry>
@@ -1294,6 +1437,7 @@
 			<class>Druid</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>1912005541509140974</phash>
 			<phash_golden/>
 		</entry>
@@ -1303,6 +1447,7 @@
 			<class>Warlock</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>5066535537301885225</phash>
 			<phash_golden/>
 		</entry>
@@ -1312,6 +1457,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>12470226915974981739</phash>
 			<phash_golden/>
 		</entry>
@@ -1321,6 +1467,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>5905312458298760542</phash>
 			<phash_golden/>
 		</entry>
@@ -1330,6 +1477,7 @@
 			<class>Priest</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>17193516847312474046</phash>
 			<phash_golden/>
 		</entry>
@@ -1339,6 +1487,7 @@
 			<class>Mage</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>14059928020503435112</phash>
 			<phash_golden/>
 		</entry>
@@ -1348,6 +1497,7 @@
 			<class>Druid</class>
 			<cost>5</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>4254246373030160111</phash>
 			<phash_golden/>
 		</entry>
@@ -1357,6 +1507,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>10615405350377846484</phash>
 			<phash_golden/>
 		</entry>
@@ -1366,6 +1517,7 @@
 			<class>Priest</class>
 			<cost>4</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>4530210164702933794</phash>
 			<phash_golden/>
 		</entry>
@@ -1375,6 +1527,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>4798677700507786134</phash>
 			<phash_golden/>
 		</entry>
@@ -1384,6 +1537,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>15614009317364293061</phash>
 			<phash_golden/>
 		</entry>
@@ -1393,6 +1547,7 @@
 			<class>Shaman</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>17689404876468158547</phash>
 			<phash_golden/>
 		</entry>
@@ -1402,6 +1557,7 @@
 			<class>Druid</class>
 			<cost>6</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>15486012580273052442</phash>
 			<phash_golden/>
 		</entry>
@@ -1411,6 +1567,7 @@
 			<class>Priest</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>5029974495977032272</phash>
 			<phash_golden/>
 		</entry>
@@ -1420,6 +1577,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>12897381483081355208</phash>
 			<phash_golden/>
 		</entry>
@@ -1429,6 +1587,7 @@
 			<class>Priest</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>4944704637381478390</phash>
 			<phash_golden/>
 		</entry>
@@ -1438,6 +1597,7 @@
 			<class>Hunter</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>16550092907056677482</phash>
 			<phash_golden/>
 		</entry>
@@ -1447,6 +1607,7 @@
 			<class>Rogue</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>8155497597358225889</phash>
 			<phash_golden/>
 		</entry>
@@ -1456,6 +1617,7 @@
 			<class>Priest</class>
 			<cost>7</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>11277537959012103753</phash>
 			<phash_golden/>
 		</entry>
@@ -1465,6 +1627,7 @@
 			<class>Warlock</class>
 			<cost>0</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>5652631774332428574</phash>
 			<phash_golden/>
 		</entry>
@@ -1474,6 +1637,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>7621142443876696786</phash>
 			<phash_golden/>
 		</entry>
@@ -1483,6 +1647,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>2067602944824509983</phash>
 			<phash_golden/>
 		</entry>
@@ -1492,6 +1657,7 @@
 			<class>Mage</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>16530877428178685476</phash>
 			<phash_golden/>
 		</entry>
@@ -1501,6 +1667,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>7741946871761167779</phash>
 			<phash_golden/>
 		</entry>
@@ -1510,6 +1677,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>12911694016190997538</phash>
 			<phash_golden/>
 		</entry>
@@ -1519,6 +1687,7 @@
 			<class>Mage</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>14520854769702515589</phash>
 			<phash_golden/>
 		</entry>
@@ -1528,6 +1697,7 @@
 			<class>Priest</class>
 			<cost>6</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>1408227206768551957</phash>
 			<phash_golden/>
 		</entry>
@@ -1537,6 +1707,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>14099568724389684241</phash>
 			<phash_golden/>
 		</entry>
@@ -1546,6 +1717,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>17543099637914896097</phash>
 			<phash_golden/>
 		</entry>
@@ -1555,6 +1727,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>5794053884304020248</phash>
 			<phash_golden/>
 		</entry>
@@ -1564,6 +1737,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>5924950832845333423</phash>
 			<phash_golden/>
 		</entry>
@@ -1573,6 +1747,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>13623179890178634590</phash>
 			<phash_golden/>
 		</entry>
@@ -1582,6 +1757,7 @@
 			<class>Shaman</class>
 			<cost>0</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>1668971358797555094</phash>
 			<phash_golden/>
 		</entry>
@@ -1591,6 +1767,7 @@
 			<class>Rogue</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>13142369087826190871</phash>
 			<phash_golden/>
 		</entry>
@@ -1600,6 +1777,7 @@
 			<class>Warrior</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>7</type>
 			<phash>12746363398245342665</phash>
 			<phash_golden/>
 		</entry>
@@ -1609,6 +1787,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>12709002705877225295</phash>
 			<phash_golden/>
 		</entry>
@@ -1618,6 +1797,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>12230609524331080960</phash>
 			<phash_golden/>
 		</entry>
@@ -1627,6 +1807,7 @@
 			<class>None</class>
 			<cost>9</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>7597787579975321211</phash>
 			<phash_golden/>
 		</entry>
@@ -1636,6 +1817,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>5474913302623397057</phash>
 			<phash_golden/>
 		</entry>
@@ -1645,6 +1827,7 @@
 			<class>Rogue</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>12829004884257078450</phash>
 			<phash_golden/>
 		</entry>
@@ -1654,6 +1837,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>487330898810858517</phash>
 			<phash_golden/>
 		</entry>
@@ -1663,6 +1847,7 @@
 			<class>Priest</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>7755141807338305081</phash>
 			<phash_golden/>
 		</entry>
@@ -1672,6 +1857,7 @@
 			<class>Paladin</class>
 			<cost>5</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>4585634244131266743</phash>
 			<phash_golden/>
 		</entry>
@@ -1681,6 +1867,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>10096425439018669595</phash>
 			<phash_golden/>
 		</entry>
@@ -1690,6 +1877,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>1953838726627056430</phash>
 			<phash_golden/>
 		</entry>
@@ -1699,6 +1887,7 @@
 			<class>Warrior</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>5327824108227744883</phash>
 			<phash_golden/>
 		</entry>
@@ -1708,6 +1897,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>15289031323438339137</phash>
 			<phash_golden/>
 		</entry>
@@ -1717,6 +1907,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>10509129584543467156</phash>
 			<phash_golden/>
 		</entry>
@@ -1726,6 +1917,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>4021602707365523738</phash>
 			<phash_golden/>
 		</entry>
@@ -1735,6 +1927,7 @@
 			<class>Warlock</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>8829112359360729246</phash>
 			<phash_golden/>
 		</entry>
@@ -1744,6 +1937,7 @@
 			<class>Paladin</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>7375936280708870242</phash>
 			<phash_golden/>
 		</entry>
@@ -1753,6 +1947,7 @@
 			<class>Warlock</class>
 			<cost>9</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>14853204411450437417</phash>
 			<phash_golden/>
 		</entry>
@@ -1762,6 +1957,7 @@
 			<class>Rogue</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>5970399244243783056</phash>
 			<phash_golden/>
 		</entry>
@@ -1771,6 +1967,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>12055051897240236899</phash>
 			<phash_golden/>
 		</entry>
@@ -1780,6 +1977,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>11729300495302848536</phash>
 			<phash_golden/>
 		</entry>
@@ -1789,6 +1987,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>13039546052462276064</phash>
 			<phash_golden/>
 		</entry>
@@ -1798,6 +1997,7 @@
 			<class>Druid</class>
 			<cost>9</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>16739859601608556010</phash>
 			<phash_golden/>
 		</entry>
@@ -1807,6 +2007,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>15225406886504547611</phash>
 			<phash_golden/>
 		</entry>
@@ -1816,6 +2017,7 @@
 			<class>Hunter</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>1653909688539293100</phash>
 			<phash_golden/>
 		</entry>
@@ -1825,6 +2027,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>13751901230542622351</phash>
 			<phash_golden/>
 		</entry>
@@ -1834,6 +2037,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>10945545949376771067</phash>
 			<phash_golden/>
 		</entry>
@@ -1843,6 +2047,7 @@
 			<class>Druid</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>10567897677313088619</phash>
 			<phash_golden/>
 		</entry>
@@ -1852,6 +2057,7 @@
 			<class>Rogue</class>
 			<cost>7</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>3003291727324984784</phash>
 			<phash_golden/>
 		</entry>
@@ -1861,6 +2067,7 @@
 			<class>Rogue</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>2696544088873530985</phash>
 			<phash_golden/>
 		</entry>
@@ -1870,6 +2077,7 @@
 			<class>Druid</class>
 			<cost>5</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>15095851980869731087</phash>
 			<phash_golden/>
 		</entry>
@@ -1879,6 +2087,7 @@
 			<class>Priest</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>11296302098326148052</phash>
 			<phash_golden/>
 		</entry>
@@ -1888,6 +2097,7 @@
 			<class>Hunter</class>
 			<cost>1</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>12992468480062199401</phash>
 			<phash_golden/>
 		</entry>
@@ -1897,6 +2107,7 @@
 			<class>Shaman</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>8054578780774887491</phash>
 			<phash_golden/>
 		</entry>
@@ -1906,6 +2117,7 @@
 			<class>Hunter</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>2519002772014683513</phash>
 			<phash_golden/>
 		</entry>
@@ -1915,6 +2127,7 @@
 			<class>Mage</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>12079555777434834008</phash>
 			<phash_golden/>
 		</entry>
@@ -1924,6 +2137,7 @@
 			<class>Warlock</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>5519504154586029354</phash>
 			<phash_golden/>
 		</entry>
@@ -1933,6 +2147,7 @@
 			<class>Rogue</class>
 			<cost>0</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>16481020456328337190</phash>
 			<phash_golden/>
 		</entry>
@@ -1942,6 +2157,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>7223304062179376242</phash>
 			<phash_golden/>
 		</entry>
@@ -1951,6 +2167,7 @@
 			<class>Warrior</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>5425459547611786733</phash>
 			<phash_golden/>
 		</entry>
@@ -1960,6 +2177,7 @@
 			<class>Hunter</class>
 			<cost>1</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>12022401983334570279</phash>
 			<phash_golden/>
 		</entry>
@@ -1969,6 +2187,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>10928382313480807763</phash>
 			<phash_golden/>
 		</entry>
@@ -1978,6 +2197,7 @@
 			<class>Paladin</class>
 			<cost>7</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>2052476059169866725</phash>
 			<phash_golden/>
 		</entry>
@@ -1987,6 +2207,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>14405404859485694612</phash>
 			<phash_golden/>
 		</entry>
@@ -1996,6 +2217,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>14170852198340381313</phash>
 			<phash_golden/>
 		</entry>
@@ -2005,6 +2227,7 @@
 			<class>Shaman</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>12931791189711140073</phash>
 			<phash_golden/>
 		</entry>
@@ -2014,6 +2237,7 @@
 			<class>Druid</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>3197228810372346865</phash>
 			<phash_golden/>
 		</entry>
@@ -2023,6 +2247,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>5809324398229301508</phash>
 			<phash_golden/>
 		</entry>
@@ -2032,6 +2257,7 @@
 			<class>Warlock</class>
 			<cost>0</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>7037022315316307963</phash>
 			<phash_golden/>
 		</entry>
@@ -2041,6 +2267,7 @@
 			<class>Warlock</class>
 			<cost>5</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>18194737535704359768</phash>
 			<phash_golden/>
 		</entry>
@@ -2050,6 +2277,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>3731044752860427347</phash>
 			<phash_golden/>
 		</entry>
@@ -2059,6 +2287,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>6988359793891367910</phash>
 			<phash_golden/>
 		</entry>
@@ -2068,6 +2297,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>7904599263518956066</phash>
 			<phash_golden/>
 		</entry>
@@ -2077,6 +2307,7 @@
 			<class>Rogue</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>14908066615024314156</phash>
 			<phash_golden/>
 		</entry>
@@ -2086,6 +2317,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>6512297401283436756</phash>
 			<phash_golden/>
 		</entry>
@@ -2095,6 +2327,7 @@
 			<class>Warlock</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>7562979212089799161</phash>
 			<phash_golden/>
 		</entry>
@@ -2104,6 +2337,7 @@
 			<class>Hunter</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>4844632359706066496</phash>
 			<phash_golden/>
 		</entry>
@@ -2113,6 +2347,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>5954361012623080342</phash>
 			<phash_golden/>
 		</entry>
@@ -2122,6 +2357,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>5598725227946535801</phash>
 			<phash_golden/>
 		</entry>
@@ -2131,6 +2367,7 @@
 			<class>Warrior</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>9379739951528113633</phash>
 			<phash_golden/>
 		</entry>
@@ -2140,6 +2377,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>3289672487617524805</phash>
 			<phash_golden/>
 		</entry>
@@ -2149,6 +2387,7 @@
 			<class>Druid</class>
 			<cost>6</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>2068252034324028969</phash>
 			<phash_golden/>
 		</entry>
@@ -2158,6 +2397,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>16876051763066313037</phash>
 			<phash_golden/>
 		</entry>
@@ -2167,6 +2407,7 @@
 			<class>None</class>
 			<cost>8</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>9544187104695893108</phash>
 			<phash_golden/>
 		</entry>
@@ -2176,6 +2417,7 @@
 			<class>Warrior</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>3714527736797195161</phash>
 			<phash_golden/>
 		</entry>
@@ -2185,6 +2427,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>8560541985871535655</phash>
 			<phash_golden/>
 		</entry>
@@ -2194,6 +2437,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>8384680295213471765</phash>
 			<phash_golden/>
 		</entry>
@@ -2203,6 +2447,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>3277853512478565745</phash>
 			<phash_golden/>
 		</entry>
@@ -2212,6 +2457,7 @@
 			<class>Priest</class>
 			<cost>0</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>5897837110575951456</phash>
 			<phash_golden/>
 		</entry>
@@ -2221,6 +2467,7 @@
 			<class>Hunter</class>
 			<cost>2</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>16657256505845289646</phash>
 			<phash_golden/>
 		</entry>
@@ -2230,6 +2477,7 @@
 			<class>Priest</class>
 			<cost>6</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>16241056751693574857</phash>
 			<phash_golden/>
 		</entry>
@@ -2239,6 +2487,7 @@
 			<class>Warrior</class>
 			<cost>1</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>7078963518197982455</phash>
 			<phash_golden/>
 		</entry>
@@ -2248,6 +2497,7 @@
 			<class>Warrior</class>
 			<cost>1</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>3641974210395405875</phash>
 			<phash_golden/>
 		</entry>
@@ -2257,6 +2507,7 @@
 			<class>Shaman</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>15396536223808342264</phash>
 			<phash_golden/>
 		</entry>
@@ -2266,6 +2517,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>17145752859822068110</phash>
 			<phash_golden/>
 		</entry>
@@ -2275,6 +2527,7 @@
 			<class>Hunter</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>13221924683429975326</phash>
 			<phash_golden/>
 		</entry>
@@ -2284,6 +2537,7 @@
 			<class>Mage</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>9671049488846137115</phash>
 			<phash_golden/>
 		</entry>
@@ -2293,6 +2547,7 @@
 			<class>Hunter</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>7</type>
 			<phash>6527236798999744099</phash>
 			<phash_golden/>
 		</entry>
@@ -2302,6 +2557,7 @@
 			<class>Mage</class>
 			<cost>7</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>4178790545464170272</phash>
 			<phash_golden/>
 		</entry>
@@ -2311,6 +2567,7 @@
 			<class>Hunter</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>749901219383705651</phash>
 			<phash_golden/>
 		</entry>
@@ -2320,6 +2577,7 @@
 			<class>Shaman</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>4140724769699063004</phash>
 			<phash_golden/>
 		</entry>
@@ -2329,6 +2587,7 @@
 			<class>Warlock</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>9635350156161572424</phash>
 			<phash_golden/>
 		</entry>
@@ -2338,6 +2597,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>16705810923562044189</phash>
 			<phash_golden/>
 		</entry>
@@ -2347,6 +2607,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>2824801855869226392</phash>
 			<phash_golden/>
 		</entry>
@@ -2356,6 +2617,7 @@
 			<class>Priest</class>
 			<cost>3</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>2696007248369686777</phash>
 			<phash_golden/>
 		</entry>
@@ -2365,6 +2627,7 @@
 			<class>Mage</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>6806523820961805652</phash>
 			<phash_golden/>
 		</entry>
@@ -2374,6 +2637,7 @@
 			<class>Mage</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>10334695525220688873</phash>
 			<phash_golden/>
 		</entry>
@@ -2383,6 +2647,7 @@
 			<class>Mage</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>14802019911221340988</phash>
 			<phash_golden/>
 		</entry>
@@ -2392,6 +2657,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>3980560574657624178</phash>
 			<phash_golden/>
 		</entry>
@@ -2401,6 +2667,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>15125620166990332882</phash>
 			<phash_golden/>
 		</entry>
@@ -2410,6 +2677,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>15177937358788597864</phash>
 			<phash_golden/>
 		</entry>
@@ -2419,6 +2687,7 @@
 			<class>Warrior</class>
 			<cost>0</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>4934734108990956693</phash>
 			<phash_golden/>
 		</entry>
@@ -2428,6 +2697,7 @@
 			<class>Warrior</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>13568012467513892580</phash>
 			<phash_golden/>
 		</entry>
@@ -2437,6 +2707,7 @@
 			<class>Shaman</class>
 			<cost>5</cost>
 			<quality>4</quality>
+			<type>7</type>
 			<phash>6544625120255309725</phash>
 			<phash_golden/>
 		</entry>
@@ -2446,6 +2717,7 @@
 			<class>Hunter</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>6008464657382587226</phash>
 			<phash_golden/>
 		</entry>
@@ -2455,6 +2727,7 @@
 			<class>Mage</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>16824674936167158291</phash>
 			<phash_golden/>
 		</entry>
@@ -2464,6 +2737,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>4501745633556259152</phash>
 			<phash_golden/>
 		</entry>
@@ -2473,6 +2747,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>10156186987252396717</phash>
 			<phash_golden/>
 		</entry>
@@ -2482,6 +2757,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>9766299675678651445</phash>
 			<phash_golden/>
 		</entry>
@@ -2491,6 +2767,7 @@
 			<class>Warlock</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>647505626760078983</phash>
 			<phash_golden/>
 		</entry>
@@ -2500,6 +2777,7 @@
 			<class>Mage</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>3835294925793631129</phash>
 			<phash_golden/>
 		</entry>
@@ -2509,6 +2787,7 @@
 			<class>Warlock</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>17967446831328604841</phash>
 			<phash_golden/>
 		</entry>
@@ -2518,6 +2797,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>12861965478466574906</phash>
 			<phash_golden/>
 		</entry>
@@ -2527,6 +2807,7 @@
 			<class>Hunter</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>7556968785474353765</phash>
 			<phash_golden/>
 		</entry>
@@ -2536,6 +2817,7 @@
 			<class>Druid</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>16612888810366387620</phash>
 			<phash_golden/>
 		</entry>
@@ -2545,6 +2827,7 @@
 			<class>Hunter</class>
 			<cost>5</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>6584998956204008588</phash>
 			<phash_golden/>
 		</entry>
@@ -2554,6 +2837,7 @@
 			<class>Paladin</class>
 			<cost>6</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>9399781905788521876</phash>
 			<phash_golden/>
 		</entry>
@@ -2563,6 +2847,7 @@
 			<class>Paladin</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>9511976170578895850</phash>
 			<phash_golden/>
 		</entry>
@@ -2572,6 +2857,7 @@
 			<class>Warlock</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>6590620449964838354</phash>
 			<phash_golden/>
 		</entry>
@@ -2581,6 +2867,7 @@
 			<class>Priest</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>7515783718144172319</phash>
 			<phash_golden/>
 		</entry>
@@ -2590,6 +2877,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>15195724964867381582</phash>
 			<phash_golden/>
 		</entry>
@@ -2599,6 +2887,7 @@
 			<class>Shaman</class>
 			<cost>6</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>2221888713296495216</phash>
 			<phash_golden/>
 		</entry>
@@ -2608,6 +2897,7 @@
 			<class>Hunter</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>8558861407774513660</phash>
 			<phash_golden/>
 		</entry>
@@ -2617,6 +2907,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>18091685609485485283</phash>
 			<phash_golden/>
 		</entry>
@@ -2626,6 +2917,7 @@
 			<class>Druid</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>426917040287747430</phash>
 			<phash_golden/>
 		</entry>
@@ -2635,6 +2927,7 @@
 			<class>Rogue</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>2939635492797584529</phash>
 			<phash_golden/>
 		</entry>
@@ -2644,6 +2937,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>12731831546909789146</phash>
 			<phash_golden/>
 		</entry>
@@ -2653,6 +2947,7 @@
 			<class>Hunter</class>
 			<cost>9</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>15364532847345551931</phash>
 			<phash_golden/>
 		</entry>
@@ -2662,6 +2957,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>16267257411089713751</phash>
 			<phash_golden/>
 		</entry>
@@ -2671,6 +2967,7 @@
 			<class>Hunter</class>
 			<cost>0</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>12293116405982386148</phash>
 			<phash_golden/>
 		</entry>
@@ -2680,6 +2977,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>12949358266991792963</phash>
 			<phash_golden/>
 		</entry>
@@ -2689,6 +2987,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>16403067585473942215</phash>
 			<phash_golden/>
 		</entry>
@@ -2698,6 +2997,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>8947625135741811276</phash>
 			<phash_golden/>
 		</entry>
@@ -2707,6 +3007,7 @@
 			<class>None</class>
 			<cost>20</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>6144314972178547119</phash>
 			<phash_golden/>
 		</entry>
@@ -2716,6 +3017,7 @@
 			<class>Warlock</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>7072373368257626338</phash>
 			<phash_golden/>
 		</entry>
@@ -2725,6 +3027,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>14760667719203529546</phash>
 			<phash_golden/>
 		</entry>
@@ -2734,6 +3037,7 @@
 			<class>Mage</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>15275651529103392762</phash>
 			<phash_golden/>
 		</entry>
@@ -2743,6 +3047,7 @@
 			<class>Druid</class>
 			<cost>7</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>270201213235991113</phash>
 			<phash_golden/>
 		</entry>
@@ -2752,6 +3057,7 @@
 			<class>None</class>
 			<cost>7</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>2753096672365900147</phash>
 			<phash_golden/>
 		</entry>
@@ -2761,6 +3067,7 @@
 			<class>Druid</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>4219992208913826686</phash>
 			<phash_golden/>
 		</entry>
@@ -2770,6 +3077,7 @@
 			<class>Shaman</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>15616604182189741930</phash>
 			<phash_golden/>
 		</entry>
@@ -2779,6 +3087,7 @@
 			<class>None</class>
 			<cost>9</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>13429650659887663371</phash>
 			<phash_golden/>
 		</entry>
@@ -2788,6 +3097,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>13395418782103128471</phash>
 			<phash_golden/>
 		</entry>
@@ -2797,6 +3107,7 @@
 			<class>Warlock</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>8440540039466965023</phash>
 			<phash_golden/>
 		</entry>
@@ -2806,6 +3117,7 @@
 			<class>Mage</class>
 			<cost>10</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>14770067458624685838</phash>
 			<phash_golden/>
 		</entry>
@@ -2815,6 +3127,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>8312744299665859732</phash>
 			<phash_golden/>
 		</entry>
@@ -2824,6 +3137,7 @@
 			<class>Mage</class>
 			<cost>3</cost>
 			<quality>4</quality>
+			<type>5</type>
 			<phash>17228867579510883362</phash>
 			<phash_golden/>
 		</entry>
@@ -2833,6 +3147,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>3684283675391065638</phash>
 			<phash_golden/>
 		</entry>
@@ -2842,6 +3157,7 @@
 			<class>Rogue</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>14811167345952854444</phash>
 			<phash_golden/>
 		</entry>
@@ -2851,6 +3167,7 @@
 			<class>Warlock</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>14143475640194913258</phash>
 			<phash_golden/>
 		</entry>
@@ -2860,6 +3177,7 @@
 			<class>Mage</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>17445967212153380217</phash>
 			<phash_golden/>
 		</entry>
@@ -2869,6 +3187,7 @@
 			<class>Priest</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>15142381707456402584</phash>
 			<phash_golden/>
 		</entry>
@@ -2878,6 +3197,7 @@
 			<class>Paladin</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>15769943186928132366</phash>
 			<phash_golden/>
 		</entry>
@@ -2887,6 +3207,7 @@
 			<class>Warlock</class>
 			<cost>6</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>1360879481946487004</phash>
 			<phash_golden/>
 		</entry>
@@ -2896,6 +3217,7 @@
 			<class>Druid</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>10875402246580332826</phash>
 			<phash_golden/>
 		</entry>
@@ -2905,6 +3227,7 @@
 			<class>Druid</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>15667292111776334273</phash>
 			<phash_golden/>
 		</entry>
@@ -2914,6 +3237,7 @@
 			<class>None</class>
 			<cost>1</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>14977016523046736440</phash>
 			<phash_golden/>
 		</entry>
@@ -2923,6 +3247,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>17589196465465116307</phash>
 			<phash_golden/>
 		</entry>
@@ -2932,6 +3257,7 @@
 			<class>Shaman</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>4525276635761675384</phash>
 			<phash_golden/>
 		</entry>
@@ -2941,6 +3267,7 @@
 			<class>Paladin</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>6029042223502028316</phash>
 			<phash_golden/>
 		</entry>
@@ -2950,6 +3277,7 @@
 			<class>Mage</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>1649668057201494588</phash>
 			<phash_golden/>
 		</entry>
@@ -2959,6 +3287,7 @@
 			<class>None</class>
 			<cost>9</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>16197634862632988811</phash>
 			<phash_golden/>
 		</entry>
@@ -2968,6 +3297,7 @@
 			<class>Priest</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>6020752503545230319</phash>
 			<phash_golden/>
 		</entry>
@@ -2977,6 +3307,7 @@
 			<class>Warrior</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>10487963085650072334</phash>
 			<phash_golden/>
 		</entry>
@@ -2986,6 +3317,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>4492940798108511649</phash>
 			<phash_golden/>
 		</entry>
@@ -2995,6 +3327,7 @@
 			<class>Hunter</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>16434245541720542739</phash>
 			<phash_golden/>
 		</entry>
@@ -3004,6 +3337,7 @@
 			<class>Warlock</class>
 			<cost>4</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>9362186538322712307</phash>
 			<phash_golden/>
 		</entry>
@@ -3013,6 +3347,7 @@
 			<class>Paladin</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>13660352441217360532</phash>
 			<phash_golden/>
 		</entry>
@@ -3022,6 +3357,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>12259460216071251856</phash>
 			<phash_golden/>
 		</entry>
@@ -3031,6 +3367,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>16848757970445390437</phash>
 			<phash_golden/>
 		</entry>
@@ -3040,6 +3377,7 @@
 			<class>Paladin</class>
 			<cost>4</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>17337426062867566573</phash>
 			<phash_golden/>
 		</entry>
@@ -3049,6 +3387,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>12944843103274045966</phash>
 			<phash_golden/>
 		</entry>
@@ -3058,6 +3397,7 @@
 			<class>Mage</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>2157437318575546704</phash>
 			<phash_golden/>
 		</entry>
@@ -3067,6 +3407,7 @@
 			<class>Paladin</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>7</type>
 			<phash>871895002282707254</phash>
 			<phash_golden/>
 		</entry>
@@ -3076,6 +3417,7 @@
 			<class>Shaman</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>17578398095864209056</phash>
 			<phash_golden/>
 		</entry>
@@ -3085,6 +3427,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>13927853904921793207</phash>
 			<phash_golden/>
 		</entry>
@@ -3094,6 +3437,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>947514579530064594</phash>
 			<phash_golden/>
 		</entry>
@@ -3103,6 +3447,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>4755364041339039809</phash>
 			<phash_golden/>
 		</entry>
@@ -3112,6 +3457,7 @@
 			<class>None</class>
 			<cost>4</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>13305309683495638284</phash>
 			<phash_golden/>
 		</entry>
@@ -3121,6 +3467,7 @@
 			<class>Druid</class>
 			<cost>3</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>1975768358397454086</phash>
 			<phash_golden/>
 		</entry>
@@ -3130,6 +3477,7 @@
 			<class>Priest</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>1065904129203513015</phash>
 			<phash_golden/>
 		</entry>
@@ -3139,6 +3487,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>14251510681331451529</phash>
 			<phash_golden/>
 		</entry>
@@ -3148,6 +3497,7 @@
 			<class>Rogue</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>12865690634334080616</phash>
 			<phash_golden/>
 		</entry>
@@ -3157,6 +3507,7 @@
 			<class>Paladin</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>767674973710893837</phash>
 			<phash_golden/>
 		</entry>
@@ -3166,6 +3517,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>17357721086525288215</phash>
 			<phash_golden/>
 		</entry>
@@ -3175,6 +3527,7 @@
 			<class>Warrior</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>13432767981893193921</phash>
 			<phash_golden/>
 		</entry>
@@ -3184,6 +3537,7 @@
 			<class>Paladin</class>
 			<cost>3</cost>
 			<quality>4</quality>
+			<type>7</type>
 			<phash>10114075091724719593</phash>
 			<phash_golden/>
 		</entry>
@@ -3193,6 +3547,7 @@
 			<class>Warrior</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>16973950873734256688</phash>
 			<phash_golden/>
 		</entry>
@@ -3202,6 +3557,7 @@
 			<class>None</class>
 			<cost>6</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>11600078154874649904</phash>
 			<phash_golden/>
 		</entry>
@@ -3211,6 +3567,7 @@
 			<class>None</class>
 			<cost>9</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>17469922289772188774</phash>
 			<phash_golden/>
 		</entry>
@@ -3220,6 +3577,7 @@
 			<class>Priest</class>
 			<cost>0</cost>
 			<quality>2</quality>
+			<type>5</type>
 			<phash>9689472179757953275</phash>
 			<phash_golden/>
 		</entry>
@@ -3229,6 +3587,7 @@
 			<class>Warlock</class>
 			<cost>1</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>15162411935795511763</phash>
 			<phash_golden/>
 		</entry>
@@ -3238,6 +3597,7 @@
 			<class>Mage</class>
 			<cost>7</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>16298203185738012409</phash>
 			<phash_golden/>
 		</entry>
@@ -3247,6 +3607,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>14572788461000671212</phash>
 			<phash_golden/>
 		</entry>
@@ -3256,6 +3617,7 @@
 			<class>Shaman</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>7</type>
 			<phash>11936224275506419214</phash>
 			<phash_golden/>
 		</entry>
@@ -3265,6 +3627,7 @@
 			<class>Priest</class>
 			<cost>6</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>1124878877394585478</phash>
 			<phash_golden/>
 		</entry>
@@ -3274,6 +3637,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>7832978468433108953</phash>
 			<phash_golden/>
 		</entry>
@@ -3283,6 +3647,7 @@
 			<class>Druid</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>6253288409892376758</phash>
 			<phash_golden/>
 		</entry>
@@ -3292,6 +3657,7 @@
 			<class>Druid</class>
 			<cost>0</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>8673339429940191925</phash>
 			<phash_golden/>
 		</entry>
@@ -3301,6 +3667,7 @@
 			<class>Shaman</class>
 			<cost>5</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>6461484109258334591</phash>
 			<phash_golden/>
 		</entry>
@@ -3310,6 +3677,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>4</quality>
+			<type>4</type>
 			<phash>12045866451104673804</phash>
 			<phash_golden/>
 		</entry>
@@ -3319,6 +3687,7 @@
 			<class>Paladin</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>5174199461480560803</phash>
 			<phash_golden/>
 		</entry>
@@ -3328,6 +3697,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>15405640942082048749</phash>
 			<phash_golden/>
 		</entry>
@@ -3337,6 +3707,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>3</quality>
+			<type>4</type>
 			<phash>3690108777956938143</phash>
 			<phash_golden/>
 		</entry>
@@ -3346,6 +3717,7 @@
 			<class>Shaman</class>
 			<cost>1</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>3772446356590441798</phash>
 			<phash_golden/>
 		</entry>
@@ -3355,6 +3727,7 @@
 			<class>Paladin</class>
 			<cost>2</cost>
 			<quality>1</quality>
+			<type>5</type>
 			<phash>10040262219258205294</phash>
 			<phash_golden/>
 		</entry>
@@ -3364,6 +3737,7 @@
 			<class>Shaman</class>
 			<cost>3</cost>
 			<quality>3</quality>
+			<type>5</type>
 			<phash>7699543898437038472</phash>
 			<phash_golden/>
 		</entry>
@@ -3373,6 +3747,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>69239315543519332</phash>
 			<phash_golden/>
 		</entry>
@@ -3382,6 +3757,7 @@
 			<class>None</class>
 			<cost>2</cost>
 			<quality>2</quality>
+			<type>4</type>
 			<phash>14729504658304610460</phash>
 			<phash_golden/>
 		</entry>
@@ -3391,6 +3767,7 @@
 			<class>Druid</class>
 			<cost>8</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>6977226991328246660</phash>
 			<phash_golden/>
 		</entry>
@@ -3400,6 +3777,7 @@
 			<class>None</class>
 			<cost>10</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>6657342328178276559</phash>
 			<phash_golden/>
 		</entry>
@@ -3409,6 +3787,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>6770627268460267894</phash>
 			<phash_golden/>
 		</entry>
@@ -3418,6 +3797,7 @@
 			<class>None</class>
 			<cost>3</cost>
 			<quality>1</quality>
+			<type>4</type>
 			<phash>7757334954199331124</phash>
 			<phash_golden/>
 		</entry>
@@ -3427,6 +3807,7 @@
 			<class>Hunter</class>
 			<cost>7</cost>
 			<quality>4</quality>
+			<type>7</type>
 			<phash>14714197701030295402</phash>
 			<phash_golden/>
 		</entry>
@@ -3436,6 +3817,7 @@
 			<class>None</class>
 			<cost>5</cost>
 			<quality>5</quality>
+			<type>4</type>
 			<phash>18260758076762935969</phash>
 			<phash_golden/>
 		</entry>
@@ -3444,47 +3826,47 @@
 		<entry>
 			<ID>000</ID>
 			<name>Rogue</name>
-			<phash>8842104209996382853</phash>
+			<phash>11283977362048714141</phash>
 		</entry>
 		<entry>
 			<ID>001</ID>
 			<name>Priest</name>
-			<phash>13099174485002046004</phash>
+			<phash>17548414800193024238</phash>
 		</entry>
 		<entry>
 			<ID>002</ID>
 			<name>Paladin</name>
-			<phash>10783273458169425378</phash>
+			<phash>3837405339022510261</phash>
 		</entry>
 		<entry>
 			<ID>003</ID>
 			<name>Shaman</name>
-			<phash>11457697254787821665</phash>
+			<phash>3808056302327140530</phash>
 		</entry>
 		<entry>
 			<ID>004</ID>
 			<name>Mage</name>
-			<phash>3299112537646393733</phash>
+			<phash>15646950697232694879</phash>
 		</entry>
 		<entry>
 			<ID>005</ID>
 			<name>Hunter</name>
-			<phash>15359156477766196682</phash>
+			<phash>644531765710366484</phash>
 		</entry>
 		<entry>
 			<ID>006</ID>
 			<name>Warlock</name>
-			<phash>2930663635059758683</phash>
+			<phash>15376392666274483912</phash>
 		</entry>
 		<entry>
 			<ID>007</ID>
 			<name>Druid</name>
-			<phash>5070558645875687171</phash>
+			<phash>1382178493503765454</phash>
 		</entry>
 		<entry>
 			<ID>008</ID>
 			<name>Warrior</name>
-			<phash>11068045630716829306</phash>
+			<phash>15671625408991121525</phash>
 		</entry>
 	</heroes>
 </hs_data>

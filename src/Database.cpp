@@ -9,7 +9,6 @@ Database::Database(const std::string& path) {
 	this->path = path;
 	std::ifstream dataFile(path);
 	boost::property_tree::read_xml(dataFile, data, boost::property_tree::xml_parser::trim_whitespace);
-
 	size_t cardCount = data.get_child("hs_data.cards").size();
 	size_t heroCount = data.get_child("hs_data.heroes").size();
 	HS_INFO << "Database contains [" << cardCount << "] cards and [" << heroCount << "] heroes" << std::endl;
@@ -24,7 +23,8 @@ Database::Database(const std::string& path) {
             c.heroClass = v.second.get<std::string>("class");
             c.cost = v.second.get<int>("cost");
             c.quality = v.second.get<int>("quality");
-            c.phash = v.second.get<ulong64>("phash");
+            c.type = v.second.get<int>("type");
+            c.phash = v.second.get<ulong64>("phash", 0);
             cards[c.id] = c;
     	}
     }
@@ -34,13 +34,14 @@ Database::Database(const std::string& path) {
     		Hero h;
     		h.id = v.second.get<int>("ID");
             h.name = v.second.get<std::string>("name");
-            h.phash = v.second.get<ulong64>("phash");
+            h.phash = v.second.get<ulong64>("phash", 0);
             heroes[h.id] = h;
     	}
     }
 }
 
 void Database::save() {
+	HS_INFO << "Saving database" << std::endl;
     for (auto& v : data.get_child("hs_data.cards")) {
     	if (v.first == "entry") {
             int id = v.second.get<int>("ID");
@@ -57,6 +58,10 @@ void Database::save() {
 
     boost::property_tree::xml_writer_settings<char> settings('\t', 1);
     write_xml(path, data, std::locale(), settings);
+}
+
+bool Database::hasMissingData() {
+	return cards.size() > 0 && cards[0].phash == 0;
 }
 
 }

@@ -38,13 +38,14 @@ bot::bot()
 
 	m_owners.push_back("zeforte");
 
-	connect();
+//	connect();
 }
 
 void bot::connect() {
 	auto cfg = Config::getConfig();
 	m_conn.connect(cfg.get<std::string>("config.twitch_bot.server"), cfg.get<std::string>("config.twitch_bot.server_port"));
 
+	if (!m_conn.alive()) return;
 	pass(cfg.get<std::string>("config.twitch_bot.bot_pass"));
 	nick(cfg.get<std::string>("config.twitch_bot.bot_nick"));
 

@@ -33,11 +33,11 @@ void connection::connect()
 		}
 	}
 	
-	if (error) {
-		throw std::runtime_error(error.message());
+	if (alive()) {
+		HS_INFO << "Connected!" << std::endl;
+	} else {
+		HS_WARNING << "Could not connect to " + m_addr + ":" + m_port << std::endl;
 	}
-	
-	HS_INFO << "Connected!" << std::endl;
 }
 
 void connection::run()
