@@ -27,7 +27,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	db = DatabasePtr(new Database(Config::getConfig().get<std::string>("config.paths.recognition_data_path")));
 	param_strawpolling = true;
 	param_backupscoring = true;
-	param_drawhandling = true;
+	param_drawhandling = false;
 	param_debug_level = 0;
 	passedFrames = PASSED_FRAMES_THRESHOLD;
 	currentCard.second = -1;
@@ -40,7 +40,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	currentDeck.state = 0;
 	currentGame.state = 0;
 	currentDraw.state = 0;
-	currentDraw.buildFromDraws = true;
+	currentDraw.buildFromDraws = false;
 	enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
 	enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
 
@@ -148,9 +148,8 @@ void StreamManager::wait() {
 
 void StreamManager::run() {
 	cv::Mat image;
-//	stream->setStreamIndex(3);
-//	stream->setFramePos(29830);
-//	stream->setFramePos(10000);
+//	stream->setStreamIndex(0);
+//	stream->setFramePos(33415);
 
 	HS_INFO << "Started thread" << std::endl;
 
@@ -267,6 +266,7 @@ void StreamManager::run() {
 				disable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
 				currentGame.player = db->heroes[result.results[0]].name;
 				currentGame.opponent = db->heroes[result.results[1]].name;
+				HS_INFO << "New Game: " << currentGame.player << " vs. " << currentGame.opponent << std::endl;
 			}
 			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_COIN)) {
 				enable(currentGame.state, RECOGNIZER_GAME_END);

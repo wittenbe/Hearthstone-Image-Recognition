@@ -132,7 +132,7 @@ bool Deck::draw(const Card& c, bool addIfNotPresent) {
 			entry->remaining--;
 			addedCard = false;
 		} else {
-			HS_WARNING << "Draw Request for \"" << c.name << "\", but amount is at 0!" << std::endl;
+//			HS_WARNING << "Draw Request for \"" << c.name << "\", but amount is at 0!" << std::endl;
 			if (addIfNotPresent && hasCardSpace()) {
 				removeUnknown(1);
 				entry->amount++;
@@ -140,7 +140,7 @@ bool Deck::draw(const Card& c, bool addIfNotPresent) {
 			}
 		}
 	} else {
-		HS_WARNING << "Draw Request for \"" << c.name << "\", but card not in deck!" << std::endl;
+//		HS_WARNING << "Draw Request for \"" << c.name << "\", but card not in deck!" << std::endl;
 		if (addIfNotPresent && hasCardSpace()) {
 			removeUnknown(1);
 			cards.insert(DeckEntry(c, 1, 0));

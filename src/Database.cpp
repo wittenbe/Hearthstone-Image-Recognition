@@ -52,7 +52,7 @@ void Database::save() {
     for (auto& v : data.get_child("hs_data.heroes")) {
     	if (v.first == "entry") {
             int id = v.second.get<int>("ID");
-            v.second.put("phash", cards[id].phash);
+            v.second.put("phash", heroes[id].phash);
     	}
     }
 
@@ -61,7 +61,7 @@ void Database::save() {
 }
 
 bool Database::hasMissingData() {
-	return cards.size() > 0 && cards[0].phash == 0;
+	return (cards.size() > 0 && cards[0].phash == 0) || (heroes.size() > 0 && heroes[0].phash == 0);
 }
 
 }

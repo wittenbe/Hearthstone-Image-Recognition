@@ -3826,47 +3826,47 @@
 		<entry>
 			<ID>000</ID>
 			<name>Rogue</name>
-			<phash>11283977362048714141</phash>
+			<phash>8842104209996382853</phash>
 		</entry>
 		<entry>
 			<ID>001</ID>
 			<name>Priest</name>
-			<phash>17548414800193024238</phash>
+			<phash>13099174485002046004</phash>
 		</entry>
 		<entry>
 			<ID>002</ID>
 			<name>Paladin</name>
-			<phash>3837405339022510261</phash>
+			<phash>10783273458169425378</phash>
 		</entry>
 		<entry>
 			<ID>003</ID>
 			<name>Shaman</name>
-			<phash>3808056302327140530</phash>
+			<phash>11457697254787821665</phash>
 		</entry>
 		<entry>
 			<ID>004</ID>
 			<name>Mage</name>
-			<phash>15646950697232694879</phash>
+			<phash>3299112537646393733</phash>
 		</entry>
 		<entry>
 			<ID>005</ID>
 			<name>Hunter</name>
-			<phash>644531765710366484</phash>
+			<phash>15359156477766196682</phash>
 		</entry>
 		<entry>
 			<ID>006</ID>
 			<name>Warlock</name>
-			<phash>15376392666274483912</phash>
+			<phash>2930663635059758683</phash>
 		</entry>
 		<entry>
 			<ID>007</ID>
 			<name>Druid</name>
-			<phash>1382178493503765454</phash>
+			<phash>5070558645875687171</phash>
 		</entry>
 		<entry>
 			<ID>008</ID>
 			<name>Warrior</name>
-			<phash>15671625408991121525</phash>
+			<phash>11068045630716829306</phash>
 		</entry>
 	</heroes>
 </hs_data>
