@@ -71,27 +71,6 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 		}
 	}
 	HS_INFO << "Using " << numThreads << " threads" << std::endl;
-
-//	deck.addCard(db->cards[57], 2);
-//	deck.addCard(db->cards[91], 2);
-//	deck.addCard(db->cards[210], 2);
-//	deck.addCard(db->cards[361], 2);
-//	deck.addCard(db->cards[83], 2);
-//	deck.addCard(db->cards[29], 2);
-//	deck.addCard(db->cards[373], 2);
-//	deck.addCard(db->cards[307], 2);
-//	deck.addCard(db->cards[39], 2);
-//	deck.addCard(db->cards[17], 2);
-//	deck.addCard(db->cards[126], 2);
-//	deck.addCard(db->cards[302], 2);
-//	deck.addCard(db->cards[288], 2);
-//	deck.addCard(db->cards[257], 1);
-//	deck.addCard(db->cards[44], 1);
-//	deck.addCard(db->cards[54], 1);
-//	deck.addCard(db->cards[72], 1);
-//
-//	auto m = deck.createImageRepresentation();
-//	std::cout << SystemInterface::createImgur(m) << std::endl;
 }
 
 StreamManager::~StreamManager() {
@@ -119,6 +98,7 @@ void StreamManager::loadState() {
         deckRep = state.get<decltype(deckRep)>("state.deck", deckRep);
         if (!deckRep.empty()) {
         	deck.fillFromInternalRepresentation(db, deckRep);
+        	shouldUpdateDeck = true;
         }
 
         HS_INFO << "state loaded" << std::endl;
@@ -153,6 +133,11 @@ void StreamManager::setStream(StreamPtr stream) {
 }
 
 void StreamManager::startAsyn() {
+	if (Config::getConfig().get<bool>("config.debugging.enabled", false)) {
+		stream->setStreamIndex(Config::getConfig().get<int>("config.debugging.stream_index"));
+		stream->setFramePos(Config::getConfig().get<int>("config.debugging.stream_pos"));
+	}
+
 	for (int i = 0; i < numThreads; i++) {
 		processingThreads.create_thread(boost::bind(&StreamManager::run, this));
 	}
@@ -164,11 +149,6 @@ void StreamManager::wait() {
 
 void StreamManager::run() {
 	cv::Mat image;
-
-	if (Config::getConfig().get<bool>("config.debugging.enabled", false)) {
-		stream->setStreamIndex(Config::getConfig().get<int>("config.debugging.stream_index"));
-		stream->setFramePos(Config::getConfig().get<int>("config.debugging.stream_pos"));
-	}
 
 	HS_INFO << "Started thread" << std::endl;
 
@@ -194,7 +174,7 @@ void StreamManager::run() {
 			if (stream->isLivestream()) {
 				HS_INFO << "Processed frame in " << elapsed << "ms" << std::endl;
 			} else {
-				HS_INFO << "Processed frame " << stream->getFramePos() << " in " << elapsed << "ms" << std::endl;
+				HS_INFO << "Processed frame " << stream->getFramePos() << " of stream " << stream->getStreamIndex() << " in " << elapsed << "ms" << std::endl;
 			}
 		}
 
