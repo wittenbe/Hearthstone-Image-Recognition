@@ -36,7 +36,7 @@ public:
 
 	static std::string callCurl(const std::string& params) {
 		std::string curl(Config::getConfig().get<std::string>("config.paths.curl_path") + " -s ");
-		return exec("\"" + curl + params + "\"");
+		return exec(curl + params);
 	}
 
 	static std::string callLivestreamer(std::string streamer) {
