@@ -109,9 +109,19 @@ CommandProcessor::CommandProcessor(boost::shared_ptr<StreamManager> smPtr) {
 		response = (boost::format("[SCORE] Current score is: %d - %d") % sm->winsLosses.first % sm->winsLosses.second).str();
 	}));
 
-	cmdMap["!fb_cleardeck"] = CCP(new CommandCallback(0, 0, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
-		sm->deck.clear();
-		response = "Deck cleared";
+	cmdMap["!fb_internaldeck"] = CCP(new CommandCallback(1, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
+		if (ci.allArgs == "clear") {
+			sm->deck.clear();
+			response = "Deck cleared";
+		} else if (ci.allArgs == "get") {
+			response = sm->deck.createInternalRepresentation();
+		} else if (ci.allArgs == "send") {
+			std::vector<std::string> args(2);
+			args.push_back(sm->deck.heroClass);
+			args.push_back(sm->deck.createInternalRepresentation());
+			SystemInterface::callAPI(sm->api.submitDeckFormat, args);
+			response = "Deck sent";
+		}
 	}));
 
 	cmdMap["!fb_state"] = CCP(new CommandCallback(0, 0, UL_SUPER, false, [this](const CommandInfo& ci, std::string& response){
