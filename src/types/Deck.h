@@ -37,11 +37,14 @@ public:
 	std::set<DeckEntry, DeckSorterLess> cards;
 	std::vector<std::vector<Card> > setHistory;
 	std::vector<Card> pickHistory;
+	std::string heroClass;
 
 	Deck();
+	std::string createInternalRepresentation();
+	void fillFromInternalRepresentation(DatabasePtr db, std::string s);
 	std::string createTextRepresentation();
 	cv::Mat createImageRepresentation();
-	void addCard(const Card& c, int amount = 1);
+	void addCard(const Card& c, int amount = 1, int remaining = 1);
 	void addSet(const Card& c0, const Card& c1, const Card& c2);
 	void addPickedCard(const Card& c);
 	void addUnknownSet();

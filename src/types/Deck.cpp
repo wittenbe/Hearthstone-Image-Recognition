@@ -1,7 +1,9 @@
 #include "Deck.h"
 #include "../Logger.h"
+#include "../Config.h"
 #include <boost/format.hpp>
 #include <algorithm>
+#include <boost/algorithm/string.hpp>
 
 namespace hs {
 
@@ -12,16 +14,54 @@ Deck::Deck() {
 	unknownCard.heroClass = "?";
 	unknownCard.quality = -1;
 
-	cardCount = 0;
-	addUnknownCard();
-	imagePath = "../images/decklist/";
+	clear();
+	imagePath = Config::getConfig().get<std::string>("config.paths.decklist_image_path");
+}
+
+std::string Deck::createInternalRepresentation() {
+	std::stringstream ss;
+
+	for (const auto& e : cards) {
+		if (e.c.id == unknownCard.id) continue;
+
+		ss << (boost::format("%03d") % e.c.id).str() << "-";
+		ss << boost::lexical_cast<std::string>(e.amount) << "-";
+		ss << "0;";
+	}
+	std::string result(ss.str());
+	if (result.length() != 0) {
+		result = result.substr(0, result.length() - 1); //remove last ';'
+	}
+
+	return result;
+}
+
+void Deck::fillFromInternalRepresentation(DatabasePtr db, std::string s) {
+	if (s.empty()) return;
+
+	clear();
+	std::vector<std::string> cardsInfo;
+	boost::split(cardsInfo, s, boost::is_any_of(";"), boost::token_compress_on);
+	for (const auto& cardInfo : cardsInfo) {
+		std::vector<std::string> cardInfoElems;
+		boost::split(cardInfoElems, cardInfo, boost::is_any_of("-"), boost::token_compress_on);
+		if (cardInfoElems.size() != 3) {
+			HS_ERROR << "Reading deck: At least one card is not a triple. Aborting. (input: " << s << ")" << std::endl;
+			clear();
+			return;
+		}
+		int id = boost::lexical_cast<int>(cardInfoElems[0]);
+		int amount = boost::lexical_cast<int>(cardInfoElems[1]);
+		bool golden = boost::lexical_cast<bool>(cardInfoElems[2]);
+		const Card& card = db->cards[id];
+		addCard(card, amount, amount);
+	}
 }
 
 std::string Deck::createTextRepresentation() {
 	std::string deckString = "";
 	std::string pickString = "";
 
-	while (!isComplete()) addUnknownCard();
 	if (setHistory.size() != 0) {
 		while (pickHistory.size() < 30) addUnknownPick();
 		while (setHistory.size() < 30) addUnknownSet();
@@ -36,7 +76,7 @@ std::string Deck::createTextRepresentation() {
 	}
 
 	//card list
-	for (auto& e : cards) {
+	for (const auto& e : cards) {
 		std::string cost;
 		if (e.c.cost == -1) {
 			cost = "?";
@@ -54,47 +94,50 @@ std::string Deck::createTextRepresentation() {
 }
 
 cv::Mat Deck::createImageRepresentation() {
-	cv::Mat unknown = cv::imread(imagePath + "unknown" + ".png", CV_LOAD_IMAGE_COLOR);
+	cv::Mat unknown = cv::imread(imagePath + "/unknown.png", CV_LOAD_IMAGE_COLOR);
 	cv::Mat result(unknown.rows * cards.size(), unknown.cols, unknown.type());
 	cv::Rect roiRect(0, 0, unknown.cols, unknown.rows);
 
 	size_t i = 0;
-	for (auto& e : cards) {
+	for (const auto& e : cards) {
+		bool drawAmount = true;
 		roiRect.y = i++ * unknown.rows;
-		cv::Mat cardImage;
+		cv::Mat cardImage = unknown;
 		cv::Mat roi = result(roiRect);
-		if (e.c.id == unknownCard.id) {
-			cardImage = unknown;
-		} else {
-			//center of amount image at 284,25
-			//lu of amount image at 274,12
+		if (e.c.id != unknownCard.id) {
 			if (e.amount == 1) {
-				cardImage = cv::imread(imagePath + "1/" + (boost::format("%03d") % e.c.id).str() + ".png", CV_LOAD_IMAGE_COLOR);
+				cardImage = cv::imread(imagePath + "/1/" + (boost::format("%03d") % e.c.id).str() + ".png", CV_LOAD_IMAGE_COLOR);
+				drawAmount = false;
 			} else {
-				cardImage = cv::imread(imagePath + "n/" + (boost::format("%03d") % e.c.id).str() + ".png", CV_LOAD_IMAGE_COLOR);
-				std::string amount = boost::lexical_cast<std::string>(std::min(e.amount, 9));
-				cv::Mat amountImage = cv::imread(imagePath + "amount/" + amount + ".png", CV_LOAD_IMAGE_UNCHANGED);
-				cv::Mat cardImageRoi = cardImage(cv::Rect(274, 12, amountImage.cols, amountImage.rows));
-				overlayImage(cardImageRoi, amountImage);
+				cardImage = cv::imread(imagePath + "/n/" + (boost::format("%03d") % e.c.id).str() + ".png", CV_LOAD_IMAGE_COLOR);
 			}
+		}
+
+		if (drawAmount) {
+			std::string amount = boost::lexical_cast<std::string>(std::min(e.amount, 9));
+			cv::Mat amountImage = cv::imread(imagePath + "/amount/" + amount + ".png", CV_LOAD_IMAGE_UNCHANGED);
+			cv::Mat cardImageRoi = cardImage(cv::Rect(274, 12, amountImage.cols, amountImage.rows)); //lu of amount image at 274,12; center at 284,25
+			overlayImage(cardImageRoi, amountImage);
 		}
 		cardImage.copyTo(roi);
 	}
 	return result;
 }
 
-void Deck::addCard(const Card& c, int amount) {
-	if (c.id != unknownCard.id) removeUnknown(amount); //replace an unknown if possible
+void Deck::addCard(const Card& c, int amount, int remaining) {
+	if (!hasCardSpace()) return;
+	removeUnknown(amount); //replace an unknown if possible
 	cardCount += amount;
-	bool inserted = cards.insert(DeckEntry(c, amount, amount)).second;
+	bool inserted = cards.insert(DeckEntry(c, amount, remaining)).second;
 	if (!inserted) { //i.e. already exists
 		for (auto& card : cards) {
 			if (card.c.id == c.id) {
 				card.amount += amount;
-				card.remaining += amount;
+				card.remaining += remaining;
 			}
 		}
 	}
+	if (c.heroClass != "None") heroClass = c.heroClass;
 }
 
 void Deck::addSet(const Card& c0, const Card& c1, const Card& c2) {
@@ -134,17 +177,13 @@ bool Deck::draw(const Card& c, bool addIfNotPresent) {
 		} else {
 //			HS_WARNING << "Draw Request for \"" << c.name << "\", but amount is at 0!" << std::endl;
 			if (addIfNotPresent && hasCardSpace()) {
-				removeUnknown(1);
-				entry->amount++;
-				cardCount++;
+				addCard(c);
 			}
 		}
 	} else {
 //		HS_WARNING << "Draw Request for \"" << c.name << "\", but card not in deck!" << std::endl;
 		if (addIfNotPresent && hasCardSpace()) {
-			removeUnknown(1);
-			cards.insert(DeckEntry(c, 1, 0));
-			cardCount++;
+			addCard(c, 1, 0);
 		}
 	}
 
@@ -162,6 +201,8 @@ void Deck::clear() {
 	cardCount = 0;
 	pickHistory.clear();
 	setHistory.clear();
+	heroClass = "Mage";
+	cards.insert(DeckEntry(unknownCard, 30, 30));
 }
 
 bool Deck::isComplete() {
@@ -177,7 +218,6 @@ void Deck::removeUnknown(int amount) {
 		for (auto& e : cards) {
 			if (e.c.id == unknownCard.id) {
 				e.amount--;
-				cardCount--;
 				if (e.amount <= 0) {
 					cards.erase(e);
 				}

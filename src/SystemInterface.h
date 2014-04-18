@@ -131,6 +131,24 @@ public:
 		return result;
 	}
 
+	static std::string callAPI(const std::string& api, const std::vector<std::string>& args) {
+		std::string result;
+		boost::format apiFormat(api);
+
+		if (apiFormat.remaining_args() != args.size()) {
+			HS_ERROR << "Calling API: too few/too many arguments for api call format. Expected " << apiFormat.remaining_args() << ", but got " << args.size() << std::endl;
+			return result;
+		}
+
+		for (const auto& arg : args) {
+			apiFormat % arg;
+		}
+
+		std::string curlParams = apiFormat.str();
+		result = callCurl(curlParams);
+		return result;
+	}
+
 private:
 	static std::map<std::string, std::string> getStreamURLsFromM3U8(const std::string& m3u8) {
 		static const std::string nameHeuristic = "NAME=\"";
@@ -173,9 +191,7 @@ private:
 	    return r;
 	}
 
-	static std::string urlencode(const std::string &c)
-	{
-
+	static std::string urlencode(const std::string &c) {
 		std::string escaped="";
 	    int max = c.length();
 	    for(int i=0; i<max; i++)

@@ -9,7 +9,7 @@
 
 namespace hs {
 
-CommandProcessor::CommandProcessor(StreamManager* smPtr) {
+CommandProcessor::CommandProcessor(boost::shared_ptr<StreamManager> smPtr) {
 	this->sm = smPtr;
 	userCooldownTimer.restart();
 
@@ -48,6 +48,14 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 		response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.textUrl).str();
 	}));
 
+	cmdMap["!strawpolling"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
+		if (ci.toggle) {
+			sm->param_strawpolling = ci.toggleEnable;
+		}
+		response = "Automated strawpolling is: ";
+		response += (sm->param_strawpolling)? "on" : "off";
+	}));
+
 	cmdMap["!backupscoring"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
 		if (ci.toggle) {
 			sm->param_backupscoring = ci.toggleEnable;
@@ -69,12 +77,12 @@ CommandProcessor::CommandProcessor(StreamManager* smPtr) {
 		response += (sm->param_drawhandling)? "on" : "off";
 	}));
 
-	cmdMap["!strawpolling"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
+	cmdMap["!apicalling"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
 		if (ci.toggle) {
-			sm->param_strawpolling = ci.toggleEnable;
+			sm->param_apicalling = ci.toggleEnable;
 		}
-		response = "Automated strawpolling is: ";
-		response += (sm->param_strawpolling)? "on" : "off";
+		response = "API calling is: ";
+		response += (sm->param_apicalling)? "on" : "off";
 	}));
 
 	cmdMap["!deckfromdraws"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){

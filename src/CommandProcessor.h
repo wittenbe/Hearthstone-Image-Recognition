@@ -42,10 +42,10 @@ public:
 	typedef boost::shared_ptr<CommandCallback> CCP;
 
 
-	CommandProcessor(StreamManager* sm);
+	CommandProcessor(boost::shared_ptr<StreamManager> sm);
 	std::string process(const std::string& user, const std::string& cmd, bool isMod, bool isSuperUser);
 private:
-	StreamManager* sm;
+	boost::shared_ptr<StreamManager> sm;
 	boost::timer userCooldownTimer;
 	boost::unordered_map<std::string, boost::shared_ptr<CommandCallback> > cmdMap;
 	void alias(std::string original, std::string alias);

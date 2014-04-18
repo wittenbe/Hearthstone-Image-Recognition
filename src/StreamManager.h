@@ -46,17 +46,6 @@ class StreamManager {
 friend class CommandProcessor;
 
 public:
-//	struct Deck {
-//		std::string url;
-//		std::vector<std::string> cards;
-//		std::vector<std::vector<std::string> > picks;
-//
-//		bool isValid() {return !url.empty();}
-//		void clear() {url=DEFAULT_DECKURL; cards.clear(); picks.clear();}
-//
-//		unsigned int state;
-//	};
-
 	struct DeckInfo {
 		std::string textUrl;
 		std::string imageUrl;
@@ -82,6 +71,12 @@ public:
 		unsigned int state;
 	};
 
+	struct APIInfo {
+		std::string submitDeckFormat;
+		std::string drawCardFormat;
+		std::string resetDrawsFormat;
+	};
+
 	StreamManager(StreamPtr stream, clever_bot::botPtr bot);
 	~StreamManager();
 	void loadState();
@@ -105,6 +100,7 @@ private:
 	bool param_strawpolling;
 	bool param_backupscoring;
 	bool param_drawhandling;
+	bool param_apicalling;
 	unsigned int param_debug_level;
 
 	int numThreads;
@@ -112,9 +108,11 @@ private:
 
 	std::string sName; //streamer name
 	Deck deck;
+	bool shouldUpdateDeck;
 	DeckInfo currentDeck;
 	GameInfo currentGame;
 	DrawInfo currentDraw;
+	APIInfo api;
 	boost::atomic<unsigned int> passedFrames;
 	std::pair<int, size_t> currentCard;
 	std::pair<int, int> winsLosses;

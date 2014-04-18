@@ -23,12 +23,15 @@ namespace hs {
 StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->stream = stream;
 	this->bot = bot;
-	cp = CommandProcessorPtr(new CommandProcessor(this));
+	cp = CommandProcessorPtr(new CommandProcessor(StreamManagerPtr(this)));
 	db = DatabasePtr(new Database(Config::getConfig().get<std::string>("config.paths.recognition_data_path")));
+	shouldUpdateDeck = false;
 	param_strawpolling = true;
 	param_backupscoring = true;
-	param_drawhandling = false;
+	param_drawhandling = true;
+	param_apicalling = true;
 	param_debug_level = 0;
+	if (Config::getConfig().get<bool>("config.debugging.enabled", false)) param_debug_level = Config::getConfig().get<int>("config.debugging.debug_level");
 	passedFrames = PASSED_FRAMES_THRESHOLD;
 	currentCard.second = -1;
 	currentCard.second = 0;
@@ -52,6 +55,10 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	}
 
 	loadState();
+
+	api.submitDeckFormat = Config::getConfig().get<std::string>("config.site_interfacing.submit_deck");
+	api.drawCardFormat = Config::getConfig().get<std::string>("config.site_interfacing.draw_card");
+	api.resetDrawsFormat = Config::getConfig().get<std::string>("config.site_interfacing.reset_draws");
 
 	sName = Config::getConfig().get<std::string>("config.stream.streamer_name");
 	numThreads = Config::getConfig().get<int>("config.image_recognition.threads");
@@ -106,7 +113,14 @@ void StreamManager::loadState() {
         param_backupscoring = state.get<decltype(param_backupscoring)>("state.backupscoring", param_backupscoring);
         param_strawpolling = state.get<decltype(param_strawpolling)>("state.strawpolling", param_strawpolling);
         param_drawhandling = state.get<decltype(param_drawhandling)>("state.drawhandling", param_drawhandling);
+        param_apicalling = state.get<decltype(param_apicalling)>("state.apicalling", param_apicalling);
         currentDraw.buildFromDraws = state.get<decltype(currentDraw.buildFromDraws)>("state.buildFromDraws", currentDraw.buildFromDraws);
+        std::string deckRep;
+        deckRep = state.get<decltype(deckRep)>("state.deck", deckRep);
+        if (!deckRep.empty()) {
+        	deck.fillFromInternalRepresentation(db, deckRep);
+        }
+
         HS_INFO << "state loaded" << std::endl;
     }
 }
@@ -122,10 +136,12 @@ void StreamManager::saveState() {
 //    state.put("state.gameState", currentGame.state);
     state.put("state.backupscoring", param_backupscoring);
     state.put("state.strawpolling", param_strawpolling);
-    state.put("state.drawhandling", param_strawpolling);
+    state.put("state.drawhandling", param_drawhandling);
+    state.put("state.apicalling", param_apicalling);
     state.put("state.currentWins", winsLosses.first);
     state.put("state.currentLosses", winsLosses.second);
     state.put("state.buildFromDraws", currentDraw.buildFromDraws);
+    state.put("state.deck", deck.createInternalRepresentation());
 
     boost::property_tree::xml_writer_settings<char> settings('\t', 1);
     write_xml(STATE_PATH, state, std::locale(""), settings);
@@ -148,8 +164,11 @@ void StreamManager::wait() {
 
 void StreamManager::run() {
 	cv::Mat image;
-//	stream->setStreamIndex(0);
-//	stream->setFramePos(33415);
+
+	if (Config::getConfig().get<bool>("config.debugging.enabled", false)) {
+		stream->setStreamIndex(Config::getConfig().get<int>("config.debugging.stream_index"));
+		stream->setFramePos(Config::getConfig().get<int>("config.debugging.stream_pos"));
+	}
 
 	HS_INFO << "Started thread" << std::endl;
 
@@ -245,20 +264,13 @@ void StreamManager::run() {
 				Card c = deck.setHistory.back()[result.results[0]];
 				HS_INFO << "picked " << c.name << std::endl;
 				deck.addPickedCard(c);
+				shouldUpdateDeck = true;
 
 				if (deck.isComplete()) {
 					disable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
 					std::string deckString = deck.createTextRepresentation();
 					currentDeck.textUrl = SystemInterface::createHastebin(deckString);
-
 					bot->message((boost::format(CMD_DECK_FORMAT) % sName % currentDeck.textUrl).str());
-					if (param_strawpolling) {
-//						std::vector<std::string> choices = list_of("9")("8")("7")("6")("4-5")("0-3");
-//						std::string strawpoll = SystemInterface::createStrawpoll(MSG_WINS_POLL, choices);
-//						bot->message((boost::format(MSG_WINS_POLL_VOTE) % sName % strawpoll).str());
-//						bot->repeat_message((boost::format(MSG_WINS_POLL_VOTE_REPEAT) % strawpoll).str(),
-//								5, 25, 7);
-					}
 				}
 			}
 			else if (RECOGNIZER_GAME_CLASS_SHOW  == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_CLASS_SHOW)) {
@@ -267,6 +279,10 @@ void StreamManager::run() {
 				currentGame.player = db->heroes[result.results[0]].name;
 				currentGame.opponent = db->heroes[result.results[1]].name;
 				HS_INFO << "New Game: " << currentGame.player << " vs. " << currentGame.opponent << std::endl;
+				if (shouldUpdateDeck && param_apicalling) {
+					SystemInterface::callAPI(api.submitDeckFormat, list_of(deck.heroClass)(deck.createInternalRepresentation()));
+					shouldUpdateDeck = false;
+				}
 			}
 			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_COIN)) {
 				enable(currentGame.state, RECOGNIZER_GAME_END);
@@ -281,12 +297,13 @@ void StreamManager::run() {
 					std::string name = "coin" + currentGame.fs + time + ".png";
 					SystemInterface::saveImage(image, name);
 				}
-				if (currentGame.fs == "1" && param_drawhandling) {
+				if (param_drawhandling && currentGame.fs == "1") {
 					enable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_1);
-				} else if (currentGame.fs == "2" && param_drawhandling) {
+				} else if (param_drawhandling && currentGame.fs == "2") {
 					enable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_2);
 				}
 				currentDraw.latestDraw = -1;
+				if (param_apicalling) SystemInterface::callAPI(api.resetDrawsFormat, std::vector<std::string>());
 				deck.resetDraws();
 			}
 			else if (RECOGNIZER_GAME_END == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_END)) {
@@ -301,7 +318,7 @@ void StreamManager::run() {
 				}
 
 				if (winsLosses.first == 12 || winsLosses.second == 3) {
-//					bot->message("!score -constructed", 10);
+					bot->message("!score -constructed", 0);
 				}
 				if (param_debug_level & 4) {
 					const std::string& time = boost::lexical_cast<std::string>(boost::posix_time::microsec_clock::local_time().time_of_day().total_milliseconds());
@@ -325,18 +342,20 @@ void StreamManager::run() {
 					currentCard.first = -1;
 					if (currentDraw.latestDraw == -1) {
 						std::vector<std::string> initDrawNames;
-						for (int id : currentDraw.initialDraw) initDrawNames.push_back(db->cards[id].name);
+						for (const auto& id : currentDraw.initialDraw) {
+							shouldUpdateDeck |= deck.draw(db->cards[id], currentDraw.buildFromDraws);
+							initDrawNames.push_back(db->cards[id].name);
+							if (param_apicalling) SystemInterface::callAPI(api.drawCardFormat, list_of((boost::format("%03d") % id).str()));
+						}
 						std::string initDraw = boost::algorithm::join(initDrawNames, "; ");
 //						bot->message((boost::format(MSG_INITIAL_DRAW) % initDraw).str());
-						for (auto& d : currentDraw.initialDraw) {
-							deck.draw(db->cards[d], currentDraw.buildFromDraws);
-						}
 						currentDraw.initialDraw.clear();
 						disable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_1);
 						disable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_2);
 					}
 //					bot->message((boost::format(MSG_DRAW) % db->cards[result.results[0]].name).str());
-					deck.draw(db->cards[result.results[0]], currentDraw.buildFromDraws);
+					shouldUpdateDeck |= deck.draw(db->cards[result.results[0]], currentDraw.buildFromDraws);
+					if (param_apicalling) SystemInterface::callAPI(api.drawCardFormat, list_of((boost::format("%03d") % result.results[0]).str()));
 					currentDraw.latestDraw = result.results[0];
 				}
 			}
