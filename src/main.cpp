@@ -19,7 +19,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
-//this include causes some errors with asio/winsock, at least on windows (edit: welp, suddenly not anymore?)
 #include <boost/property_tree/json_parser.hpp>
 
 boost::shared_ptr<hs::StreamManager> smPtrGlobal;

@@ -18,7 +18,7 @@
 		<streamer>trumpsc</streamer>
 		<streamer_name>Trump</streamer_name>
 		<stream_quality>Medium</stream_quality>
-		<vod>http://api.justin.tv/api/broadcast/by_archive/519851616.xml</vod> <!-- in case live == false -->
+		<vod>http://api.justin.tv/api/broadcast/by_archive/521589593.xml</vod> <!-- in case live == false -->
 	</stream>
 	<image_recognition>
 		<!-- using any non-positive value here will cause the program to use as many threads as there are cores -->
@@ -29,15 +29,14 @@
 	<paths>
 		<!-- relative to where you execute the program -->
 		<recognition_data_path>../data.xml</recognition_data_path>
+		<calibrations_path>../calibrations</calibrations_path>
 		<curl_path>.\..\curl</curl_path>
 		
 		<!-- needed for sift feature precalculation -->
 		<misc_image_path>../images/misc</misc_image_path>
 		<decklist_image_path>../images/decklist</decklist_image_path>
-		<!-- only needed if precompute_data == true -->
 		<card_image_path>../images/card</card_image_path>
 		<hero_image_path>../images/hero</hero_image_path>
-		
 	</paths>
 	<site_interfacing>
 		<submit_deck></submit_deck>
@@ -46,8 +45,9 @@
 	</site_interfacing>
 	<debugging>
 		<enabled>true</enabled>
-		<debug_level>0</debug_level>
-		<stream_index>2</stream_index>
-		<stream_pos>8500</stream_pos>
+		<debug_level>2</debug_level>
+		<wait_key_time>10</wait_key_time>
+		<stream_index>1</stream_index>
+		<stream_pos>6750</stream_pos>
 	</debugging>
 </config>

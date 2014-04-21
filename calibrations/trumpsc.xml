@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<calibration>
+	<stream>trumpsc</stream>
+	<resolution>
+		<width>854</width>
+		<height>480</height>
+	</resolution>
+	<ROIs>
+		<draft_class_pick>
+			<roi x="202" y="141" width="56" height="84"/>
+			<roi x="325" y="141" width="56" height="84"/>
+			<roi x="447" y="141" width="56" height="84"/>
+		</draft_class_pick>
+		<draft_card_pick>
+			<roi x="209" y="118" width="43" height="59"/>
+			<roi x="331" y="118" width="43" height="59"/>
+			<roi x="452" y="118" width="43" height="59"/>		
+		</draft_card_pick>
+		<draft_card_chosen>
+			<roi x="209" y="214" width="43" height="35"/>
+			<roi x="331" y="214" width="43" height="35"/>
+			<roi x="452" y="214" width="43" height="35"/>		
+		</draft_card_chosen>
+		<game_class_show>
+			<roi x="239" y="285" width="94" height="141"/>
+			<roi x="563" y="59" width="94" height="141"/>		
+		</game_class_show>
+		<game_draw>
+			<roi x="582" y="165" width="54" height="74"/>		
+		</game_draw>
+		<game_draw_init_1>
+			<roi x="259" y="169" width="40" height="53"/>
+			<roi x="408" y="167" width="40" height="53"/>
+			<roi x="557" y="166" width="40" height="53"/>		
+		</game_draw_init_1>
+		<game_draw_init_2>
+			<roi x="242" y="169" width="40" height="53"/>
+			<roi x="353" y="167" width="40" height="53"/>
+			<roi x="465" y="167" width="40" height="53"/>
+			<roi x="576" y="166" width="40" height="53"/>		
+		</game_draw_init_2>
+		<game_coin>
+			<roi x="550" y="192" width="85" height="110"/>		
+		</game_coin>
+		<game_end>
+			<roi x="328" y="258" width="211" height="71"/>		
+		</game_end>
+	</ROIs>
+</calibration>

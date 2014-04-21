@@ -26,25 +26,25 @@ add_executable(${EXECUTABLE_NAME}
     bot/connection.cpp
 	types/Stream.cpp
 	types/Deck.cpp
-    Calibration/Calibrator.cpp
-    Calibration/Calibration.cpp
+    types/Calibration.cpp
 )
 
 # set(CALIBRATOR_NAME ${PROJECT_NAME}_calib)
 # add_executable(${CALIBRATOR_NAME}
 	# Calibration/main.cpp
-    # Calibration/Calibrator.cpp
-    # Calibration/Calibration.cpp
+    # types/Calibration.cpp
     # Recognizer.cpp
     # PerceptualHash.cpp
 # )
 
-# set(TESTS_NAME ${PROJECT_NAME}_tests)
-# add_executable(${TESTS_NAME}
-	# tests/testRecognizer.cpp
-    # Recognizer.cpp
-	# PerceptualHash.cpp
-# )
+set(TESTS_NAME ${PROJECT_NAME}_tests)
+add_executable(${TESTS_NAME}
+	tests/testRecognizer.cpp
+	Database.cpp
+    Recognizer.cpp
+	PerceptualHash.cpp
+	types/Calibration.cpp
+)
 
 #set(Boost_NO_SYSTEM_PATHS ON)
 #set(Boost_USE_STATIC_LIBS ON)
@@ -52,12 +52,12 @@ find_package(Boost 1.54 REQUIRED COMPONENTS system thread regex chrono)
 include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
 #target_link_libraries(${CALIBRATOR_NAME} ${Boost_LIBRARIES})
-#target_link_libraries(${TESTS_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${TESTS_NAME} ${Boost_LIBRARIES})
 
 find_package(OpenCV 2.4.6 REQUIRED)
 target_link_libraries(${EXECUTABLE_NAME} ${OpenCV_LIBS})
 #target_link_libraries(${CALIBRATOR_NAME} ${OpenCV_LIBS})
-#target_link_libraries(${TESTS_NAME} ${OpenCV_LIBS})
+target_link_libraries(${TESTS_NAME} ${OpenCV_LIBS})
 
 IF(WIN32)
     target_link_libraries(${EXECUTABLE_NAME} wsock32 ws2_32)

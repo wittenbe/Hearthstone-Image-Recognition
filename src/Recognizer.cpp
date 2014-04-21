@@ -20,66 +20,28 @@ using namespace boost::assign;
 
 namespace hs {
 
-//to avoid dependency on a specific resolution, these values are ratios of the screen width/height
-
-//regions of interest for phash comparisons
-const Recognizer::VectorROI Recognizer::DRAFT_CLASS_PICK = list_of
-		(cv::Rect_<float>(0.2366f, 0.2938f, 0.0656f, 0.1751f))
-		(cv::Rect_<float>(0.3806f, 0.2938f, 0.0656f, 0.1751f))
-		(cv::Rect_<float>(0.5235f, 0.2938f, 0.0656f, 0.1751f));
-
-const Recognizer::VectorROI Recognizer::DRAFT_CARD_PICK = list_of
-		(cv::Rect_<float>(0.2448f, 0.2459f, 0.0504f, 0.1230f))
-		(cv::Rect_<float>(0.3876f, 0.2459f, 0.0504f, 0.1230f))
-		(cv::Rect_<float>(0.5293f, 0.2459f, 0.0504f, 0.1230f));
-
-const Recognizer::VectorROI Recognizer::DRAFT_CARD_CHOSEN = list_of
-		(cv::Rect_<float>(0.2448f, 0.4459f, 0.0504f, 0.073f))
-		(cv::Rect_<float>(0.3876f, 0.4459f, 0.0504f, 0.073f))
-		(cv::Rect_<float>(0.5293f, 0.4459f, 0.0504f, 0.073f));
-
-const Recognizer::VectorROI Recognizer::GAME_CLASS_SHOW = list_of
-		(cv::Rect_<float>(0.2799f, 0.5938f, 0.1101f, 0.2938f))
-		(cv::Rect_<float>(0.6593f, 0.123f, 0.1101f, 0.2938f));
-
-const Recognizer::VectorROI Recognizer::GAME_DRAW = list_of
-		(cv::Rect_<float>(0.6815f, 0.3438f, 0.0633f, 0.1542f));
-
-const Recognizer::VectorROI Recognizer::GAME_DRAW_INIT_1 = list_of
-		(cv::Rect_<float>(0.3033f, 0.3521f, 0.0469f, 0.1125f))
-		(cv::Rect_<float>(0.4778f, 0.3480f, 0.0469f, 0.1125f))
-		(cv::Rect_<float>(0.6523f, 0.3459f, 0.0469f, 0.1125f));
-
-const Recognizer::VectorROI Recognizer::GAME_DRAW_INIT_2 = list_of
-		(cv::Rect_<float>(0.2834f, 0.3521f, 0.0469f, 0.1125f))
-		(cv::Rect_<float>(0.4134f, 0.3500f, 0.0469f, 0.1125f))
-		(cv::Rect_<float>(0.5445f, 0.348f, 0.0469f, 0.1125f))
-		(cv::Rect_<float>(0.6748f, 0.3459f, 0.0469f, 0.1125f));
-
-//regions of interest for SURF comparison
-const Recognizer::VectorROI Recognizer::GAME_COIN = list_of
-		(cv::Rect_<float>(0.6441f, 0.4f, 0.0996f, 0.2292f));
-
-const Recognizer::VectorROI Recognizer::GAME_END = list_of
-		(cv::Rect_<float>(0.3841f, 0.53751f, 0.2471f, 0.148f));
-
-Recognizer::Recognizer(DatabasePtr db) {
+Recognizer::Recognizer(DatabasePtr db, std::string calibrationID) {
 	this->db = db;
 	auto cfg = Config::getConfig();
 	phashThreshold = cfg.get<int>("config.image_recognition.phash_threshold");
+
+	c = CalibrationPtr(new Calibration(cfg.get<std::string>("config.paths.calibrations_path") + "/" + calibrationID + ".xml"));
+	if (!c->valid) {
+		HS_ERROR << "Calibration with ID " << calibrationID << " was not properly initialized, trying to use default..." << std::endl;
+		c = CalibrationPtr(new Calibration(cfg.get<std::string>("config.paths.calibrations_path") + "/default.xml"));
+	}
+
 	if (db->hasMissingData()) {
 		HS_INFO << "pHashes missing from database, filling..." << std::endl;
 		precomputeData();
 	}
 
-	setCards.typeID = SETTYPE_CARDS;
     for (auto& e : db->cards) {
 		DataSetEntry o(e.id);
 		setCards.entries.push_back(o);
 		setCards.hashes.push_back(e.phash);
     }
 
-	setClasses.typeID = SETTYPE_HEROES;
     for (auto& e : db->heroes) {
 		DataSetEntry o(e.id);
 		setClasses.entries.push_back(o);
@@ -91,7 +53,6 @@ Recognizer::Recognizer(DatabasePtr db) {
 	matcher = BFMatcherPtr(new cv::BFMatcher(cv::NORM_L2));
 
     cv::Mat tempImg;
-
     tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_end_victory.png", CV_LOAD_IMAGE_GRAYSCALE);
     descriptorEnd.push_back(std::make_pair(getDescriptor(tempImg), RESULT_GAME_END_VICTORY));
     tempImg = cv::imread(cfg.get<std::string>("config.paths.misc_image_path") + "/" + "game_end_defeat.png", CV_LOAD_IMAGE_GRAYSCALE);
@@ -126,16 +87,22 @@ void Recognizer::precomputeData() {
     db->save();
 }
 
-std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& image, unsigned int allowedRecognizers) {
+std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& source, unsigned int allowedRecognizers) {
 	std::vector<RecognitionResult> results;
+	cv::Mat image;
+	if (source.cols != c->res.width || source.rows != c->res.height) {
+		cv::resize(source, image, cv::Size(c->res.width, c->res.height));
+	} else {
+		image = source;
+	}
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CLASS_PICK) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CLASS_PICK, DRAFT_CLASS_PICK, setClasses);
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CLASS_PICK, c->roiDraftClassPick, setClasses);
 		if (rr.valid) results.push_back(rr);
 	}
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CARD_PICK) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CARD_PICK, DRAFT_CARD_PICK, setCards);
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CARD_PICK, c->roiDraftCardPick, setCards);
 		if (rr.valid) {
 			results.push_back(rr);
 			lastDraftRecognition = rr.results;
@@ -143,12 +110,12 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 	}
 
 	if (allowedRecognizers & RECOGNIZER_GAME_CLASS_SHOW) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_CLASS_SHOW, GAME_CLASS_SHOW, setClasses);
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_CLASS_SHOW, c->roiGameClassShow, setClasses);
 		if (rr.valid) results.push_back(rr);
 	}
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CARD_CHOSEN) {
-		int index = getIndexOfBluest(image, DRAFT_CARD_CHOSEN);
+		int index = getIndexOfBluest(image, c->roiDraftCardChosen);
 		if (index >= 0) {
 			RecognitionResult rr;
 			rr.sourceRecognizer = RECOGNIZER_DRAFT_CARD_CHOSEN;
@@ -157,35 +124,35 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 		}
 	}
 
-	if (allowedRecognizers & RECOGNIZER_GAME_COIN) {
-		RecognitionResult rr = compareFeatures(image, RECOGNIZER_GAME_COIN, GAME_COIN, descriptorCoin);
-		if (rr.valid) results.push_back(rr);
-	}
-
-	if (allowedRecognizers & RECOGNIZER_GAME_END) {
-		RecognitionResult rr = compareFeatures(image, RECOGNIZER_GAME_END, GAME_END, descriptorEnd);
-		if (rr.valid) results.push_back(rr);
-	}
-
 	if (allowedRecognizers & RECOGNIZER_GAME_DRAW) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW, GAME_DRAW, setCards);
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW, c->roiGameDraw, setCards);
 		if (rr.valid) results.push_back(rr);
 	}
 
 	if (allowedRecognizers & RECOGNIZER_GAME_DRAW_INIT_1) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW_INIT_1, GAME_DRAW_INIT_1, setCards);
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW_INIT_1, c->roiGameDrawInit1, setCards);
 		if (rr.valid) results.push_back(rr);
 	}
 
 	if (allowedRecognizers & RECOGNIZER_GAME_DRAW_INIT_2) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW_INIT_2, GAME_DRAW_INIT_2, setCards);
+		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW_INIT_2, c->roiGameDrawInit2, setCards);
+		if (rr.valid) results.push_back(rr);
+	}
+
+	if (allowedRecognizers & RECOGNIZER_GAME_COIN) {
+		RecognitionResult rr = compareFeatures(image, RECOGNIZER_GAME_COIN, c->roiGameCoin, descriptorCoin);
+		if (rr.valid) results.push_back(rr);
+	}
+
+	if (allowedRecognizers & RECOGNIZER_GAME_END) {
+		RecognitionResult rr = compareFeatures(image, RECOGNIZER_GAME_END, c->roiGameEnd, descriptorEnd);
 		if (rr.valid) results.push_back(rr);
 	}
 
 	return results;
 }
 
-Recognizer::RecognitionResult Recognizer::comparePHashes(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const DataSet& dataSet) {
+Recognizer::RecognitionResult Recognizer::comparePHashes(const cv::Mat& image, unsigned int recognizer, const Calibration::VectorROI& roi, const DataSet& dataSet) {
 	std::vector<DataSetEntry> bestMatches = bestPHashMatches(image, roi, dataSet);
 	bool valid = true;
 	for (auto& bestMatch : bestMatches) {
@@ -203,12 +170,12 @@ Recognizer::RecognitionResult Recognizer::comparePHashes(const cv::Mat& image, u
 	return rr;
 }
 
-std::vector<Recognizer::DataSetEntry> Recognizer::bestPHashMatches(const cv::Mat& image, const VectorROI& roi, const DataSet& dataSet) {
+std::vector<Recognizer::DataSetEntry> Recognizer::bestPHashMatches(const cv::Mat& image, const Calibration::VectorROI& roi, const DataSet& dataSet) {
 	std::vector<DataSetEntry> results;
 	for (auto& r : roi) {
 		cv::Mat roiImage = image(
-	    		cv::Range(r.y * image.rows, (r.y + r.height) * image.rows),
-	    		cv::Range(r.x * image.cols, (r.x + r.width) * image.cols));
+	    		cv::Range(r.y, r.y + r.height),
+	    		cv::Range(r.x, r.x + r.width));
 		ulong64 phash = PerceptualHash::phash(roiImage);
 		PerceptualHash::ComparisonResult best = PerceptualHash::best(phash, dataSet.hashes);
 
@@ -222,7 +189,7 @@ std::vector<Recognizer::DataSetEntry> Recognizer::bestPHashMatches(const cv::Mat
 	return results;
 }
 
-int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
+int Recognizer::getIndexOfBluest(const cv::Mat& image, const Calibration::VectorROI& roi) {
 	if (lastDraftRecognition.empty()) return -1;
 	int quality = db->cards[lastDraftRecognition[0]].quality;
 	std::vector<float> hV;
@@ -231,8 +198,8 @@ int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
 	std::vector<std::vector<float> > hsv;
 	for (auto& r : roi) {
 		cv::Mat roiImage = image(
-	    		cv::Range(r.y * image.rows, (r.y + r.height) * image.rows),
-	    		cv::Range(r.x * image.cols, (r.x + r.width) * image.cols));
+	    		cv::Range(r.y, r.y + r.height),
+	    		cv::Range(r.x, r.x + r.width));
 		cv::Mat hsvImage;
 		cv::cvtColor(roiImage, hsvImage, CV_BGR2HSV);
 
@@ -285,14 +252,14 @@ int Recognizer::getIndexOfBluest(const cv::Mat& image, const VectorROI& roi) {
 	return best;
 }
 
-Recognizer::RecognitionResult Recognizer::compareFeatures(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const VectorDescriptor& descriptors) {
+Recognizer::RecognitionResult Recognizer::compareFeatures(const cv::Mat& image, unsigned int recognizer, const Calibration::VectorROI& roi, const VectorDescriptor& descriptors) {
     RecognitionResult rr;
     rr.valid = false;
 
 	for (auto& r : roi) {
 		cv::Mat roiImage = image(
-	    		cv::Range(r.y * image.rows, (r.y + r.height) * image.rows),
-	    		cv::Range(r.x * image.cols, (r.x + r.width) * image.cols));
+	    		cv::Range(r.y, r.y + r.height),
+	    		cv::Range(r.x, r.x + r.width));
 	    cv::Mat greyscaleImage;
 	    if (roiImage.channels() == 1) {
 	    	greyscaleImage = roiImage.clone();

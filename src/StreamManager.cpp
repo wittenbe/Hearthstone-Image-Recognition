@@ -13,7 +13,6 @@
 #include <boost/assign/list_of.hpp>
 #include <boost/assign/std/vector.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include "Calibration/Calibration.h"
 
 #include "opencv2/highgui/highgui.hpp"
 
@@ -38,7 +37,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	currentCard.second = 0;
 	winsLosses = std::make_pair<int, int>(0,0);
 
-	recognizer = RecognizerPtr(new Recognizer(db));
+	recognizer = RecognizerPtr(new Recognizer(db, Config::getConfig().get<std::string>("config.stream.streamer")));
 
 	currentDeck.clear();
 	currentDeck.state = 0;

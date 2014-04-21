@@ -3,7 +3,7 @@
 
 #include "Database.h"
 #include "PerceptualHash.h"
-#include "Calibration/Calibration.h"
+#include "types/Calibration.h"
 
 #include <fstream>
 #include <boost/shared_ptr.hpp>
@@ -36,9 +36,6 @@ const unsigned int RECOGNIZER_DRAFT_CLASS_CHOSEN = 2;
 const unsigned int RECOGNIZER_ALLOW_ALL = -1;
 const unsigned int RECOGNIZER_ALLOW_NONE = 0;
 
-const unsigned int SETTYPE_CARDS = 0;
-const unsigned int SETTYPE_HEROES = 1;
-
 const unsigned int RESULT_GAME_END_VICTORY = 0;
 const unsigned int RESULT_GAME_END_DEFEAT = 1;
 const unsigned int RESULT_GAME_COIN_FIRST = 2;
@@ -50,17 +47,7 @@ typedef boost::shared_ptr<cv::BFMatcher> BFMatcherPtr;
 class Recognizer {
 
 public:
-	typedef std::vector<cv::Rect_<float> > VectorROI;
 	typedef std::vector<std::pair<cv::Mat, int> > VectorDescriptor;
-	static const VectorROI DRAFT_CLASS_PICK;
-	static const VectorROI DRAFT_CARD_PICK;
-	static const VectorROI DRAFT_CARD_CHOSEN;
-	static const VectorROI GAME_CLASS_SHOW;
-	static const VectorROI GAME_COIN;
-	static const VectorROI GAME_END;
-	static const VectorROI GAME_DRAW;
-	static const VectorROI GAME_DRAW_INIT_1;
-	static const VectorROI GAME_DRAW_INIT_2;
 
 	struct RecognitionResult {
 		bool valid;
@@ -76,18 +63,17 @@ public:
 	};
 
 	struct DataSet {
-		int typeID = -1;
 		std::vector<DataSetEntry> entries;
 		std::vector<ulong64> hashes; //for quick access
 		int phashThreshold;
 	};
 
-	Recognizer(DatabasePtr db);
+	Recognizer(DatabasePtr db, std::string calibrationID);
 	std::vector<RecognitionResult> recognize(const cv::Mat& image, unsigned int allowedRecognizers);
-	RecognitionResult compareFeatures(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const VectorDescriptor& descriptors);
-	RecognitionResult comparePHashes(const cv::Mat& image, unsigned int recognizer, const VectorROI& roi, const DataSet& dataSet);
-	std::vector<DataSetEntry> bestPHashMatches(const cv::Mat& image, const VectorROI& roi, const DataSet& dataSet);
-	int getIndexOfBluest(const cv::Mat& image, const VectorROI& roi);
+	RecognitionResult compareFeatures(const cv::Mat& image, unsigned int recognizer, const Calibration::VectorROI& roi, const VectorDescriptor& descriptors);
+	RecognitionResult comparePHashes(const cv::Mat& image, unsigned int recognizer, const Calibration::VectorROI& roi, const DataSet& dataSet);
+	std::vector<DataSetEntry> bestPHashMatches(const cv::Mat& image, const Calibration::VectorROI& roi, const DataSet& dataSet);
+	int getIndexOfBluest(const cv::Mat& image, const Calibration::VectorROI& roi);
 
 	cv::Mat getDescriptor(cv::Mat& image);
 	bool isGoodDescriptorMatch(const std::vector<cv::DMatch>& matches);
@@ -95,6 +81,7 @@ public:
 private:
 	void precomputeData();
 
+	CalibrationPtr c;
 	DatabasePtr db;
 	int phashThreshold;
 	DataSet setCards;
