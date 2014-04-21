@@ -4,7 +4,6 @@
 #include "Database.h"
 #include "PerceptualHash.h"
 #include "Calibration/Calibration.h"
-#include "Calibration/Calibrator.h"
 
 #include <fstream>
 #include <boost/shared_ptr.hpp>
@@ -19,8 +18,6 @@
 #include "opencv2/imgproc/imgproc.hpp"
 
 namespace hs {
-
-class Calibrator;
 
 //supported
 const unsigned int RECOGNIZER_DRAFT_CLASS_PICK = 1;
@@ -51,7 +48,6 @@ const unsigned int RESULT_GAME_COIN_SECOND = 3;
 typedef boost::shared_ptr<cv::BFMatcher> BFMatcherPtr;
 
 class Recognizer {
-friend class Calibrator;
 
 public:
 	typedef std::vector<cv::Rect_<float> > VectorROI;
@@ -99,7 +95,6 @@ public:
 private:
 	void precomputeData();
 
-//	boost::property_tree::ptree data;
 	DatabasePtr db;
 	int phashThreshold;
 	DataSet setCards;
@@ -107,7 +102,6 @@ private:
 	std::vector<int> lastDraftRecognition;
 
 	cv::SURF surf;
-//	FlannBasedMatcherPtr matcher;
 	BFMatcherPtr matcher;
 	VectorDescriptor descriptorCoin;
 	VectorDescriptor descriptorEnd;

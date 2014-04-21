@@ -13,6 +13,7 @@
 #include <boost/assign/list_of.hpp>
 #include <boost/assign/std/vector.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include "Calibration/Calibration.h"
 
 #include "opencv2/highgui/highgui.hpp"
 
@@ -159,8 +160,9 @@ void StreamManager::run() {
 
 		if (param_debug_level & 2) {
 			cv::imshow("Debug", image);
-//			cv::waitKey(10);
-			cv::waitKey();
+			static int waitTime = Config::getConfig().get<int>("config.debugging.wait_key_time", 0);
+			if (waitTime) cv::waitKey(waitTime);
+			else cv::waitKey();
 		}
 
 		auto startTime = boost::posix_time::microsec_clock::local_time();

@@ -117,8 +117,8 @@ CommandProcessor::CommandProcessor(boost::shared_ptr<StreamManager> smPtr) {
 			response = sm->deck.createInternalRepresentation();
 		} else if (ci.allArgs == "send") {
 			std::vector<std::string> args(2);
-			args.push_back(sm->deck.heroClass);
-			args.push_back(sm->deck.createInternalRepresentation());
+			args[0] = sm->deck.heroClass;
+			args[1] = sm->deck.createInternalRepresentation();
 			SystemInterface::callAPI(sm->api.submitDeckFormat, args);
 			response = "Deck sent";
 		}

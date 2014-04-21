@@ -3,6 +3,7 @@
 
 #include <string>
 #include <opencv2/opencv.hpp>
+#include "../PerceptualHash.h"
 
 namespace hs {
 
@@ -10,8 +11,7 @@ class Calibration {
 
 public:
 	Calibration();
-	bool valid;
-
+	static cv::Rect bruteforceOptimize(const cv::Mat& image, ulong64 phash, cv::Rect heuristic = cv::Rect());
 private:
 
 

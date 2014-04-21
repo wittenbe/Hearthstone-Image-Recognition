@@ -43,7 +43,7 @@ const Recognizer::VectorROI Recognizer::GAME_CLASS_SHOW = list_of
 		(cv::Rect_<float>(0.6593f, 0.123f, 0.1101f, 0.2938f));
 
 const Recognizer::VectorROI Recognizer::GAME_DRAW = list_of
-		(cv::Rect_<float>(0.6815f, 0.3375f, 0.06207f, 0.1625f));
+		(cv::Rect_<float>(0.6815f, 0.3438f, 0.0633f, 0.1542f));
 
 const Recognizer::VectorROI Recognizer::GAME_DRAW_INIT_1 = list_of
 		(cv::Rect_<float>(0.3033f, 0.3521f, 0.0469f, 0.1125f))
