@@ -12,20 +12,21 @@ namespace hs {
 
 class StreamManager;
 
-#define UL_SUBUSER 0
-#define UL_USER 1
-#define UL_MOD 2
-#define UL_SUPER 3
+const unsigned int UL_SUBUSER = 0;
+const unsigned int UL_USER = 0;
+const unsigned int UL_MOD = 0;
+const unsigned int UL_SUPER = 0;
 
-#define TIME_BETWEEN_COMMANDS 1
+const unsigned int COMMAND_COOLDOWN = 5;
+
+const std::string COMMAND_FEEDBACK_TOGGLE = "Parameter \"%s\" is: %s";
+const std::string COMMAND_FEEDBACK_STATE = "Deck(%d) Game(%d) Draw(%d) Internal(%d)";
 
 class CommandProcessor {
 public:
 	struct CommandInfo {
 		std::string user;
 		unsigned int userlevel;
-		bool toggle;
-		bool toggleEnable;
 		std::vector<std::string> args;
 		std::string allArgs;
 	};
@@ -41,14 +42,17 @@ public:
 	};
 	typedef boost::shared_ptr<CommandCallback> CCP;
 
-
 	CommandProcessor(boost::shared_ptr<StreamManager> sm);
 	std::string process(const std::string& user, const std::string& cmd, bool isMod, bool isSuperUser);
 private:
 	boost::shared_ptr<StreamManager> sm;
 	boost::timer userCooldownTimer;
 	boost::unordered_map<std::string, boost::shared_ptr<CommandCallback> > cmdMap;
+	boost::unordered_map<std::string, unsigned int> toggleMap;
 	void alias(std::string original, std::string alias);
+	inline bool getToggle(const std::string& s) {
+		return (s == "1" || s == "on" || s == "true");
+	}
 };
 
 typedef boost::shared_ptr<CommandProcessor> CommandProcessorPtr;

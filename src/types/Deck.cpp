@@ -124,6 +124,28 @@ cv::Mat Deck::createImageRepresentation() {
 	return result;
 }
 
+cv::Mat Deck::createImageRemainingRepresentation() {
+	cv::Mat unknown = cv::imread(imagePath + "/unknown.png", CV_LOAD_IMAGE_COLOR);
+	cv::Mat result(unknown.rows * cards.size(), unknown.cols, unknown.type());
+	cv::Rect roiRect(0, 0, unknown.cols, unknown.rows);
+
+	size_t i = 0;
+	for (const auto& e : cards) {
+		roiRect.y = i++ * unknown.rows;
+		cv::Mat cardImage = unknown;
+		cv::Mat roi = result(roiRect);
+		if (e.c.id != unknownCard.id) {
+			cardImage = cv::imread(imagePath + "/n/" + (boost::format("%03d") % e.c.id).str() + ".png", CV_LOAD_IMAGE_COLOR);
+		}
+		std::string amount = boost::lexical_cast<std::string>(std::min(e.remaining, 9));
+		cv::Mat amountImage = cv::imread(imagePath + "/amount/" + amount + ".png", CV_LOAD_IMAGE_UNCHANGED);
+		cv::Mat cardImageRoi = cardImage(cv::Rect(274, 12, amountImage.cols, amountImage.rows));
+		overlayImage(cardImageRoi, amountImage);
+		cardImage.copyTo(roi);
+	}
+	return result;
+}
+
 void Deck::addCard(const Card& c, int amount, int remaining) {
 	if (!hasCardSpace()) return;
 	removeUnknown(amount); //replace an unknown if possible

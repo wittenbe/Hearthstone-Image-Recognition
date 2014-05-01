@@ -44,6 +44,7 @@ public:
 	void fillFromInternalRepresentation(DatabasePtr db, std::string s);
 	std::string createTextRepresentation();
 	cv::Mat createImageRepresentation();
+	cv::Mat createImageRemainingRepresentation();
 	void addCard(const Card& c, int amount = 1, int remaining = 1);
 	void addSet(const Card& c0, const Card& c1, const Card& c2);
 	void addPickedCard(const Card& c);
@@ -55,6 +56,7 @@ public:
 	void clear();
 	bool isComplete();
 	int getCardCount();
+	bool hasUnknown() {return cards.size() != 0 && cards.begin()->c.id == unknownCard.id;}
 
 private:
 	std::string imagePath;
@@ -62,7 +64,6 @@ private:
 	int cardCount;
 	void removeUnknown(int amount = 1);
 	bool hasCardSpace();
-	bool hasUnknown() {return cards.size() != 0 && cards.begin()->c.id == unknownCard.id;}
 	void overlayImage(cv::Mat &background, const cv::Mat &foreground);
 };
 

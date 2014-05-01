@@ -13,9 +13,15 @@ CommandProcessor::CommandProcessor(boost::shared_ptr<StreamManager> smPtr) {
 	this->sm = smPtr;
 	userCooldownTimer.restart();
 
+	toggleMap["strawpolling"] = INTERNAL_STRAWPOLLING;
+	toggleMap["scoring"] = INTERNAL_SCORING;
+	toggleMap["drawhandling"] = INTERNAL_DRAWHANDLING;
+	toggleMap["buildfromdraws"] = INTERNAL_BUILDFROMDRAWS;
+	toggleMap["apicalling"] = INTERNAL_APICALLING;
+
 	//set up all commands
 	cmdMap["!deck"] = CCP(new CommandCallback(0, 0, UL_USER, false, [this](const CommandInfo& ci, std::string& response){
-		response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.textUrl).str();
+		response = sm->deckInfo.msg;
 	}));
 	alias("!deck", "!decklist");
 
@@ -31,72 +37,41 @@ CommandProcessor::CommandProcessor(boost::shared_ptr<StreamManager> smPtr) {
 	}));
 
 	cmdMap["!publishdeck"] = CCP(new CommandCallback(0, 0, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
-		if (ci.allArgs == "image") {
-			auto deckImage = sm->deck.createImageRepresentation();
-			sm->currentDeck.imageUrl = SystemInterface::createImgur(deckImage);
-			response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.imageUrl).str();
+		if (ci.allArgs == "remaining") {
+			auto deckImage = sm->deck.createImageRemainingRepresentation();
+			std::string remaining = SystemInterface::createImgur(deckImage);
+			response = (boost::format(CMD_REMAINING_FORMAT) % remaining).str();
 		} else {
 			std::string deckString = sm->deck.createTextRepresentation();
-			sm->currentDeck.textUrl = SystemInterface::createHastebin(deckString);
-			response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.textUrl).str();
+			sm->deckInfo.msg = sm->createDeckURLs();
+			response = sm->deckInfo.msg;
 		}
-
 	}));
 
 	cmdMap["!setdeck"] = CCP(new CommandCallback(1, -1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
-		sm->currentDeck.textUrl = ci.allArgs;
-		response = (boost::format(CMD_DECK_FORMAT) % sm->sName % sm->currentDeck.textUrl).str();
+		sm->deckInfo.msg = ci.allArgs;
+		response = sm->deckInfo.msg;
 	}));
 
-	cmdMap["!strawpolling"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
-		if (ci.toggle) {
-			sm->param_strawpolling = ci.toggleEnable;
-		}
-		response = "Automated strawpolling is: ";
-		response += (sm->param_strawpolling)? "on" : "off";
-	}));
+	cmdMap["!fb"] = CCP(new CommandCallback(1, 2, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
+		const unsigned int internal = toggleMap[ci.args[0]];
+		if (!internal) return;
 
-	cmdMap["!backupscoring"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
-		if (ci.toggle) {
-			sm->param_backupscoring = ci.toggleEnable;
-		}
-		response = "Backup scoring is: ";
-		response += (sm->param_backupscoring)? "on" : "off";
-	}));
-
-	cmdMap["!drawhandling"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
-		if (ci.toggle) {
-			sm->param_drawhandling = ci.toggleEnable;
-			if (sm->param_drawhandling) {
-				sm->currentDraw.state = RECOGNIZER_GAME_DRAW;
+		if (ci.args.size() >= 2) {
+			if (getToggle(ci.args[1])) {
+				sm->enable(sm->internalState, internal);
 			} else {
-				sm->currentDraw.state = 0;
+				sm->disable(sm->internalState, internal);
 			}
 		}
-		response = "Draw handling is: ";
-		response += (sm->param_drawhandling)? "on" : "off";
-	}));
-
-	cmdMap["!apicalling"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
-		if (ci.toggle) {
-			sm->param_apicalling = ci.toggleEnable;
-		}
-		response = "API calling is: ";
-		response += (sm->param_apicalling)? "on" : "off";
-	}));
-
-	cmdMap["!deckfromdraws"] = CCP(new CommandCallback(0, 1, UL_MOD, true, [this](const CommandInfo& ci, std::string& response){
-		if (ci.toggle) {
-			sm->currentDraw.buildFromDraws = ci.toggleEnable;
-		}
-		response = "Building decklist from observed draws is: ";
-		response += (sm->currentDraw.buildFromDraws)? "on" : "off";
+		const bool isOn = sm->internalState & internal;
+		response = (boost::format(COMMAND_FEEDBACK_TOGGLE) % ci.args[0] % ((isOn)? "on" : "off")).str();
 	}));
 
 	cmdMap["!info"] = CCP(new CommandCallback(1, 1, UL_MOD, false, [this](const CommandInfo& ci, std::string& response){
 		if (ci.allArgs != "fortebot") return;
-		response = "ForteBot uses OpenCV and perceptual hashing to very quickly compare all card images against the stream image to find a match. "
-				"Additionally, SURF feature detection is used for automated scoring. "
+		response = "ForteBot uses OpenCV and perceptual hashing to very quickly compare all card/class images against the stream image to find a match. "
+				"Additionally, SURF feature detection is used for automated victory/defeat detection. "
 				"The Bot is written in C++ by ZeForte. "
 				"Check out the (poorly commented) source on GitHub: http://bit.ly/1eGgN5g";
 	}));
@@ -125,11 +100,7 @@ CommandProcessor::CommandProcessor(boost::shared_ptr<StreamManager> smPtr) {
 	}));
 
 	cmdMap["!fb_state"] = CCP(new CommandCallback(0, 0, UL_SUPER, false, [this](const CommandInfo& ci, std::string& response){
-		response = boost::lexical_cast<std::string>(sm->currentDeck.state);
-		response += " ";
-		response += boost::lexical_cast<std::string>(sm->currentGame.state);
-		response += " ";
-		response += boost::lexical_cast<std::string>(sm->currentDraw.state);
+		response = (boost::format(COMMAND_FEEDBACK_STATE) % sm->deckInfo.state % sm->gameInfo.state % sm->drawInfo.state % sm->internalState).str();
 	}));
 
 	cmdMap["!fb_quit"] = CCP(new CommandCallback(0, 0, UL_MOD, false, [this](const CommandInfo& ci, std::string& response){
@@ -140,7 +111,7 @@ CommandProcessor::CommandProcessor(boost::shared_ptr<StreamManager> smPtr) {
 std::string CommandProcessor::process(const std::string& user, const std::string& cmd, bool isMod, bool isSuperUser) {
 	std::string response;
 
-	//command exists
+	//command exists?
 	std::vector<std::string> cmdParams;
 	boost::split(cmdParams, cmd, boost::is_any_of(" "), boost::token_compress_on);
 	auto cmdMapEntry = cmdMap.find(cmdParams[0]);
@@ -151,8 +122,6 @@ std::string CommandProcessor::process(const std::string& user, const std::string
 	ci.user = user;
 	for (size_t i = 1; i < cmdParams.size(); i++) {ci.args.push_back(cmdParams[i]);}
 	ci.allArgs = boost::algorithm::join(ci.args, " ");
-	ci.toggle = cmdParams.size() >= 2;
-	ci.toggleEnable = ci.toggle && (ci.args[0] == "1" || ci.args[0] == "on" || ci.args[0] == "true");
 
 	//get userlevel
 	if (isSuperUser) {
@@ -161,7 +130,7 @@ std::string CommandProcessor::process(const std::string& user, const std::string
 		ci.userlevel = UL_MOD;
 	} else {
 		ci.userlevel = UL_USER;
-		if (userCooldownTimer.elapsed() < TIME_BETWEEN_COMMANDS) {
+		if (userCooldownTimer.elapsed() < COMMAND_COOLDOWN) {
 			ci.userlevel = UL_SUBUSER;
 		} else {
 			userCooldownTimer.restart();

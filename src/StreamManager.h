@@ -15,7 +15,9 @@
 
 namespace hs {
 
-const std::string CMD_DECK_FORMAT = "%s's current decklist: %s";
+const std::string CMD_DECK_FORMAT = "%s's current decklist: %s (draft history: %s )";
+const std::string CMD_REMAINING_FORMAT = "Remaining cards in deck: %s";
+const std::string DEFAULT_DECKURL = "Draft is in progress (!deckprogress for more info)";
 
 const std::string MSG_CLASS_POLL = "Which class should %s pick next?";
 const int MSG_CLASS_POLL_ERROR_RETRY_COUNT = 1;
@@ -34,11 +36,17 @@ const std::string MSG_GAME_END = "!score -%s";
 const std::string MSG_INITIAL_DRAW = "Initial Draw: %s";
 const std::string MSG_DRAW = "Drew \"%s\"";
 
-const std::string DEFAULT_DECKURL = "draft is in progress (!deckprogress for more info)";
-const std::string STATE_PATH = "state.xml";
+const std::string STATE_PATH_FORMAT = "state_%s.xml";
 
 const unsigned int PASSED_FRAMES_THRESHOLD = 20;
 const unsigned int PASSED_CARD_RECOGNITIONS = 2;
+
+const unsigned int INTERNAL_STRAWPOLLING = 1;
+const unsigned int INTERNAL_SCORING = 2;
+const unsigned int INTERNAL_DRAWHANDLING = 4;
+const unsigned int INTERNAL_APICALLING = 8;
+const unsigned int INTERNAL_BUILDFROMDRAWS = 16;
+const unsigned int INTERNAL_ENABLE_ALL = 31;
 
 class CommandProcessor;
 
@@ -46,10 +54,9 @@ class StreamManager {
 friend class CommandProcessor;
 
 public:
-	struct DeckInfo {
-		std::string textUrl;
-		std::string imageUrl;
-		void clear() {textUrl=DEFAULT_DECKURL;}
+	struct DraftInfo {
+		std::string msg;
+		void clear() {msg=DEFAULT_DECKURL;}
 
 		unsigned int state;
 	};
@@ -64,7 +71,6 @@ public:
 	};
 
 	struct DrawInfo {
-		bool buildFromDraws;
 		std::vector<int> initialDraw;
 		int latestDraw;
 
@@ -87,8 +93,9 @@ public:
 	void run();
 	std::string processCommand(const std::string& user, const std::string& cmd, bool isMod, bool isSuperUser);
 
-	std::string getDeckURL();
+	std::string createDeckURLs();
 	void setDeckURL(std::string deckURL);
+
 
 private:
 	boost::shared_ptr<CommandProcessor> cp;
@@ -97,10 +104,7 @@ private:
 	clever_bot::botPtr bot;
 	RecognizerPtr recognizer;
 
-	bool param_strawpolling;
-	bool param_backupscoring;
-	bool param_drawhandling;
-	bool param_apicalling;
+	unsigned int internalState;
 	unsigned int param_debug_level;
 
 	int numThreads;
@@ -109,9 +113,9 @@ private:
 	std::string sName; //streamer name
 	Deck deck;
 	bool shouldUpdateDeck;
-	DeckInfo currentDeck;
-	GameInfo currentGame;
-	DrawInfo currentDraw;
+	DraftInfo deckInfo;
+	GameInfo gameInfo;
+	DrawInfo drawInfo;
 	APIInfo api;
 	boost::atomic<unsigned int> passedFrames;
 	std::pair<int, size_t> currentCard;

@@ -36,6 +36,4 @@ typedef boost::shared_ptr<Calibration> CalibrationPtr;
 
 }
 
-
-
 #endif /* CALIBRATION_H_ */

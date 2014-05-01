@@ -25,33 +25,33 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 	this->bot = bot;
 	cp = CommandProcessorPtr(new CommandProcessor(StreamManagerPtr(this)));
 	db = DatabasePtr(new Database(Config::getConfig().get<std::string>("config.paths.recognition_data_path")));
+	recognizer = RecognizerPtr(new Recognizer(db, Config::getConfig().get<std::string>("config.stream.streamer")));
+
+	//zeroing out
 	shouldUpdateDeck = false;
-	param_strawpolling = true;
-	param_backupscoring = true;
-	param_drawhandling = true;
-	param_apicalling = true;
 	param_debug_level = 0;
-	if (Config::getConfig().get<bool>("config.debugging.enabled", false)) param_debug_level = Config::getConfig().get<int>("config.debugging.debug_level");
 	passedFrames = PASSED_FRAMES_THRESHOLD;
 	currentCard.second = -1;
 	currentCard.second = 0;
 	winsLosses = std::make_pair<int, int>(0,0);
+	internalState = 0;
+	deckInfo.state = 0;
+	gameInfo.state = 0;
+	drawInfo.state = 0;
+	deckInfo.clear();
 
-	recognizer = RecognizerPtr(new Recognizer(db, Config::getConfig().get<std::string>("config.stream.streamer")));
+	//default state
+	if (Config::getConfig().get<bool>("config.debugging.enabled", false)) param_debug_level = Config::getConfig().get<int>("config.debugging.debug_level");
+	enable(internalState, INTERNAL_ENABLE_ALL);
 
-	currentDeck.clear();
-	currentDeck.state = 0;
-	currentGame.state = 0;
-	currentDraw.state = 0;
-	currentDraw.buildFromDraws = false;
-	enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
-	enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
+	enable(deckInfo.state, RECOGNIZER_DRAFT_CLASS_PICK);
+	enable(deckInfo.state, RECOGNIZER_DRAFT_CARD_PICK);
 
-	enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
-	enable(currentGame.state, RECOGNIZER_GAME_END);
+	enable(gameInfo.state, RECOGNIZER_GAME_CLASS_SHOW);
+	enable(gameInfo.state, RECOGNIZER_GAME_END);
 
-	if (param_drawhandling) {
-		enable(currentDraw.state, RECOGNIZER_GAME_DRAW);
+	if (internalState & INTERNAL_DRAWHANDLING) {
+		enable(drawInfo.state, RECOGNIZER_GAME_DRAW);
 	}
 
 	loadState();
@@ -71,6 +71,7 @@ StreamManager::StreamManager(StreamPtr stream, clever_bot::botPtr bot) {
 		}
 	}
 	HS_INFO << "Using " << numThreads << " threads" << std::endl;
+	this->stream->setCopyOnRead(numThreads > 1);
 }
 
 StreamManager::~StreamManager() {
@@ -79,23 +80,18 @@ StreamManager::~StreamManager() {
 
 void StreamManager::loadState() {
 	boost::property_tree::ptree state;
-    std::ifstream stateFile(std::string(STATE_PATH).c_str());
+    std::ifstream stateFile((boost::format(STATE_PATH_FORMAT) % Config::getConfig().get<std::string>("config.stream.streamer")).str());
     if (stateFile.fail()) {
     	HS_INFO << "no state to load, using default values" << std::endl;
     } else {
         boost::property_tree::read_xml(stateFile, state);
-        currentDeck.textUrl = state.get<decltype(currentDeck.textUrl)>("state.deckURL", currentDeck.textUrl);
-        currentDeck.state = state.get<decltype(currentDeck.state)>("state.deckState", currentDeck.state);
-        currentGame.state = state.get<decltype(currentGame.state)>("state.gameState", currentGame.state);
-        winsLosses.first = state.get<decltype(winsLosses.first)>("state.currentWins", winsLosses.first);
-        winsLosses.second = state.get<decltype(winsLosses.second)>("state.currentLosses", winsLosses.second);
-        param_backupscoring = state.get<decltype(param_backupscoring)>("state.backupscoring", param_backupscoring);
-        param_strawpolling = state.get<decltype(param_strawpolling)>("state.strawpolling", param_strawpolling);
-        param_drawhandling = state.get<decltype(param_drawhandling)>("state.drawhandling", param_drawhandling);
-        param_apicalling = state.get<decltype(param_apicalling)>("state.apicalling", param_apicalling);
-        currentDraw.buildFromDraws = state.get<decltype(currentDraw.buildFromDraws)>("state.buildFromDraws", currentDraw.buildFromDraws);
+        deckInfo.msg = state.get<decltype(deckInfo.msg)>("state.deck_msg", deckInfo.msg);
+        internalState = state.get<decltype(internalState)>("state.internal_state", internalState);
+        winsLosses.first = state.get<decltype(winsLosses.first)>("state.current_wins", winsLosses.first);
+        winsLosses.second = state.get<decltype(winsLosses.second)>("state.current_losses", winsLosses.second);
+
         std::string deckRep;
-        deckRep = state.get<decltype(deckRep)>("state.deck", deckRep);
+        deckRep = state.get<decltype(deckRep)>("state.data.deck", deckRep);
         if (!deckRep.empty()) {
         	deck.fillFromInternalRepresentation(db, deckRep);
         	shouldUpdateDeck = true;
@@ -107,24 +103,18 @@ void StreamManager::loadState() {
 
 void StreamManager::saveState() {
 	HS_INFO << "attempting to save state" << std::endl;
-	std::ifstream stateFile(STATE_PATH);
+	std::string statePath = (boost::format(STATE_PATH_FORMAT) % Config::getConfig().get<std::string>("config.stream.streamer")).str();
+	std::ifstream stateFile(statePath);
 	boost::property_tree::ptree state;
-//	boost::property_tree::read_xml(stateFile, state, boost::property_tree::xml_parser::trim_whitespace);
 
-    state.put("state.deckURL", currentDeck.textUrl);
-//    state.put("state.deckState", currentDeck.state);
-//    state.put("state.gameState", currentGame.state);
-    state.put("state.backupscoring", param_backupscoring);
-    state.put("state.strawpolling", param_strawpolling);
-    state.put("state.drawhandling", param_drawhandling);
-    state.put("state.apicalling", param_apicalling);
-    state.put("state.currentWins", winsLosses.first);
-    state.put("state.currentLosses", winsLosses.second);
-    state.put("state.buildFromDraws", currentDraw.buildFromDraws);
-    state.put("state.deck", deck.createInternalRepresentation());
+    state.put("state.deck_msg", deckInfo.msg);
+    state.put("state.internal_state", internalState);
+    state.put("state.current_wins", winsLosses.first);
+    state.put("state.current_losses", winsLosses.second);
+    state.put("state.data.deck", deck.createInternalRepresentation());
 
     boost::property_tree::xml_writer_settings<char> settings('\t', 1);
-    write_xml(STATE_PATH, state, std::locale(""), settings);
+    write_xml(statePath, state, std::locale(""), settings);
     HS_INFO << "state saved" << std::endl;
 }
 
@@ -166,7 +156,7 @@ void StreamManager::run() {
 
 		auto startTime = boost::posix_time::microsec_clock::local_time();
 
-		std::vector<Recognizer::RecognitionResult> results = recognizer->recognize(image, currentDeck.state | currentGame.state | currentDraw.state);
+		std::vector<Recognizer::RecognitionResult> results = recognizer->recognize(image, deckInfo.state | gameInfo.state | drawInfo.state);
 
 		if (param_debug_level & 1) {
 			auto endTime = boost::posix_time::microsec_clock::local_time();
@@ -184,16 +174,16 @@ void StreamManager::run() {
 
 		stateMutex.lock();
 		for (auto& result : results) {
-			if (RECOGNIZER_DRAFT_CLASS_PICK == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CLASS_PICK)) {
+			if (RECOGNIZER_DRAFT_CLASS_PICK == result.sourceRecognizer && (deckInfo.state & RECOGNIZER_DRAFT_CLASS_PICK)) {
 				deck.clear();
-				currentDeck.clear();
-				disable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
-				enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
+				deckInfo.clear();
+				disable(deckInfo.state, RECOGNIZER_DRAFT_CLASS_PICK);
+				enable(deckInfo.state, RECOGNIZER_DRAFT_CARD_PICK);
 				HS_INFO << "new draft: " << db->heroes[result.results[0]].name << ", " << db->heroes[result.results[1]].name << ", " << db->heroes[result.results[2]].name << std::endl;
 				bot->message("!score -arena");
 				winsLosses = std::make_pair<int, int>(0,0);
 
-				if (param_strawpolling) {
+				if (internalState & INTERNAL_STRAWPOLLING) {
 					bot->message("!subon");
 					bool success = false;
 					std::vector<std::string> classNames;
@@ -218,7 +208,7 @@ void StreamManager::run() {
 					}
 				}
 			}
-			else if (RECOGNIZER_DRAFT_CARD_PICK == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CARD_PICK)) {
+			else if (RECOGNIZER_DRAFT_CARD_PICK == result.sourceRecognizer && (deckInfo.state & RECOGNIZER_DRAFT_CARD_PICK)) {
 				const size_t last = deck.setHistory.size() - 1;
 				bool isNew = deck.pickHistory.size() == 0 && last == -1;
 				for (size_t i = 0; i < result.results.size() && !isNew; i++) {
@@ -228,19 +218,19 @@ void StreamManager::run() {
 
 				if (isNew) {
 					deck.addSet(db->cards[result.results[0]], db->cards[result.results[1]], db->cards[result.results[2]]);
-					if ((currentDeck.state & RECOGNIZER_DRAFT_CARD_CHOSEN) && deck.setHistory.size() == deck.pickHistory.size() + 2) {
+					if ((deckInfo.state & RECOGNIZER_DRAFT_CARD_CHOSEN) && deck.setHistory.size() == deck.pickHistory.size() + 2) {
 						deck.addUnknownPick();
 						HS_WARNING << "Missed pick " << deck.cards.size() << std::endl;
 					}
-					enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
-					enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_CHOSEN);
+					enable(deckInfo.state, RECOGNIZER_DRAFT_CLASS_PICK);
+					enable(deckInfo.state, RECOGNIZER_DRAFT_CARD_CHOSEN);
 					HS_INFO << "pick " << deck.getCardCount() + 1 << ": " + db->cards[result.results[0]].name + ", " + db->cards[result.results[1]].name + ", " << db->cards[result.results[2]].name << std::endl;
 				}
 			}
-			else if (RECOGNIZER_DRAFT_CARD_CHOSEN  == result.sourceRecognizer && (currentDeck.state & RECOGNIZER_DRAFT_CARD_CHOSEN)) {
-				enable(currentDeck.state, RECOGNIZER_DRAFT_CLASS_PICK);
-				enable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
-				disable(currentDeck.state, RECOGNIZER_DRAFT_CARD_CHOSEN);
+			else if (RECOGNIZER_DRAFT_CARD_CHOSEN  == result.sourceRecognizer && (deckInfo.state & RECOGNIZER_DRAFT_CARD_CHOSEN)) {
+				enable(deckInfo.state, RECOGNIZER_DRAFT_CLASS_PICK);
+				enable(deckInfo.state, RECOGNIZER_DRAFT_CARD_PICK);
+				disable(deckInfo.state, RECOGNIZER_DRAFT_CARD_CHOSEN);
 
 				Card c = deck.setHistory.back()[result.results[0]];
 				HS_INFO << "picked " << c.name << std::endl;
@@ -248,54 +238,53 @@ void StreamManager::run() {
 				shouldUpdateDeck = true;
 
 				if (deck.isComplete()) {
-					disable(currentDeck.state, RECOGNIZER_DRAFT_CARD_PICK);
-					std::string deckString = deck.createTextRepresentation();
-					currentDeck.textUrl = SystemInterface::createHastebin(deckString);
-					bot->message((boost::format(CMD_DECK_FORMAT) % sName % currentDeck.textUrl).str());
+					disable(deckInfo.state, RECOGNIZER_DRAFT_CARD_PICK);
+					deckInfo.msg = createDeckURLs();
+					bot->message(deckInfo.msg);
 				}
 			}
-			else if (RECOGNIZER_GAME_CLASS_SHOW  == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_CLASS_SHOW)) {
-				enable(currentGame.state, RECOGNIZER_GAME_COIN);
-				disable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
-				currentGame.player = db->heroes[result.results[0]].name;
-				currentGame.opponent = db->heroes[result.results[1]].name;
-				HS_INFO << "New Game: " << currentGame.player << " vs. " << currentGame.opponent << std::endl;
-				if (shouldUpdateDeck && param_apicalling) {
+			else if (RECOGNIZER_GAME_CLASS_SHOW  == result.sourceRecognizer && (gameInfo.state & RECOGNIZER_GAME_CLASS_SHOW)) {
+				enable(gameInfo.state, RECOGNIZER_GAME_COIN);
+				disable(gameInfo.state, RECOGNIZER_GAME_CLASS_SHOW);
+				gameInfo.player = db->heroes[result.results[0]].name;
+				gameInfo.opponent = db->heroes[result.results[1]].name;
+				HS_INFO << "New Game: " << gameInfo.player << " vs. " << gameInfo.opponent << std::endl;
+				if (shouldUpdateDeck && (internalState & INTERNAL_APICALLING)) {
 					SystemInterface::callAPI(api.submitDeckFormat, list_of(deck.heroClass)(deck.createInternalRepresentation()));
 					shouldUpdateDeck = false;
 				}
 			}
-			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_COIN)) {
-				enable(currentGame.state, RECOGNIZER_GAME_END);
-				enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
-				disable(currentGame.state, RECOGNIZER_GAME_COIN);
-				currentGame.fs = (result.results[0] == RESULT_GAME_COIN_FIRST)? "1" : "2";
-				if (param_backupscoring) {
-					bot->message((boost::format(MSG_GAME_START) % currentGame.player % currentGame.opponent % currentGame.fs).str());
+			else if (RECOGNIZER_GAME_COIN == result.sourceRecognizer && (gameInfo.state & RECOGNIZER_GAME_COIN)) {
+				enable(gameInfo.state, RECOGNIZER_GAME_END);
+				enable(gameInfo.state, RECOGNIZER_GAME_CLASS_SHOW);
+				disable(gameInfo.state, RECOGNIZER_GAME_COIN);
+				gameInfo.fs = (result.results[0] == RESULT_GAME_COIN_FIRST)? "1" : "2";
+				if (internalState & INTERNAL_SCORING) {
+					bot->message((boost::format(MSG_GAME_START) % gameInfo.player % gameInfo.opponent % gameInfo.fs).str());
 				}
 				if (param_debug_level & 4) {
 					const std::string& time = boost::lexical_cast<std::string>(boost::posix_time::microsec_clock::local_time().time_of_day().total_milliseconds());
-					std::string name = "coin" + currentGame.fs + time + ".png";
+					std::string name = "coin" + gameInfo.fs + time + ".png";
 					SystemInterface::saveImage(image, name);
 				}
-				if (param_drawhandling && currentGame.fs == "1") {
-					enable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_1);
-				} else if (param_drawhandling && currentGame.fs == "2") {
-					enable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_2);
+				if ((internalState & INTERNAL_DRAWHANDLING) && gameInfo.fs == "1") {
+					enable(drawInfo.state, RECOGNIZER_GAME_DRAW_INIT_1);
+				} else if ((internalState & INTERNAL_DRAWHANDLING) && gameInfo.fs == "2") {
+					enable(drawInfo.state, RECOGNIZER_GAME_DRAW_INIT_2);
 				}
-				currentDraw.latestDraw = -1;
-				if (param_apicalling) SystemInterface::callAPI(api.resetDrawsFormat, std::vector<std::string>());
+				drawInfo.latestDraw = -1;
+				if (internalState & INTERNAL_APICALLING) SystemInterface::callAPI(api.resetDrawsFormat, std::vector<std::string>());
 				deck.resetDraws();
 			}
-			else if (RECOGNIZER_GAME_END == result.sourceRecognizer && (currentGame.state & RECOGNIZER_GAME_END)) {
-				enable(currentGame.state, RECOGNIZER_GAME_CLASS_SHOW);
-				disable(currentGame.state, RECOGNIZER_GAME_END);
-				currentGame.end = (result.results[0] == RESULT_GAME_END_VICTORY)? "w" : "l";
-				if (currentGame.end == "w") winsLosses.first++;
+			else if (RECOGNIZER_GAME_END == result.sourceRecognizer && (gameInfo.state & RECOGNIZER_GAME_END)) {
+				enable(gameInfo.state, RECOGNIZER_GAME_CLASS_SHOW);
+				disable(gameInfo.state, RECOGNIZER_GAME_END);
+				gameInfo.end = (result.results[0] == RESULT_GAME_END_VICTORY)? "w" : "l";
+				if (gameInfo.end == "w") winsLosses.first++;
 				else winsLosses.second++;
 
-				if (param_backupscoring) {
-					bot->message((boost::format(MSG_GAME_END) % currentGame.end).str());
+				if (internalState & INTERNAL_SCORING) {
+					bot->message((boost::format(MSG_GAME_END) % gameInfo.end).str());
 				}
 
 				if (winsLosses.first == 12 || winsLosses.second == 3) {
@@ -303,17 +292,17 @@ void StreamManager::run() {
 				}
 				if (param_debug_level & 4) {
 					const std::string& time = boost::lexical_cast<std::string>(boost::posix_time::microsec_clock::local_time().time_of_day().total_milliseconds());
-					std::string name = currentGame.end + time + ".png";
+					std::string name = gameInfo.end + time + ".png";
 					SystemInterface::saveImage(image, name);
 				}
 			}
-			else if (RECOGNIZER_GAME_DRAW_INIT_1 == result.sourceRecognizer && (currentDraw.state & RECOGNIZER_GAME_DRAW_INIT_1)) {
-				currentDraw.initialDraw = result.results;
+			else if (RECOGNIZER_GAME_DRAW_INIT_1 == result.sourceRecognizer && (drawInfo.state & RECOGNIZER_GAME_DRAW_INIT_1)) {
+				drawInfo.initialDraw = result.results;
 			}
-			else if (RECOGNIZER_GAME_DRAW_INIT_2 == result.sourceRecognizer && (currentDraw.state & RECOGNIZER_GAME_DRAW_INIT_2)) {
-				currentDraw.initialDraw = result.results;
+			else if (RECOGNIZER_GAME_DRAW_INIT_2 == result.sourceRecognizer && (drawInfo.state & RECOGNIZER_GAME_DRAW_INIT_2)) {
+				drawInfo.initialDraw = result.results;
 			}
-			else if (RECOGNIZER_GAME_DRAW == result.sourceRecognizer && (currentDraw.state & RECOGNIZER_GAME_DRAW) && passedFrames.load() >= PASSED_FRAMES_THRESHOLD) {
+			else if (RECOGNIZER_GAME_DRAW == result.sourceRecognizer && (drawInfo.state & RECOGNIZER_GAME_DRAW) && passedFrames.load() >= PASSED_FRAMES_THRESHOLD) {
 				bool pass = result.results[0] == currentCard.first && ++currentCard.second >= PASSED_CARD_RECOGNITIONS;
 				if (result.results[0] != currentCard.first) currentCard.second = 0;
 				currentCard.first = result.results[0];
@@ -321,23 +310,30 @@ void StreamManager::run() {
 					passedFrames = 0;
 					currentCard.second = 0;
 					currentCard.first = -1;
-					if (currentDraw.latestDraw == -1) {
+					bool newCards = false;
+					if (drawInfo.latestDraw == -1) {
 						std::vector<std::string> initDrawNames;
-						for (const auto& id : currentDraw.initialDraw) {
-							shouldUpdateDeck |= deck.draw(db->cards[id], currentDraw.buildFromDraws);
+						for (const auto& id : drawInfo.initialDraw) {
+							newCards |= deck.draw(db->cards[id], internalState & INTERNAL_BUILDFROMDRAWS);
 							initDrawNames.push_back(db->cards[id].name);
-							if (param_apicalling) SystemInterface::callAPI(api.drawCardFormat, list_of((boost::format("%03d") % id).str()));
+							if (internalState & INTERNAL_APICALLING) SystemInterface::callAPI(api.drawCardFormat, list_of((boost::format("%03d") % id).str()));
 						}
 						std::string initDraw = boost::algorithm::join(initDrawNames, "; ");
 //						bot->message((boost::format(MSG_INITIAL_DRAW) % initDraw).str());
-						currentDraw.initialDraw.clear();
-						disable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_1);
-						disable(currentDraw.state, RECOGNIZER_GAME_DRAW_INIT_2);
+						drawInfo.initialDraw.clear();
+						disable(drawInfo.state, RECOGNIZER_GAME_DRAW_INIT_1);
+						disable(drawInfo.state, RECOGNIZER_GAME_DRAW_INIT_2);
 					}
 //					bot->message((boost::format(MSG_DRAW) % db->cards[result.results[0]].name).str());
-					shouldUpdateDeck |= deck.draw(db->cards[result.results[0]], currentDraw.buildFromDraws);
-					if (param_apicalling) SystemInterface::callAPI(api.drawCardFormat, list_of((boost::format("%03d") % result.results[0]).str()));
-					currentDraw.latestDraw = result.results[0];
+					newCards |= deck.draw(db->cards[result.results[0]], internalState & INTERNAL_BUILDFROMDRAWS);
+					shouldUpdateDeck |= newCards;
+					if (internalState & INTERNAL_APICALLING) SystemInterface::callAPI(api.drawCardFormat, list_of((boost::format("%03d") % result.results[0]).str()));
+					drawInfo.latestDraw = result.results[0];
+
+					if (newCards && deck.isComplete()) {
+						deckInfo.msg = createDeckURLs();
+						bot->message(deckInfo.msg);
+					}
 				}
 			}
 		}
@@ -350,6 +346,12 @@ void StreamManager::run() {
 std::string StreamManager::processCommand(const std::string& user, const std::string& cmd, bool isMod, bool isSuperUser) {
 	if (cmd.empty() || cmd.find("!") != 0) return std::string("");
 	return cp->process(user, cmd, isMod, isSuperUser);
+}
+
+std::string StreamManager::createDeckURLs() {
+	std::string deckImage = SystemInterface::createImgur(deck.createImageRepresentation());
+	std::string deckString = SystemInterface::createHastebin(deck.createTextRepresentation());
+	return (boost::format(CMD_DECK_FORMAT) % sName % deckImage % deckString).str();
 }
 
 }

@@ -8,8 +8,8 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
-//relative to executable
-#define CONFIG_PATH "../config.xml"
+//relative to where program is executed
+const std::string CONFIG_PATH = "../config.xml";
 
 class Config {
 public:

@@ -11,7 +11,12 @@ namespace hs {
 
 class Stream {
 public:
-	Stream(std::vector<std::string> urls); //class for managing live streams or vods (which consist of multiple archives/flvs)
+	Stream(std::vector<std::string> urls);
+	/*
+	 * videocapture(the read method) actually only returns a reference to the buffer
+	 * if you don't copy and use multiple threads, one thread reading an image will overwrite/replace the data of other threads' images
+	 */
+	void setCopyOnRead(bool copyOnRead);
 	bool read(cv::Mat& image);
 	void setStreamIndex(size_t i);
 	void setFramePos(double n);
@@ -30,6 +35,7 @@ private:
 	size_t urlIndex;
 
 	bool isLiveStream;
+	bool copyOnRead;
 	double frameCount;
 };
 

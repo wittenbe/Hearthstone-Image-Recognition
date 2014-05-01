@@ -16,8 +16,8 @@
 
 #include <cv.h>
 
-#define FORMAT_ACCESS_TOKEN "http://api.twitch.tv/api/channels/%s/access_token"
-#define FORMAT_USHER "\"http://usher.twitch.tv/select/%s.xml?nauth=%s&nauthsig=%s&allow_source=true&type=any&private_code=\""
+const std::string FORMAT_ACCESS_TOKEN = "http://api.twitch.tv/api/channels/%s/access_token";
+const std::string FORMAT_USHER = "\"http://usher.twitch.tv/select/%s.xml?nauth=%s&nauthsig=%s&allow_source=true&type=any&private_code=\"";
 
 class SystemInterface {
 public:

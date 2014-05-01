@@ -66,6 +66,17 @@ Recognizer::Recognizer(DatabasePtr db, std::string calibrationID) {
     //set each set's phash threshold
     setCards.phashThreshold = phashThreshold;
     setClasses.phashThreshold = phashThreshold;
+
+    //declare recognizers
+    phashRecognizers.push_back(boost::make_tuple(RECOGNIZER_DRAFT_CLASS_PICK, c->roiDraftClassPick, setClasses));
+    phashRecognizers.push_back(boost::make_tuple(RECOGNIZER_DRAFT_CARD_PICK, c->roiDraftCardPick, setCards));
+    phashRecognizers.push_back(boost::make_tuple(RECOGNIZER_GAME_CLASS_SHOW, c->roiGameClassShow, setClasses));
+    phashRecognizers.push_back(boost::make_tuple(RECOGNIZER_GAME_DRAW, c->roiGameDraw, setCards));
+    phashRecognizers.push_back(boost::make_tuple(RECOGNIZER_GAME_DRAW_INIT_1, c->roiGameDrawInit1, setCards));
+    phashRecognizers.push_back(boost::make_tuple(RECOGNIZER_GAME_DRAW_INIT_2, c->roiGameDrawInit2, setCards));
+
+    surfRecognizers.push_back(boost::make_tuple(RECOGNIZER_GAME_COIN, c->roiGameCoin, descriptorCoin));
+    surfRecognizers.push_back(boost::make_tuple(RECOGNIZER_GAME_END, c->roiGameEnd, descriptorEnd));
 }
 
 void Recognizer::precomputeData() {
@@ -96,57 +107,25 @@ std::vector<Recognizer::RecognitionResult> Recognizer::recognize(const cv::Mat& 
 		image = source;
 	}
 
-	if (allowedRecognizers & RECOGNIZER_DRAFT_CLASS_PICK) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CLASS_PICK, c->roiDraftClassPick, setClasses);
-		if (rr.valid) results.push_back(rr);
+	for (const auto& rPHash : phashRecognizers) {
+		if (allowedRecognizers & rPHash.get<0>()) {
+			RecognitionResult rr = comparePHashes(image, rPHash.get<0>(), rPHash.get<1>(), rPHash.get<2>());
+			if (rr.valid) results.push_back(rr);
+		}
+	}
+
+	for (const auto& rSURF : surfRecognizers) {
+		if (allowedRecognizers & rSURF.get<0>()) {
+			RecognitionResult rr = compareFeatures(image, rSURF.get<0>(), rSURF.get<1>(), rSURF.get<2>());
+			if (rr.valid) results.push_back(rr);
+		}
 	}
 
 	if (allowedRecognizers & RECOGNIZER_DRAFT_CARD_PICK) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_DRAFT_CARD_PICK, c->roiDraftCardPick, setCards);
-		if (rr.valid) {
-			results.push_back(rr);
-			lastDraftRecognition = rr.results;
-		}
-	}
-
-	if (allowedRecognizers & RECOGNIZER_GAME_CLASS_SHOW) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_CLASS_SHOW, c->roiGameClassShow, setClasses);
-		if (rr.valid) results.push_back(rr);
-	}
-
-	if (allowedRecognizers & RECOGNIZER_DRAFT_CARD_CHOSEN) {
-		int index = getIndexOfBluest(image, c->roiDraftCardChosen);
-		if (index >= 0) {
-			RecognitionResult rr;
-			rr.sourceRecognizer = RECOGNIZER_DRAFT_CARD_CHOSEN;
-			rr.results.push_back(index);
-			results.push_back(rr);
-		}
-	}
-
-	if (allowedRecognizers & RECOGNIZER_GAME_DRAW) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW, c->roiGameDraw, setCards);
-		if (rr.valid) results.push_back(rr);
-	}
-
-	if (allowedRecognizers & RECOGNIZER_GAME_DRAW_INIT_1) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW_INIT_1, c->roiGameDrawInit1, setCards);
-		if (rr.valid) results.push_back(rr);
-	}
-
-	if (allowedRecognizers & RECOGNIZER_GAME_DRAW_INIT_2) {
-		RecognitionResult rr = comparePHashes(image, RECOGNIZER_GAME_DRAW_INIT_2, c->roiGameDrawInit2, setCards);
-		if (rr.valid) results.push_back(rr);
-	}
-
-	if (allowedRecognizers & RECOGNIZER_GAME_COIN) {
-		RecognitionResult rr = compareFeatures(image, RECOGNIZER_GAME_COIN, c->roiGameCoin, descriptorCoin);
-		if (rr.valid) results.push_back(rr);
-	}
-
-	if (allowedRecognizers & RECOGNIZER_GAME_END) {
-		RecognitionResult rr = compareFeatures(image, RECOGNIZER_GAME_END, c->roiGameEnd, descriptorEnd);
-		if (rr.valid) results.push_back(rr);
+		auto recognitionResult = std::find_if(results.begin(), results.end(), [&](const RecognitionResult& r) -> bool {
+			return r.sourceRecognizer == RECOGNIZER_DRAFT_CARD_PICK;
+		});
+		if (recognitionResult != results.end()) lastDraftRecognition = recognitionResult->results;
 	}
 
 	return results;

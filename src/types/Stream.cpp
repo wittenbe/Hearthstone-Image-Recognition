@@ -1,4 +1,5 @@
 #include "Stream.h"
+#include "../Logger.h"
 #include <stdio.h>
 #include <iostream>
 #include <algorithm>
@@ -7,6 +8,7 @@ namespace hs {
 
 Stream::Stream(std::vector<std::string> urls) {
 	this->urls = urls;
+	copyOnRead = false;
 	isLiveStream = false;
 	frameCount = 0;
 	urlIndex = 0;
@@ -20,7 +22,7 @@ bool Stream::openNextStream() {
 		vcap.release();
 		vcap.open(urls[urlIndex++]);
 		if (!vcap.isOpened()) {
-			printf("Error opening video stream or file\n");
+			HS_ERROR << "Error opening video stream or file(s)" << std::endl;
 		} else {
 			opened = true;
 			frameCount = vcap.get(CV_CAP_PROP_FRAME_COUNT);
@@ -30,6 +32,10 @@ bool Stream::openNextStream() {
 	return opened;
 }
 
+void Stream::setCopyOnRead(bool copyOnRead) {
+	this->copyOnRead = copyOnRead;
+}
+
 bool Stream::read(cv::Mat& image) {
 	frameMutex.lock();
 	bool success = vcap.isOpened() && vcap.read(image);
@@ -37,6 +43,11 @@ bool Stream::read(cv::Mat& image) {
 		success = openNextStream() && vcap.read(image);
 	}
 
+	if (copyOnRead) {
+		cv::Mat copyImage;
+		image.copyTo(copyImage);
+		image = copyImage;
+	}
 	frameMutex.unlock();
 	return success;
 }

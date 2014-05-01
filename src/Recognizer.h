@@ -8,6 +8,7 @@
 #include <fstream>
 #include <boost/shared_ptr.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
@@ -47,8 +48,6 @@ typedef boost::shared_ptr<cv::BFMatcher> BFMatcherPtr;
 class Recognizer {
 
 public:
-	typedef std::vector<std::pair<cv::Mat, int> > VectorDescriptor;
-
 	struct RecognitionResult {
 		bool valid;
 		unsigned int sourceRecognizer;
@@ -67,6 +66,10 @@ public:
 		std::vector<ulong64> hashes; //for quick access
 		int phashThreshold;
 	};
+
+	typedef std::vector<std::pair<cv::Mat, int> > VectorDescriptor;
+	typedef boost::tuple<unsigned int, Calibration::VectorROI, DataSet> PHashRecognizer;
+	typedef boost::tuple<unsigned int, Calibration::VectorROI, VectorDescriptor> SURFRecognizer;
 
 	Recognizer(DatabasePtr db, std::string calibrationID);
 	std::vector<RecognitionResult> recognize(const cv::Mat& image, unsigned int allowedRecognizers);
@@ -92,6 +95,9 @@ private:
 	BFMatcherPtr matcher;
 	VectorDescriptor descriptorCoin;
 	VectorDescriptor descriptorEnd;
+
+	std::vector<PHashRecognizer> phashRecognizers;
+	std::vector<SURFRecognizer> surfRecognizers;
 };
 
 typedef boost::shared_ptr<Recognizer> RecognizerPtr;
